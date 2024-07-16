@@ -2,6 +2,10 @@
 
 Codi Listening é uma página da Codi Academy voltada para o curso de inglês para programadores, com o objetivo de aprimorar habilidades na língua inglesa e fornecer prática para questões técnicas e entrevistas. Nossa página oferece um ambiente onde desenvolvedores podem melhorar suas habilidades de comunicação enquanto se preparam para os desafios das entrevistas técnicas diariamente.
 
+## Andamento do projeto
+
+Este projeto encontra-se em desenvolvimento, e seu início foi no dia 16/07/2024 às 16:20
+
 ## Índice
 
 - [Introdução](#introdução)
@@ -10,8 +14,6 @@ Codi Listening é uma página da Codi Academy voltada para o curso de inglês pa
 - [Recursos](#recursos)
 - [Dependências](#dependências)
 - [Configuração](#configuração)
-- [Documentação](#documentação)
-- [Exemplos](#exemplos)
 - [Contribuidores](#contribuidores)
 - [Licença](#licença)
 
