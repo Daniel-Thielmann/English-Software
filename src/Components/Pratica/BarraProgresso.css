@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --roxo-codi: #A243D2;
+    --fonte-marrom: #211B15;
+    --fonte-preta: #1C1C1C;
+    --gray-900: #111827;
+    --gray-950: #030712;
+    --faded: linear-gradient(97.57deg, #29e0a9 -12.7%, #5f75f2 32.64%, #9956f6 78.49%, #e254ff 109.78%);
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+}
+
+.progress-container .progress-bar {
+    font-family: "Montserrat", sans-serif;
+    letter-spacing: 5px;
+    color: white;
+    font-size: 30px;
+} 
