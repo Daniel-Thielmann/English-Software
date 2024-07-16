@@ -1,0 +1,20 @@
+:root {
+    --roxo-codi: #A243D2;
+    --fonte-marrom: #211B15;
+    --fonte-preta: #1C1C1C;
+    --gray-900: #111827;
+    --gray-950: #030712;
+    --faded: linear-gradient(97.57deg, #29e0a9 -12.7%, #5f75f2 32.64%, #9956f6 78.49%, #e254ff 109.78%);
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.App {
+    height: 100vh;
+    background-color: var(--gray-900);
+}
+
