@@ -13,8 +13,11 @@
     padding: 0;
 }
 
-.App {
+body {
     height: 100vh;
+}
+
+.App {
     background-color: var(--gray-900);
 }
 

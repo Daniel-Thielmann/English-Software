@@ -3,7 +3,7 @@ import codiicon from '../../assets/codi_icon.png'
 import './Header.css'
 
 
-const Header = () => {
+const Header = ( { comecarPratica } ) => {
   return (
     <div className="header-container">
         <div className="logo">
@@ -14,7 +14,7 @@ const Header = () => {
             <p>Aprimore seu entendimento em apenas alguns minutos, diariamente!</p>
         </div>
         <div className="start-container">
-            <button className="btn-start">
+            <button className="btn-start" onClick={comecarPratica}>
                 Praticar agora!
             </button>
         </div>
@@ -23,3 +23,6 @@ const Header = () => {
 }
 
 export default Header
+
+//Modifique o componente Header para receber a função startPractice como uma prop e chamá-la quando o botão for clicado.
+
