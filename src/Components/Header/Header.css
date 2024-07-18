@@ -17,16 +17,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 15vh auto;
+    margin: 10vh auto;
     gap: 5vh;
 }
 
 .header-container .logo img {
-    width: 15rem;
+    width:10rem;
 }
 
 .header-text {
-    font-size: 24px;
+    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,7 +58,7 @@
     font-weight: 600;
     color: white;
     padding: 20px;
-    width: 300px;
+    width: 250px;
     border: none;
     outline: none;
     border-radius: 10px;
