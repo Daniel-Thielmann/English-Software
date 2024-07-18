@@ -1,11 +1,11 @@
-import logo from '../../assets/logo.png'
+//import logo from '../../assets/logo.png'
 import codiicon from '../../assets/codi_icon.png'
 import './Header.css'
 
 
 const Header = ( { comecarPratica } ) => {
   return (
-    <div className="header-container">
+    <header className="header-container">
         <div className="logo">
             <img src={codiicon} alt="Logomarca Codi Academy" />
         </div>
@@ -18,7 +18,7 @@ const Header = ( { comecarPratica } ) => {
                 Praticar agora!
             </button>
         </div>
-    </div>
+    </header>
   )
 }
 

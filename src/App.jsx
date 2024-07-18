@@ -16,14 +16,16 @@ const App = () => {
   return (
     <div className="App">
       <Navbar />
-    {praticando ? (
-      <div>
-        <BarraProgresso />
-        <ConteudoPratica />
-      </div>
-    ) : (
-      <Header comecarPratica={comecarPratica}/>
-    ) }
+      <main className="container">
+          {praticando ? (
+          <div>
+            <BarraProgresso />
+            <ConteudoPratica />
+          </div>
+        ) : (
+          <Header comecarPratica={comecarPratica}/>
+        ) }
+      </main>
       <Footer />
     </div>
   )
