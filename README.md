@@ -65,7 +65,6 @@ Após iniciar o servidor, você pode acessar a aplicação em http://localhost:3
 Para gerar áudios, é necessário configurar uma chave API. Você pode obter uma chave API nos seguintes serviços:
 
 - Eleven Labs API
-- Google Cloud API
 
 ## Contribuidores 
 Fernando Zuchi Ozorio
