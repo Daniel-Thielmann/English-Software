@@ -20,8 +20,12 @@
     padding: 20px;
     background-color: var(--gray-900);
     border-bottom: 1px solid var(--gray-950);
+<<<<<<< HEAD
 
     cursor: pointer;
+=======
+    height: 3rem;
+>>>>>>> e001fc371cf98103e12e868264a5cb227ce77acd
 }
 
 .left-container {
@@ -30,7 +34,7 @@
 }
 
 .left-container img {
-    width: 10rem;
+    width: 8rem;
 }
 
 .right-container {

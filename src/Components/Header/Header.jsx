@@ -1,4 +1,3 @@
-//import logo from '../../assets/logo.png'
 import codiicon from '../../assets/codi_icon.png'
 import './Header.css'
 
@@ -23,6 +22,4 @@ const Header = ( { comecarPratica } ) => {
 }
 
 export default Header
-
-//Modifique o componente Header para receber a função startPractice como uma prop e chamá-la quando o botão for clicado.
 

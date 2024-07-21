@@ -13,12 +13,37 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4rem;
+    padding: 3rem;
 }
 
-.progress-container .progress-bar {
+.progress-bar {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 20px;
+    overflow: hidden;
     font-family: "Montserrat", sans-serif;
-    letter-spacing: 5px;
-    color: white;
-    font-size: 30px;
-} 
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--faded);
+    border-radius: 20px 0 0 20px;
+    transition: width 0.3 ease;
+}
+
+.progress-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    color: var(--gray-400);
+    font-weight: 600;
+    line-height: 40px; 
+    letter-spacing: 1px;
+    font-size: 20px;
+}
+
