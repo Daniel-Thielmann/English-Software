@@ -1,13 +1,20 @@
 import './BarraProgresso.css'
 
-const BarraProgresso = () => {
+const BarraProgresso = ({ progresso }) => {
+
+  const progressoAtualizado = Math.min(Math.max(progresso, 0), 100);
+
   return (
-    <div className='progress-container'>
+    <>
+      <div className="progress-text">
+        Progresso: {progresso}% / 100%
+      </div>
+      <div className='progress-container'>
         <div className="progress-bar">
-            { /* Lógica da barra de progresso a ser implementada */ }
-            Progresso: X%
+          <div className="progress-fill" style={{ width: `${progressoAtualizado}%` }}></div>
         </div>
-    </div>
+      </div>
+    </>
   )
 }
 

@@ -9,11 +9,23 @@
 .container-pratica .texto-pratica {
     color: var(--gray-400);
     text-align: center;
+    font-size: 22px;
+}
+
+.texto-pratica span {
+    background-image: var(--faded);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.container-pratica .texto-pratica img {
+    width: 200px;
 }
 
 .container-pratica .texto-pratica p {
     margin: 1rem;
     letter-spacing: 1px;
+    font-size: 18px;
 }
 
 .container-pratica .input-pratica textarea {
@@ -26,6 +38,8 @@
     padding: 10px;
     letter-spacing: 1px;
 }
+
+
 
 .container-pratica .footer-pratica {
     margin: 1rem;
