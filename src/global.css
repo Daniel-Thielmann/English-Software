@@ -19,15 +19,10 @@ body {
 
 .App {
     background-color: var(--gray-900);
-<<<<<<< HEAD
-     min-height: 100vh;
+    min-height: 100vh;
 
-     display: flex;
-     flex-direction: column;
-=======
-    height: 100vh;
-    overflow: auto;
->>>>>>> e001fc371cf98103e12e868264a5cb227ce77acd
+    display: flex;
+    flex-direction: column;
 }
 
 .App .container {
