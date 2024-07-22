@@ -1,16 +1,10 @@
-import { ElevenLabsClient } from "elevenlabs";
-
-const client = new ElevenLabsClient({
-    apiKey: "f9021a15e002ebb28775113e2503911e",
-});
-
 export const criarArquivoAudio = async (text) => {
     try {
         const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'xi-api-key': 'f9021a15e002ebb28775113e2503911e',
+                'xi-api-key': 'sk_f56316b7a4921c7777318e53ce8128f2b81c50959670ce4a',
                 'Accept': 'audio/mpeg'
             },
             body: JSON.stringify({
