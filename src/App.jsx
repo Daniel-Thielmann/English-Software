@@ -1,47 +1,45 @@
-import Navbar from "./Components/Navbar/Navbar"
-import Header from "./Components/Header/Header"
-import Footer from "./Components/Footer/Footer"
-import BarraProgresso from "./Components/Pratica/BarraProgresso"
-import ConteudoPratica from "./Components/Pratica/ConteudoPratica"
-import './global.css'
-import { useState } from "react"
-import { useConteudoPratica } from './Components/Pratica/UseConteudoPratica';
+import { useState } from "react";
+import Navbar from "./Components/Navbar/Navbar";
+import Header from "./Components/Header/Header";
+import Footer from "./Components/Footer/Footer";
+import BarraProgresso from "./Components/Pratica/BarraProgresso";
+import ConteudoPratica from "./Components/Pratica/ConteudoPratica";
+import './global.css';
 
 const App = () => {
   const [praticando, setPraticando] = useState(false);
   const [progresso, setProgresso] = useState(0);
-  
-  const comecarPratica= () => {
+
+  const comecarPratica = () => {
     setPraticando(true);
-    handleContinueClick();
-  }
+  };
 
   const voltarParaInicio = () => {
     setPraticando(false);
-    setProgresso(0);
-  }
+    setProgresso(0); // Zera o progresso
+  };
 
-  const aumentarProgresso = () => {
-    setProgresso((prevProgresso) => Math.min(prevProgresso + 10, 100));
-  }
-  const { handleContinueClick } = useConteudoPratica(aumentarProgresso);
+  // Permite definir o progresso diretamente
+  const setProgressoDireto = (novoProgresso) => {
+    setProgresso(novoProgresso);
+  };
 
   return (
     <div className="App">
-      <Navbar voltarParaInicio={voltarParaInicio}/>
+      <Navbar voltarParaInicio={voltarParaInicio} />
       <main className="container">
-          {praticando ? (
+        {praticando ? (
           <div>
-            <BarraProgresso progresso={progresso}/>
-            <ConteudoPratica aumentarProgresso={aumentarProgresso}/>
+            <BarraProgresso progresso={progresso} />
+            <ConteudoPratica setProgresso={setProgressoDireto} />
           </div>
         ) : (
-          <Header comecarPratica={comecarPratica}/>
-        ) }
+          <Header comecarPratica={comecarPratica} />
+        )}
       </main>
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;

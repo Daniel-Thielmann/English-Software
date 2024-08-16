@@ -46,7 +46,7 @@
     padding: 1rem;
 }
 
-.container-pratica .footer-pratica .btn-continue {
+.container-pratica .footer-pratica .btn-continue, .container-pratica .start-pratica .btn-start, .btn-show-answer, .btn-restart {
     padding: 15px;
     width: 200px;
     border: none;
@@ -56,6 +56,31 @@
     border-radius: 10px;
 }
 
+.btn-show-answer{
+    margin-left: 1vw;
+}
+
+.answer-display {
+    color: var(--gray-400);
+    font-size: 20px;
+}
+
+.btn-restart {
+    margin: 5vh auto;
+    display: block;
+}
+
 .btn-continue:hover {
     transform: scale(1.05);
+}
+
+.success-message {
+    color: green;
+    font-size: 30px;
+
+}
+
+.error-message {
+    color: red;
+    font-size: 30px;
 }
