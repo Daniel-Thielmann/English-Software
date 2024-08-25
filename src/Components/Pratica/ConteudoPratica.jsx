@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { useConteudoPratica } from '../Pratica/UseConteudoPratica';
 import './ConteudoPratica.css';
 import waves from '../../assets/waves.png';
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { checkAudioLimit, handlePlayAudio, incrementAudioCount } from '../../utils/control'; // Funções de controle com firebase
+
 
 const ConteudoPratica = ({ setProgresso }) => {
     const { audioUrl, audioRef, text, gerarAudio } = useConteudoPratica();
@@ -10,13 +13,29 @@ const ConteudoPratica = ({ setProgresso }) => {
     const [isCorrect, setIsCorrect] = useState(null);
     const [attempts, setAttempts] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
-    const [showRestart, setShowRestart] = useState(false);
+    const [showSkip, setShowSkip] = useState(false);
+    const [user, setUser] = useState(null);
+    const [audioLimitError, setAudioLimitError] = useState('');
+
+    // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setUser(user);
+            } else {
+                setUser(null);
+            }
+        });
+        return () => unsubscribe();
+    }, []);
+
 
     useEffect(() => {
         if (audioUrl && audioRef.current) {
             audioRef.current.load();
-            audioRef.current.play().catch(error => {
-                console.error("Erro ao tentar reproduzir o áudio:", error);
+            audioRef.current.play().catch(e => {
+                console.log("Erro ao tentar reproduzir o áudio:", e);
             });
             setShowContinue(true);
         }
@@ -26,11 +45,14 @@ const ConteudoPratica = ({ setProgresso }) => {
         setInputText(e.target.value);
     };
 
-    const handleContinueClick = () => {
+    // Isso tá muito feio mas eu reprovei em POO então ta tudo bem
+    const handleContinueClick = async () => {
         if (inputText.toLocaleLowerCase() === text.toLocaleLowerCase()) {
             setIsCorrect(true);
-            setProgresso(prevProgresso => Math.min(prevProgresso + 10, 100)); // Atualiza o progresso -> trabalhar melhor no progresso depois 
-            gerarAudio(); // Gera um novo áudio
+            setProgresso(prevProgresso => Math.min(prevProgresso + 10, 100)); // Atualiza o progresso -> trabalhar melhor no progresso depois
+            await gerarAudio();
+            await incrementAudioCount();
+            await gerarAudio(); 
             setInputText('');
             setAttempts(0);
         } else {
@@ -39,24 +61,81 @@ const ConteudoPratica = ({ setProgresso }) => {
         }
     };
 
+    const handleSkip = async () => {
+        if (user) {
+            console.log("User ID:", user.uid);
+    
+            try {
+                await incrementAudioCount(user.uid); 
+                setShowAnswer(true);
+                setShowSkip(false);
+                setInputText('');
+                setAttempts(0);
+                await gerarAudio();
+            } catch (error) {
+                console.error("Erro ao incrementar contagem de áudio:", error);
+            }
+        } else {
+            console.log("Usuário não está logado. Não é possível incrementar contagem.");
+        }
+        // setShowAnswer(true);
+        // setShowSkip(false);
+        // setInputText('');
+        // setAttempts(0);
+        // await gerarAudio();
+        // await incrementAudioCount();
+    };
+
+    // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
     const handleStartClick = async () => {
-        await gerarAudio();
+
+        if (user) {
+            console.log("User ID:", user.uid);
+            
+            const canGenerate = await checkAudioLimit(user.uid);
+
+            if (canGenerate) {
+                await gerarAudio();
+                await handlePlayAudio(user.uid);
+                setAudioLimitError('')
+            }
+            else {
+                setAudioLimitError('Você atingiu o limite de 10 áudios por dia.')
+            }
+        }
+        else {
+            handleLogin();
+        }
+
+
+        // if (user) {
+        //     await gerarAudio();
+        // }
+        // else {
+        //     handleLogin();
+        // }
+    };
+    // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
+    const handleLogin = async () => {
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (error) {
+            console.error("Erro ao fazer login:", error);
+        }
     };
 
-    const handleShowAnswerClick = () => {
-        setShowAnswer(true);
-        setShowRestart(true);
-    };
-
-    const handleRestart = () => {
-        setAttempts(0);
-        setShowAnswer(false);
-        setShowRestart(false);
-        setInputText('');
-        setIsCorrect(null);
-        setProgresso(0); // Zera o progresso diretamente ao clicar em mostrar resposta (justo, né)
-        gerarAudio();
-    };
+    // const handleRestart = () => {
+    //     setAttempts(0);
+    //     setShowAnswer(false);
+    //     setShowSkip(false);
+    //     setInputText('');
+    //     setIsCorrect(null);
+    //     setProgresso(0); // Zera o progresso diretamente ao clicar em mostrar resposta (justo, né)
+    //     gerarAudio();
+    // };
 
     return (
         <div className='container-pratica'>
@@ -86,32 +165,22 @@ const ConteudoPratica = ({ setProgresso }) => {
                 />
             </div>
 
-            {isCorrect === true && <p className="success-message">Você acertou!</p>}
-            {isCorrect === false && !showAnswer && <p className="error-message">Tente novamente.</p>}
+            {isCorrect === true && <p className="success-message" id='msg'>Você acertou!</p>}
+            {isCorrect === false && !showSkip && <p className="error-message" id='msg'>Tente novamente.</p>}
+            {audioLimitError && <p className='error-message'>{audioLimitError}</p>}
 
             <div className="footer-pratica">
-                {showContinue && !showAnswer && (
+                {showContinue && !showSkip && (
                     <button className="btn-continue" onClick={handleContinueClick}>
                         Continuar
                     </button>
                 )}
-                {attempts >= 3 && !showAnswer && (
-                    <button className="btn-show-answer" onClick={handleShowAnswerClick}>
-                        Mostrar Resposta?
+                {attempts >= 3 && !showSkip && (
+                    <button className="btn-show-answer" onClick={handleSkip}>
+                        Pular
                     </button>
                 )}
             </div>
-
-            {showAnswer && (
-                <div className="answer-display">
-                    <p>Resposta correta: {text}</p>
-                    {showRestart && (
-                        <button className="btn-restart" onClick={handleRestart}>
-                            Recomeçar
-                        </button>
-                    )}
-                </div>
-            )}
         </div>
     );
 }
