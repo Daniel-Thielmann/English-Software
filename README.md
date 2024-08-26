@@ -68,6 +68,8 @@ Para gerar áudios, é necessário configurar uma chave API. Você pode obter um
 
 ## Contribuidores 
 Fernando Zuchi Ozorio
+Gabriel Fontoura
+Bruno Gonçalves
 
 ## Licença
 Este projeto é licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
