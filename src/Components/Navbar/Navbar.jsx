@@ -44,10 +44,13 @@ const Navbar = ({ voltarParaInicio }) => {
       {
         user ? (
           <div className="right-container-logged">
-            <img src={user.photoURL} alt={user.displayName} className="user-photo" />
+             <img src={user.photoURL} alt={user.displayName} className="user-photo" />
             <span>{user.displayName}</span>
-            <button className="right-container">Checar Rankinkg</button>
-            <button className="right-container" onClick={handleLogout}>Logout</button>
+            <span className="material-symbols-outlined" onClick={handleLogout} id="logout">
+              logout
+            </span>
+            {/* <button className="right-container">Checar Rankinkg</button>*/}
+
           </div>
         ) : (
           <div className="right-container" onClick={handleLogin}>

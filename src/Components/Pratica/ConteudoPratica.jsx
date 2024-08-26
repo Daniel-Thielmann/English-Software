@@ -5,7 +5,6 @@ import waves from '../../assets/waves.png';
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { checkAudioLimit, handlePlayAudio, incrementAudioCount } from '../../utils/control'; // Funções de controle com firebase
 
-
 const ConteudoPratica = ({ setProgresso }) => {
     const { audioUrl, audioRef, text, gerarAudio } = useConteudoPratica();
     const [showContinue, setShowContinue] = useState(false);
@@ -52,7 +51,7 @@ const ConteudoPratica = ({ setProgresso }) => {
             setProgresso(prevProgresso => Math.min(prevProgresso + 10, 100)); // Atualiza o progresso -> trabalhar melhor no progresso depois
             await gerarAudio();
             await incrementAudioCount();
-            await gerarAudio(); 
+            await gerarAudio();
             setInputText('');
             setAttempts(0);
         } else {
@@ -64,9 +63,9 @@ const ConteudoPratica = ({ setProgresso }) => {
     const handleSkip = async () => {
         if (user) {
             console.log("User ID:", user.uid);
-    
+
             try {
-                await incrementAudioCount(user.uid); 
+                await incrementAudioCount(user.uid);
                 setShowAnswer(true);
                 setShowSkip(false);
                 setInputText('');
@@ -91,12 +90,13 @@ const ConteudoPratica = ({ setProgresso }) => {
 
         if (user) {
             console.log("User ID:", user.uid);
-            
+
             const canGenerate = await checkAudioLimit(user.uid);
 
             if (canGenerate) {
                 await gerarAudio();
                 await handlePlayAudio(user.uid);
+                await incrementAudioCount(user.uid);
                 setAudioLimitError('')
             }
             else {
@@ -122,8 +122,8 @@ const ConteudoPratica = ({ setProgresso }) => {
 
         try {
             await signInWithPopup(auth, provider);
-        } catch (error) {
-            console.error("Erro ao fazer login:", error);
+        } catch (e) {
+            console.log("Erro ao fazer login:", e);
         }
     };
 
