@@ -20,7 +20,6 @@
     padding: 20px;
     background-color: var(--gray-900);
     border-bottom: 1px solid var(--gray-950);
-    cursor: pointer;
     height: 3rem;
 }
 
@@ -31,6 +30,7 @@
 
 .left-container img {
     width: 8rem;
+    cursor: pointer;
 }
 
 .right-container {
@@ -45,9 +45,33 @@
     transition: ease-in-out;
     background-image: var(--faded);
     border: none;
+    cursor: pointer;
 }
 
 .left-container:hover {
     transform: scale(1.05);
     transition: ease-in-out;
+}
+
+.right-container-logged {
+    border: 1px solid aliceblue;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.right-container-logged img {
+    border-radius: 50%;
+    width: 1.75em;
+    height: 1.75em;
+}
+
+#logout:hover {
+    cursor: pointer;
+    transform: scale(1.15);
+    color: red;
 }
