@@ -67,9 +67,9 @@ Para gerar áudios, é necessário configurar uma chave API. Você pode obter um
 - Eleven Labs API
 
 ## Contribuidores 
-Fernando Zuchi Ozorio
-Gabriel Fontoura
-Bruno Gonçalves
+Fernando Zuchi Ozorio </br>
+Gabriel Fontoura </br>
+Bruno Gonçalves </br>
 
 ## Licença
 Este projeto é licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
