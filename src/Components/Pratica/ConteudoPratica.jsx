@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useConteudoPratica } from '../Pratica/UseConteudoPratica';
+import { useConteudoPratica } from '../Hooks/UseConteudoPratica';
 import './ConteudoPratica.css';
 import waves from '../../assets/waves.png';
 import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -46,18 +46,44 @@ const ConteudoPratica = ({ setProgresso }) => {
 
     // Isso tá muito feio mas eu reprovei em POO então ta tudo bem
     const handleContinueClick = async () => {
-        if (inputText.toLocaleLowerCase() === text.toLocaleLowerCase()) {
-            setIsCorrect(true);
-            setProgresso(prevProgresso => Math.min(prevProgresso + 10, 100)); // Atualiza o progresso -> trabalhar melhor no progresso depois
-            await gerarAudio();
-            await incrementAudioCount();
-            await gerarAudio();
-            setInputText('');
-            setAttempts(0);
-        } else {
-            setIsCorrect(false);
-            setAttempts(prevAttempts => prevAttempts + 1);
+
+        const canGenerate = await checkAudioLimit(user.uid);
+
+        if(canGenerate)
+        {
+            if (inputText.toLocaleLowerCase() === text.toLocaleLowerCase()) {
+                setIsCorrect(true);
+                setProgresso(prevProgresso => Math.min(prevProgresso + 10, 100)); // Atualiza o progresso -> trabalhar melhor no progresso depois
+                await gerarAudio();
+                await incrementAudioCount();
+                await gerarAudio();
+                setInputText('');
+                setAttempts(0);
+            } else {
+                setIsCorrect(false);
+                setAttempts(prevAttempts => prevAttempts + 1);
+                setAudioLimitError('Você atingiu o limite de 10 áudios por dia.');
+            }
         }
+        
+
+        // if (user) {
+        //     // console.log("User ID:", user.uid);
+
+        //     const canGenerate = await checkAudioLimit(user.uid);
+        
+        //     if (canGenerate) {
+        //         await gerarAudio();
+        //         await handlePlayAudio(user.uid);
+        //         setAudioLimitError('')
+        //     }
+        //     else {
+        //         setAudioLimitError('Você atingiu o limite de 10 áudios por dia.')
+        //     }
+        // }
+        // else {
+        //     handleLogin();
+        // }
     };
 
     const handleSkip = async () => {
@@ -89,14 +115,13 @@ const ConteudoPratica = ({ setProgresso }) => {
     const handleStartClick = async () => {
 
         if (user) {
-            console.log("User ID:", user.uid);
+            // console.log("User ID:", user.uid);
 
             const canGenerate = await checkAudioLimit(user.uid);
 
             if (canGenerate) {
                 await gerarAudio();
                 await handlePlayAudio(user.uid);
-                await incrementAudioCount(user.uid);
                 setAudioLimitError('')
             }
             else {

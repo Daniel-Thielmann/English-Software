@@ -9,10 +9,9 @@ export const useConteudoPratica = () => {
 
     const gerarAudio = async () => {
         try {
-            console.log('Função gerarAudio chamada');
             const fraseAleatoria = frases[Math.floor(Math.random() * frases.length)];
             setText(fraseAleatoria);
-            console.log('Frase aleatória:', fraseAleatoria);
+            // console.log('Frase aleatória:', fraseAleatoria);
             const url = await criarArquivoAudio(fraseAleatoria);
             if (url) {
                 setAudioURL(url);

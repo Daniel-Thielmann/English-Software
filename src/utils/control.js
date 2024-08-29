@@ -1,15 +1,19 @@
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore"; // Manipulação firestore
+import { formatDate, formatEntryDate } from "../Components/Hooks/Date";
 
 export const checkAudioLimit = async (userId) => {
-    console.log("User id 1", userId);
+    // console.log("User id 1", userId);
     const db = getFirestore();
     const userRef = doc(db, 'audioLimits', userId); // Referência ao vagabundo atual e seu limite de áudios
     const userDoc = await getDoc(userRef);
-    const today = new Date().toISOString().split('T')[0]; // Data de hoje no formato YYYY-MM-DD
+    const now = new Date().toISOString();
+    const today = formatDate(now);
+    console.log(today);
 
     // Verifica se o mesmo existe e a data de hoje
     if (userDoc.exists()) {
         const data = userDoc.data();
+        console.log(data);
         if (data.lastAccessed === today) {
             return data.audioCount < 10; // Retorna true se ainda pode gerar áudio
         } else {
@@ -21,7 +25,7 @@ export const checkAudioLimit = async (userId) => {
         // Caso seja a primeira vez que o usuário está acessando
         await setDoc(userRef, { audioCount: 0, lastAccessed: today });
         return true;
-    }
+    } 
 }
 
 export const incrementAudioCount = async (userId) => {
