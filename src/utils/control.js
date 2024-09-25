@@ -40,26 +40,9 @@ export const incrementAudioCount = async (userId) => {
     const db = getFirestore();
     const userRef = doc(db, "audioLimits", userId);
     const userDoc = await getDoc(userRef);
-    const today = formatDate(new Date().toISOString);
-
-    if (userDoc.exists()) {
-      const data = userDoc.data();
-      if (data.lastAccessed === today) {
-        // Se o documento não existir cria um novo documento com valor de 1
-        await setDoc(
-          userRef,
-          { audioCount: data.audioCount + 1 },
-          { merge: true }
-        );
-      } else {
-        // Isso deveria ser garantido no checkAudioLimit, mas como precaução bora de else
-        await setDoc(
-          userRef,
-          { audioCount: 1, lastAccessed: today },
-          { merge: true }
-        );
-      }
-    }
+    const { audioCount, lastAccessed } = userDoc.data();
+    await setDoc(userRef, {audioCount: audioCount + 1, lastAccessed}, { merge: true });
+   
   } catch (error) {
     console.log("Erro ao incrementar contagem de áudios: ", error);
   }
