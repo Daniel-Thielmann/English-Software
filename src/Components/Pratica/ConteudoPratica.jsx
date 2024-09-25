@@ -113,7 +113,8 @@ const ConteudoPratica = ({ setProgresso }) => {
 
     // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
     const handleStartClick = async () => {
-
+        console.log(user.uid);
+        
         if (user) {
             // console.log("User ID:", user.uid);
 
