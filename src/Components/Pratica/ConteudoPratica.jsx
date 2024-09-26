@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useConteudoPratica } from "../Hooks/UseConteudoPratica";
+import Modal from "../Modal/Modal";
 import "./ConteudoPratica.css";
 import waves from "../../assets/waves.png";
 import {
@@ -14,16 +15,17 @@ import {
   incrementAudioCount,
 } from "../../utils/control"; // Funções de controle com firebase
 
-const ConteudoPratica = ({ setProgresso }) => {
+const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const { audioUrl, audioRef, text, gerarAudio } = useConteudoPratica();
-  //const [showContinue, setShowContinue] = useState(false);
   const [inputText, setInputText] = useState("");
   const [isCorrect, setIsCorrect] = useState(null);
   const [attempts, setAttempts] = useState(0);
-  // const [showAnswer, setShowAnswer] = useState(false);
-  const [showSkip, setShowSkip] = useState(false);
   const [user, setUser] = useState(null);
   const [audioLimitError, setAudioLimitError] = useState("");
+  const [acertos, setAcertos] = useState(0);
+  const [audiosGerados, setAudiosGerados] = useState(0);
+  const [modalMessage, setModalMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
   useEffect(() => {
@@ -43,28 +45,55 @@ const ConteudoPratica = ({ setProgresso }) => {
     }
   }, [audioUrl]);
 
-  const handleTextChange = (e) => {
-    setInputText(e.target.value);
+  // Isso tá muito feio mas eu reprovei em POO então ta tudo bem
+  // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
+  const handleStartClick = async () => {
+    if (user) {
+      const canGenerate = await checkAudioLimit(user.uid);
+
+      if (canGenerate) {
+        await handlePlayAudio(user.uid, gerarAudio, setAudioLimitError);
+        setAudioLimitError("");
+      } else {
+        setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
+        setModalMessage(audioLimitError); // Exibir mensagem de limite
+        setShowModal(true);
+      }
+    } else {
+      handleLogin();
+    }
   };
 
-  // Isso tá muito feio mas eu reprovei em POO então ta tudo bem
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   const handleContinueClick = async () => {
     const canGenerate = await checkAudioLimit(user.uid);
 
     if (canGenerate) {
       if (inputText.toLocaleLowerCase() === text.toLocaleLowerCase()) {
         setIsCorrect(true);
-        setProgresso((prevProgresso) => Math.min(prevProgresso + 10, 100)); // Atualiza o progresso -> trabalhar melhor no progresso depois
+        setProgresso((prevProgresso) => Math.min(prevProgresso + 10, 100));
+        setAcertos((prevAcertos) => prevAcertos + 1);
         await incrementAudioCount(user.uid);
-        await gerarAudio();
+        setAudiosGerados((prevCount) => prevCount + 1);
         setInputText("");
         setAttempts(0);
+
+        if (audiosGerados + 1 === 10) {
+          finalizarPratica(acertos + 1);
+        } else {
+          await gerarAudio();
+        }
       } else {
         setIsCorrect(false);
         setAttempts((prevAttempts) => prevAttempts + 1);
       }
     } else {
       setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
+      setModalMessage(audioLimitError);
+      setShowModal(true);
     }
   };
 
@@ -74,31 +103,21 @@ const ConteudoPratica = ({ setProgresso }) => {
 
     if (canGenerate) {
       await incrementAudioCount(user.uid);
-      await gerarAudio();
       setInputText("");
       setAttempts(0);
-    } else {
-      setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
-    }
-  };
 
-  // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
-  const handleStartClick = async () => {
-    if (user) {
-      // console.log("User ID:", user.uid);
-
-      const canGenerate = await checkAudioLimit(user.uid);
-
-      if (canGenerate) {
-        await handlePlayAudio(user.uid, gerarAudio, setAudioLimitError);
-        setAudioLimitError("");
+      if (audiosGerados + 1 === 10) {
+        finalizarPratica(acertos);
       } else {
-        setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
+        await gerarAudio();
       }
     } else {
-      handleLogin();
+      setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
+      setModalMessage(audioLimitError);
+      setShowModal(true);
     }
   };
+
   // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
   const handleLogin = async () => {
     const auth = getAuth();
@@ -113,6 +132,14 @@ const ConteudoPratica = ({ setProgresso }) => {
 
   return (
     <div className="container-pratica">
+      {showModal && (
+        <Modal
+          message={modalMessage}
+          onClose={closeModal}
+          finalizarPratica={finalizarPratica}
+          acertos={acertos}
+        />
+      )}
       <div className="texto-pratica">
         <img src={waves} alt="" />
         <p>
@@ -141,17 +168,12 @@ const ConteudoPratica = ({ setProgresso }) => {
         />
       </div>
 
-      {isCorrect === true && <p className="success-message">Você acertou!</p>}
-      {isCorrect === false && <p className="error-message">Tente novamente.</p>}
-      {audioLimitError && <p className="error-message">{audioLimitError}</p>}
-
       <div className="footer-pratica">
-        {!showSkip && (
-          <button className="btn-continue" onClick={handleContinueClick}>
-            Continuar
-          </button>
-        )}
-        {attempts >= 3 && !showSkip && (
+        <button className="btn-continue" onClick={handleContinueClick}>
+          Continuar
+        </button>
+
+        {attempts >= 3 && (
           <button className="btn-skip" onClick={handleSkip}>
             Pular
           </button>
