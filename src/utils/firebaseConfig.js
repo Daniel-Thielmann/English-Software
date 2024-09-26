@@ -3,13 +3,14 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyD5OZhUAWlYb026IQ3VGUVkemwJIZS3AvE",
-    authDomain: "codi-listening.firebaseapp.com",
-    projectId: "codi-listening",
-    storageBucket: "codi-listening.appspot.com",
-    messagingSenderId: "42743346481",
-    appId: "G-6E3380RZQP"
-};
+    apiKey: "AIzaSyDCUO2iFNtSq6hnqX0R1UHxvodXZK1gQiE",
+    authDomain: "codi-listening-ae9ad.firebaseapp.com",
+    projectId: "codi-listening-ae9ad",
+    storageBucket: "codi-listening-ae9ad.appspot.com",
+    messagingSenderId: "556329953951",
+    appId: "1:556329953951:web:789fecc5bf5e6895c350aa",
+    measurementId: "G-WGBJ37RJFQ"
+  };
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
