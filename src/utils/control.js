@@ -1,6 +1,5 @@
 import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore"; // Manipulação firestore
 import { formatDate } from "../Components/Hooks/Date";
-import { useConteudoPratica } from "../Components/Hooks/UseConteudoPratica";
 
 export const checkAudioLimit = async (userId) => {
   try {
@@ -48,8 +47,7 @@ export const incrementAudioCount = async (userId) => {
   }
 };
 
-export const handlePlayAudio = async (userId) => {
-    const { gerarAudio } = useConteudoPratica();
+export const handlePlayAudio = async (userId, gerarAudio, setAudioLimitError) => {
 
   if (userId) {
     const canGenerate = await checkAudioLimit(userId);

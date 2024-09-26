@@ -39,14 +39,12 @@
     letter-spacing: 1px;
 }
 
-
-
 .container-pratica .footer-pratica {
     margin: 1rem;
     padding: 1rem;
 }
 
-.container-pratica .footer-pratica .btn-continue, .container-pratica .start-pratica .btn-start, .btn-show-answer, .btn-restart {
+.container-pratica .footer-pratica .btn-continue, .btn-skip, .container-pratica .start-pratica .btn-start{
     padding: 15px;
     width: 200px;
     border: none;
@@ -56,9 +54,9 @@
     border-radius: 10px;
 }
 
-.btn-show-answer{
+/* .btn-show-answer{
     margin-left: 1vw;
-}
+} */
 
 .answer-display {
     color: var(--gray-400);
@@ -68,6 +66,10 @@
 .btn-restart {
     margin: 5vh auto;
     display: block;
+}
+
+.btn-skip { 
+    margin-left: 1vw;
 }
 
 .btn-continue:hover {
