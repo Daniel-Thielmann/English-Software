@@ -47,16 +47,15 @@ export const incrementAudioCount = async (userId) => {
   }
 };
 
-export const handlePlayAudio = async (userId, gerarAudio, setAudioLimitError) => {
+export const handlePlayAudio = async (userId, gerarAudio) => {
 
   if (userId) {
     const canGenerate = await checkAudioLimit(userId);
     if (canGenerate) {
       await gerarAudio();
       await incrementAudioCount(userId);
-      setAudioLimitError("");
     } else {
-      setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
+      console.log("SE FUDEU VIADO");
     }
   } else {
     handleLogin();

@@ -21,11 +21,12 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const [isCorrect, setIsCorrect] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [user, setUser] = useState(null);
-  const [audioLimitError, setAudioLimitError] = useState("");
+  // const [audioLimitError, setAudioLimitError] = useState("");
   const [acertos, setAcertos] = useState(0);
   const [audiosGerados, setAudiosGerados] = useState(0);
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [showDoneBtn, setShowDoneBtn] = useState(false);
 
   // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
   useEffect(() => {
@@ -52,11 +53,10 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       const canGenerate = await checkAudioLimit(user.uid);
 
       if (canGenerate) {
-        await handlePlayAudio(user.uid, gerarAudio, setAudioLimitError);
-        setAudioLimitError("");
+        await handlePlayAudio(user.uid, gerarAudio);
       } else {
-        setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
-        setModalMessage(audioLimitError); // Exibir mensagem de limite
+        setModalMessage("Você atingiu o limite de 10 áudios por dia.");
+        setShowDoneBtn(true);
         setShowModal(true);
       }
     } else {
@@ -80,20 +80,26 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
         setAudiosGerados((prevCount) => prevCount + 1);
         setInputText("");
         setAttempts(0);
+        setModalMessage("Parabéns! Você acertou.");
 
         if (audiosGerados + 1 === 10) {
           finalizarPratica(acertos + 1);
+          setModalMessage("Você finalizou a prática diária de 10 áudios!");
+          setShowModal(true);
+          setShowDoneBtn(true);
         } else {
           await gerarAudio();
         }
       } else {
         setIsCorrect(false);
         setAttempts((prevAttempts) => prevAttempts + 1);
+        setModalMessage("Você errou! Tente novamente.");
+        setShowModal(true);
       }
     } else {
-      setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
-      setModalMessage(audioLimitError);
+      setModalMessage("Você atingiu o limite de 10 áudios por dia.");
       setShowModal(true);
+      setShowDoneBtn(true);
     }
   };
 
@@ -112,8 +118,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
         await gerarAudio();
       }
     } else {
-      setAudioLimitError("Você atingiu o limite de 10 áudios por dia.");
-      setModalMessage(audioLimitError);
+      setModalMessage("Você atingiu o limite de 10 áudios por dia.");
       setShowModal(true);
     }
   };
@@ -138,6 +143,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
           onClose={closeModal}
           finalizarPratica={finalizarPratica}
           acertos={acertos}
+          showDoneBtn={showDoneBtn}
         />
       )}
       <div className="texto-pratica">
