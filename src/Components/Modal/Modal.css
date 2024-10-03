@@ -46,17 +46,23 @@
 .btn-finalize {
     margin-top: 2rem;
     letter-spacing: 1px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: bold;
     color: white;
     padding: 10px;
     width: 200px;
-    border: none;
-    outline: none;
+    border: 1px solid white;
+    background: transparent;
+    /* outline: none; */
     border-radius: 10px;
-    background-image: var(--faded);
+    /* background-image: var(--faded); */
 }
+
 
 .btn-finalize:hover {
     transform: scale(1.10);
+    border: none;
     transition: ease-in-out;
+    background-image: var(--faded);
+    cursor: pointer;
 }

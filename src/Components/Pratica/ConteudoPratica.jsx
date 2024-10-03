@@ -18,15 +18,14 @@ import {
 const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const { audioUrl, audioRef, text, gerarAudio } = useConteudoPratica();
   const [inputText, setInputText] = useState("");
-  const [isCorrect, setIsCorrect] = useState(null);
   const [attempts, setAttempts] = useState(0);
   const [user, setUser] = useState(null);
-  // const [audioLimitError, setAudioLimitError] = useState("");
   const [acertos, setAcertos] = useState(0);
   const [audiosGerados, setAudiosGerados] = useState(0);
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [showDoneBtn, setShowDoneBtn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
   useEffect(() => {
@@ -53,7 +52,9 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       const canGenerate = await checkAudioLimit(user.uid);
 
       if (canGenerate) {
+        setIsLoading(true);
         await handlePlayAudio(user.uid, gerarAudio);
+        setIsLoading(false);
       } else {
         setModalMessage("Você atingiu o limite de 10 áudios por dia.");
         setShowDoneBtn(true);
@@ -73,17 +74,16 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
 
     if (canGenerate) {
       if (inputText.toLocaleLowerCase() === text.toLocaleLowerCase()) {
-        setIsCorrect(true);
         setProgresso((prevProgresso) => Math.min(prevProgresso + 10, 100));
-        setAcertos((prevAcertos) => prevAcertos + 1);
+        setAcertos((prevAcertos) => (prevAcertos || 0) + 1);
         await incrementAudioCount(user.uid);
-        setAudiosGerados((prevCount) => prevCount + 1);
+        setAudiosGerados((prevCount) => (prevCount || 0) + 1);
         setInputText("");
         setAttempts(0);
         setModalMessage("Parabéns! Você acertou.");
 
         if (audiosGerados + 1 === 10) {
-          finalizarPratica(acertos + 1);
+          finalizarPratica((acertos || 0) + 1);
           setModalMessage("Você finalizou a prática diária de 10 áudios!");
           setShowModal(true);
           setShowDoneBtn(true);
@@ -91,8 +91,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
           await gerarAudio();
         }
       } else {
-        setIsCorrect(false);
-        setAttempts((prevAttempts) => prevAttempts + 1);
+        setAttempts((prevAttempts) => (prevAttempts || 0) + 1);
         setModalMessage("Você errou! Tente novamente.");
         setShowModal(true);
       }
@@ -147,7 +146,8 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
         />
       )}
       <div className="texto-pratica">
-        <img src={waves} alt="" />
+        {/* <img src={waves} alt="" /> */}
+        {/* <div className="wave-animation"></div> */}
         <p>
           Reproduza o <span>áudio</span> para ouvir sua <span>frase.</span>
         </p>
@@ -161,7 +161,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       ) : (
         <div className="start-pratica">
           <button className="btn-start" onClick={handleStartClick}>
-            Começar
+            {isLoading ? <div className="loading-animation"></div> : "Começar"}
           </button>
         </div>
       )}
@@ -175,9 +175,11 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       </div>
 
       <div className="footer-pratica">
-        <button className="btn-continue" onClick={handleContinueClick}>
-          Continuar
-        </button>
+        {handleStartClick && (
+          <button className="btn-continue" onClick={handleContinueClick}>
+            Continuar
+          </button>
+        )}
 
         {attempts >= 3 && (
           <button className="btn-skip" onClick={handleSkip}>

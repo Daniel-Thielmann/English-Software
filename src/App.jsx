@@ -20,7 +20,7 @@ const App = () => {
   };
 
   const finalizarPratica = (acertos) => {
-    setAcertos(acertos);
+    setAcertos(acertos || 0);
     setPraticaConcluida(true);
   };
 
@@ -32,18 +32,18 @@ const App = () => {
   };
 
   const atualizarProgresso = (novoProgresso) => {
-    const progressoAtualizado = Math.min(novoProgresso, 100);
+    // const progressoAtualizado = Math.min((novoProgresso || 0) + 10, 100);
 
-    setProgresso(progressoAtualizado);
+    setProgresso((prevProgresso) => prevProgresso + (novoProgresso ? 10 : 0));
 
-    if (progressoAtualizado === 100) {
-      setPraticaConcluida(true);
-      setPraticando(false);
-    }
+    // if (progressoAtualizado === 100) {
+    //   setPraticaConcluida(true);
+    //   setPraticando(false);
+    // }
   };
 
   const atualizarAcertos = (novoAcerto) => {
-    setAcertos((prevAcertos) => prevAcertos + (novoAcerto ? 1 : 0));
+    setAcertos(novoAcerto);
   };
 
   return (
