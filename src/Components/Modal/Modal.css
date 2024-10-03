@@ -1,68 +1,101 @@
 /* src/Components/Modal/Modal.css */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
 .modal-content {
-    background-color: var(--gray-900);
-    padding: 4rem;
-    border-radius: 8px;
-    text-align: center;
-    position: relative;
-    
+  background-color: var(--gray-900);
+  padding: 4rem;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
 }
 
 .modal-text {
-    color: white;
-    font-size: 20px;
-    letter-spacing: 2px;
+  color: white;
+  font-size: 20px;
+  letter-spacing: 2px;
 }
 
 .modal-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    border: none;
-    background: none;
-    font-size: 18px;
-    cursor: pointer;
-    color: var(--faded);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--faded);
 }
 
 .modal-close:hover {
-    transform: scale(1.25);
-    transition: ease-in-out;
+  transform: scale(1.25);
+  transition: ease-in-out;
 }
 
 .btn-finalize {
-    margin-top: 2rem;
-    letter-spacing: 1px;
-    font-size: 14px;
-    font-weight: bold;
-    color: white;
-    padding: 10px;
-    width: 200px;
-    border: 1px solid white;
-    background: transparent;
-    /* outline: none; */
-    border-radius: 10px;
-    /* background-image: var(--faded); */
+  margin-top: 2rem;
+  letter-spacing: 1px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  padding: 10px;
+  width: 200px;
+  border: 1px solid white;
+  background: transparent;
+  /* outline: none; */
+  border-radius: 10px;
+  /* background-image: var(--faded); */
 }
 
-
 .btn-finalize:hover {
-    transform: scale(1.10);
+  transform: scale(1.1);
+  border: none;
+  transition: ease-in-out;
+  background-image: var(--faded);
+  cursor: pointer;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 2rem;
+    font-size: 14px;
+  }
+
+  .modal-text {
+    font-size: 16px;
+  }
+
+  .btn-finalize {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    padding: 1rem;
+  }
+
+  .modal-text {
+    margin-top: 1.5rem;
+    font-size: 14px;
+  }
+
+  .btn-finalize {
     border: none;
     transition: ease-in-out;
     background-image: var(--faded);
-    cursor: pointer;
+    width: 70%;
+  }
 }

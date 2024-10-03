@@ -26,3 +26,14 @@
 .text:hover {
    color: var(--roxo-codi);
 }
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding: 10px;
+  }
+
+  .text {
+    font-size: 12px;
+    margin: 10px;
+  }
+}

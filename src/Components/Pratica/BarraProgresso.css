@@ -47,3 +47,18 @@
     font-size: 20px;
 }
 
+/* Ajustes de responsividade */
+@media (max-width: 768px) {
+    .progress-container {
+        margin-top: 1rem;
+        gap: 10px;
+    }
+
+    .progress-bar {
+        max-width: 300px;
+    }
+
+    .progress-text {
+        font-size: 16px;
+    }
+}

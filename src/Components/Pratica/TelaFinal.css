@@ -74,3 +74,30 @@
   background-image: var(--faded);
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .container-final h1 {
+    font-size: 2rem;
+  }
+
+  .container-final p {
+    font-size: 1rem;
+  }
+
+  .header-final {
+    font-size: 2rem;
+  }
+
+  .acertos-final,
+  .progress-final {
+    font-size: 1.5rem;
+  }
+
+  .btn-voltar {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border: none;
+    transition: ease-in-out;
+    background-image: var(--faded);
+  }
+}

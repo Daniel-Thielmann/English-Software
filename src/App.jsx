@@ -32,14 +32,7 @@ const App = () => {
   };
 
   const atualizarProgresso = (novoProgresso) => {
-    // const progressoAtualizado = Math.min((novoProgresso || 0) + 10, 100);
-
     setProgresso((prevProgresso) => prevProgresso + (novoProgresso ? 10 : 0));
-
-    // if (progressoAtualizado === 100) {
-    //   setPraticaConcluida(true);
-    //   setPraticando(false);
-    // }
   };
 
   const atualizarAcertos = (novoAcerto) => {
