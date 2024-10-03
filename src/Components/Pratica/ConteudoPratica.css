@@ -151,5 +151,6 @@
 
   .container-pratica .footer-pratica button {
     width: 60%;
+    color: var(--gray-400);
   }
 }

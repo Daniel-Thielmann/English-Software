@@ -26,6 +26,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const [showModal, setShowModal] = useState(false);
   const [showDoneBtn, setShowDoneBtn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [plays, setPlays] = useState(0);
 
   // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
   useEffect(() => {
@@ -52,6 +53,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       const canGenerate = await checkAudioLimit(user.uid);
 
       if (canGenerate) {
+        setPlays((prevPlays) => prevPlays + 1);
         setIsLoading(true);
         await handlePlayAudio(user.uid, gerarAudio);
         setIsLoading(false);
@@ -175,7 +177,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       </div>
 
       <div className="footer-pratica">
-        {handleStartClick && (
+        {handleStartClick && plays > 0 && (
           <button className="btn-continue" onClick={handleContinueClick}>
             Continuar
           </button>
