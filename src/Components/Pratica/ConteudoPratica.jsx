@@ -26,6 +26,8 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const [audiosGerados, setAudiosGerados] = useState(0);
   const [modalMessage, setModalMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [feedback, setFeedback] = useState(""); // Para o feedback da resposta
+
 
   // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
   useEffect(() => {
@@ -74,6 +76,9 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
     if (canGenerate) {
       if (inputText.toLocaleLowerCase() === text.toLocaleLowerCase()) {
         setIsCorrect(true);
+        setFeedback(`Você acertou! Resposta correta: ${text}`);
+        setModalMessage("Você acertou!");
+        setShowModal(true);
         setProgresso((prevProgresso) => Math.min(prevProgresso + 10, 100));
         setAcertos((prevAcertos) => prevAcertos + 1);
         await incrementAudioCount(user.uid);
@@ -88,6 +93,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
         }
       } else {
         setIsCorrect(false);
+        setFeedback(`Você errou. Resposta correta: ${text}`);
         setAttempts((prevAttempts) => prevAttempts + 1);
       }
     } else {
@@ -135,6 +141,7 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
       {showModal && (
         <Modal
           message={modalMessage}
+          feedback={feedback}
           onClose={closeModal}
           finalizarPratica={finalizarPratica}
           acertos={acertos}
