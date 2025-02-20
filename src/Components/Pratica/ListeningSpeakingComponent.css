@@ -56,7 +56,7 @@
 
 /* Área de prática */
 .practice-content {
-  background-color: #1c1c1c;
+  background-color: var(--gray-900);
   padding: 20px;
   width: 100%;
   max-width: 600px;
