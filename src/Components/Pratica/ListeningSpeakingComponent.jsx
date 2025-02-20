@@ -44,17 +44,27 @@ const ListeningSpeakingComponent = () => {
       ) : (
         <div className="start-section">
           <p className="body-text">
-            Nesta atividade, você ouvirá frases em inglês e precisará repeti-las
-            corretamente para aprimorar sua pronúncia e fluência.
+            🔹 Nesta atividade, você ouvirá frases em inglês e precisará
+            repeti-las corretamente para aprimorar sua pronúncia e fluência.
             <br />
             <br />
-            🔹 **Regras da Atividade:** - Você deve repetir a frase com a melhor
-            pronúncia possível. - Um sistema de IA analisará sua voz e dará uma
-            pontuação. - Você pode tentar novamente se não estiver satisfeito
-            com a resposta. - A cada acerto, sua barra de progresso aumentará.
+            📜 Regras da Atividade:
             <br />
             <br />
-            🎯 **Objetivo:** Melhore sua pronúncia praticando regularmente!
+            - Você deve repetir a frase com a melhor pronúncia possível.
+            <br />
+            <br />
+            - Um sistema de IA analisará sua voz e dará uma pontuação.
+            <br />
+            <br />
+            - Você pode tentar novamente se não estiver satisfeito com a
+            resposta.
+            <br />
+            <br />
+            - A cada acerto, sua barra de progresso aumentará.
+            <br />
+            <br />
+            🎯 Objetivo: Melhore sua pronúncia praticando regularmente!
           </p>
           <button className="start-button" onClick={comecarPratica}>
             Iniciar Prática de Listening & Speaking

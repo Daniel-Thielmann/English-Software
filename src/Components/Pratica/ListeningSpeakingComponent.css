@@ -11,13 +11,15 @@
 }
 
 /* Texto explicativo */
-.body-text {
-  font-size: 16px;
-  color: #ffffff;
+.listening-speaking-container .body-text {
+  font-family: "Montserrat", sans-serif;
+  color: #9ca3af !important; /* Força a cor cinza */
+  font-weight: 400;
+  font-size: 22px !important; /* Força o tamanho */
+  line-height: 1.6;
+  max-width: 1000px;
   text-align: center;
-  margin-bottom: 15px;
-  max-width: 500px;
-  line-height: 1.5;
+  margin-bottom: 30px;
 }
 
 /* Botão de início */
