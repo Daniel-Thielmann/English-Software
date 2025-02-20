@@ -1,14 +1,13 @@
 const express = require("express");
 const cors = require("cors");
-const rankingRoutes = require("./routes/ranking");
-const pointsRoutes = require("./routes/points");
+const userRoutes = require("./routes/users");
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api", rankingRoutes);
-app.use("/api", pointsRoutes);
+// Adicionar a rota para criação de usuários
+app.use("/api", userRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

@@ -19,6 +19,21 @@ const Navbar = ({ voltarParaInicio }) => {
     signInWithPopup(auth, provider)
       .then((result) => {
         setUser(result.user);
+
+        // Enviar os dados do usuário para o backend
+        fetch("http://localhost:3000/api/create-user", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            uid: result.user.uid,
+            name: result.user.displayName,
+            email: result.user.email,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => console.log("Usuário salvo no backend:", data))
+          .catch((error) => console.error("Erro ao salvar usuário:", error));
+
         window.location.reload();
       })
       .catch((e) => {
