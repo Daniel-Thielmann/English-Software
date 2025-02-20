@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import BarraProgresso from "./BarraProgresso";
 import ConteudoPratica from "./ConteudoPratica";
 import TelaFinal from "./TelaFinal";
 import "../../global.css";
 import "./ListeningWritingComponent.css"; // Importando o CSS
+import ProgressBar from "./ProgressBar";
 
 const ListeningWritingComponent = () => {
   const [praticando, setPraticando] = useState(false);
@@ -38,7 +38,7 @@ const ListeningWritingComponent = () => {
         </div>
       ) : praticando ? (
         <div className="practice-content">
-          <BarraProgresso progresso={progresso} />
+          <ProgressBar progresso={progresso} />
           <ConteudoPratica setProgresso={atualizarProgresso} />
         </div>
       ) : (

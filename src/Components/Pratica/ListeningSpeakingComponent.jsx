@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import BarraProgresso from "./BarraProgresso";
 import ConteudoFala from "./ConteudoFala"; // Componente específico para fala
 import TelaFinal from "./TelaFinal";
 import "../../global.css";
 import "./ListeningSpeakingComponent.css"; // Importando o CSS
+import ProgressBar from "./ProgressBar";
 
 const ListeningSpeakingComponent = () => {
   const [praticando, setPraticando] = useState(false);
@@ -38,7 +38,7 @@ const ListeningSpeakingComponent = () => {
         </div>
       ) : praticando ? (
         <div className="practice-content">
-          <BarraProgresso progresso={progresso} />
+          <ProgressBar progresso={progresso} />
           <ConteudoFala setProgresso={atualizarProgresso} />
         </div>
       ) : (
