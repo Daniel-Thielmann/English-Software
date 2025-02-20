@@ -28,6 +28,7 @@
 .header-container .logo img {
   width: 10rem;
   transition: transform 0.3s ease-in-out;
+  margin-bottom: 20px;
 }
 
 .header-container .logo img:hover {
@@ -46,7 +47,7 @@
 .header-text h1 {
   font-size: 42px;
   font-weight: 700;
-  margin-bottom: 50px;
+  margin-bottom: 80px;
 }
 
 .header-text span {
