@@ -1,69 +1,26 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar/Navbar";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
-import BarraProgresso from "./Components/Pratica/BarraProgresso";
-import ConteudoPratica from "./Components/Pratica/ConteudoPratica";
-import TelaFinal from "./Components/Pratica/TelaFinal";
+import ListeningWriting from "./pages/ListeningWriting";
+import ListeningSpeaking from "./pages/ListeningSpeaking";
 import "./global.css";
 
 const App = () => {
-  const [praticando, setPraticando] = useState(false);
-  const [progresso, setProgresso] = useState(0);
-  const [acertos, setAcertos] = useState(0);
-  const [praticaConcluida, setPraticaConcluida] = useState(false);
-
-  const comecarPratica = () => {
-    setPraticando(true);
-    setPraticaConcluida(false);
-    setProgresso(0);
-  };
-
-  const finalizarPratica = (acertos) => {
-    setAcertos(acertos || 0);
-    setPraticaConcluida(true);
-  };
-
-  const voltarParaInicio = () => {
-    setPraticando(false);
-    setProgresso(0);
-    setAcertos(0);
-    setPraticaConcluida(false);
-  };
-
-  const atualizarProgresso = (novoProgresso) => {
-    setProgresso((prevProgresso) => prevProgresso + (novoProgresso ? 10 : 0));
-  };
-
-  const atualizarAcertos = (novoAcerto) => {
-    setAcertos(novoAcerto);
-  };
-
   return (
-    <div className="App">
-      <Navbar voltarParaInicio={voltarParaInicio} />
-      <main className="container">
-        {praticaConcluida ? (
-          <TelaFinal
-            acertos={acertos}
-            progresso={progresso}
-            voltarParaInicio={voltarParaInicio}
-          />
-        ) : praticando ? (
-          <div>
-            <BarraProgresso progresso={progresso} />
-            <ConteudoPratica
-              setProgresso={atualizarProgresso}
-              setAcertos={atualizarAcertos}
-              finalizarPratica={finalizarPratica}
-            />
-          </div>
-        ) : (
-          <Header comecarPratica={comecarPratica} />
-        )}
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <div className="App">
+        <Navbar />
+        <main className="container">
+          <Routes>
+            <Route path="/" element={<Header />} />
+            <Route path="/listening-writing" element={<ListeningWriting />} />
+            <Route path="/listening-speaking" element={<ListeningSpeaking />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 };
 
