@@ -1,0 +1,46 @@
+.conteudo-fala-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #1c1c1c;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.frase {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.botao-falar {
+  background-color: #5f75f2;
+  color: white;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.botao-falar:hover {
+  background-color: #4957c8;
+}
+
+.resultado {
+  margin-top: 15px;
+  font-size: 18px;
+  color: #28a745;
+}
+
+.feedback {
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+}
