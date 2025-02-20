@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom"; // Importar Link para navegação
+import { Link } from "react-router-dom";
 import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "../../utils/firebaseConfig";
 import navlogo from "../../assets/nav-logo.png";
@@ -7,6 +7,8 @@ import "./Nav.css";
 
 const Navbar = ({ voltarParaInicio }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -16,28 +18,41 @@ const Navbar = ({ voltarParaInicio }) => {
   }, []);
 
   const handleLogin = async () => {
+    setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
-        setUser(result.user);
+        const loggedUser = result.user;
+        setUser(loggedUser);
 
         // Enviar os dados do usuário para o backend
         fetch("http://localhost:3000/api/create-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            uid: result.user.uid,
-            name: result.user.displayName,
-            email: result.user.email,
+            uid: loggedUser.uid,
+            name: loggedUser.displayName,
+            email: loggedUser.email,
           }),
         })
-          .then((response) => response.json())
-          .then((data) => console.log("Usuário salvo no backend:", data))
-          .catch((error) => console.error("Erro ao salvar usuário:", error));
-
-        window.location.reload();
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`Erro do backend: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("Usuário salvo no backend:", data);
+          })
+          .catch((error) => {
+            console.error("Erro ao salvar usuário:", error);
+            setError("Erro ao salvar usuário no backend.");
+          })
+          .finally(() => setLoading(false));
       })
       .catch((e) => {
-        console.log("Erro ao logar: ", e);
+        console.error("Erro ao logar:", e);
+        setError("Erro ao autenticar com o Google.");
+        setLoading(false);
       });
   };
 
@@ -45,10 +60,10 @@ const Navbar = ({ voltarParaInicio }) => {
     signOut(auth)
       .then(() => {
         setUser(null);
-        window.location.reload();
       })
       .catch((error) => {
-        console.error(error);
+        console.error("Erro ao deslogar:", error);
+        setError("Erro ao deslogar.");
       });
   };
 
@@ -60,7 +75,6 @@ const Navbar = ({ voltarParaInicio }) => {
         </Link>
       </div>
 
-      {/* Adicionando os Links para as Rotas */}
       <div className="nav-links">
         <Link to="/listening-writing" className="nav-item">
           📖 Escuta & Escrita
@@ -87,10 +101,16 @@ const Navbar = ({ voltarParaInicio }) => {
           </span>
         </div>
       ) : (
-        <div className="right-container" onClick={handleLogin}>
-          Login com Google
-        </div>
+        <button
+          className="right-container"
+          onClick={handleLogin}
+          disabled={loading}
+        >
+          {loading ? "Carregando..." : "Login com Google"}
+        </button>
       )}
+
+      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };
