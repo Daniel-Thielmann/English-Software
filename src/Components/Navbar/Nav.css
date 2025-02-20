@@ -13,11 +13,32 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Centraliza os itens da navbar */
   padding: 15px 30px;
   background-color: var(--gray-900);
   border-bottom: 1px solid var(--gray-950);
   height: 3rem;
+  position: relative; /* Para manter alinhamentos corretos */
+}
+
+/* Ajustar logo e botão para não empurrar os links */
+.left-container {
+  position: absolute;
+  left: 30px;
+}
+
+.right-container,
+.right-container-logged {
+  position: absolute;
+  right: 30px;
+}
+
+/* Centralizando os links */
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
 }
 
 /* Logo */
@@ -32,13 +53,7 @@
 }
 
 /* Navegação - Links */
-.nav-links {
-  display: flex;
-  margin-left: 95px;
-  gap: 40px; /* Adiciona espaçamento entre os links */
-}
-
-.nav-item {
+.nav-links .nav-item {
   text-decoration: none;
   color: var(--white); /* Cor branca nos links */
   font-weight: 600;
@@ -46,7 +61,7 @@
   transition: color 0.3s ease-in-out;
 }
 
-.nav-item:hover {
+.nav-links .nav-item:hover {
   color: var(--roxo-codi); /* Hover roxo */
 }
 
