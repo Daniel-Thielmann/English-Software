@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Importar Link para navegação
 import { onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
 import { auth, provider } from "../../utils/firebaseConfig";
-import navlogo from '../../assets/nav-logo.png'
-import './Nav.css'
+import navlogo from "../../assets/nav-logo.png";
+import "./Nav.css";
 
 const Navbar = ({ voltarParaInicio }) => {
   const [user, setUser] = useState(null);
@@ -39,27 +40,44 @@ const Navbar = ({ voltarParaInicio }) => {
   return (
     <div className="nav-container">
       <div className="left-container" onClick={voltarParaInicio}>
-        <img src={navlogo} alt="" />
+        <Link to="/">
+          <img src={navlogo} alt="Logo" />
+        </Link>
       </div>
-      {
-        user ? (
-          <div className="right-container-logged">
-             <img src={user.photoURL} alt={user.displayName} className="user-photo" />
-            <span>{user.displayName}</span>
-            <span className="material-symbols-outlined" onClick={handleLogout} id="logout">
-              logout
-            </span>
-            {/* <button className="right-container">Checar Rankinkg</button>*/}
 
-          </div>
-        ) : (
-          <div className="right-container" onClick={handleLogin}>
-            Login com Google
-          </div>
-        )
-      }
+      {/* Adicionando os Links para as Rotas */}
+      <div className="nav-links">
+        <Link to="/listening-writing" className="nav-item">
+          📖 Escuta & Escrita
+        </Link>
+        <Link to="/listening-speaking" className="nav-item">
+          🎤 Escuta & Fala
+        </Link>
+      </div>
+
+      {user ? (
+        <div className="right-container-logged">
+          <img
+            src={user.photoURL}
+            alt={user.displayName}
+            className="user-photo"
+          />
+          <span>{user.displayName}</span>
+          <span
+            className="material-symbols-outlined"
+            onClick={handleLogout}
+            id="logout"
+          >
+            logout
+          </span>
+        </div>
+      ) : (
+        <div className="right-container" onClick={handleLogin}>
+          Login com Google
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

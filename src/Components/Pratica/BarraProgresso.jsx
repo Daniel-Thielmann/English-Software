@@ -1,21 +1,20 @@
-import './BarraProgresso.css'
+import "./BarraProgresso.css";
 
 const BarraProgresso = ({ progresso }) => {
-
-  const progressoAtualizado = Math.min(Math.max(progresso, 0), 100);
-
   return (
-    <>
-      <div className="progress-text">
-        Progresso: {progresso}% / 100%
+    <div className="progress-container">
+      <div className="progress-bar">
+        <div
+          className="progress-fill"
+          style={{
+            width: `${progresso}%`, // ✅ Agora deve expandir corretamente
+            height: "100%", // ✅ Garante altura correta
+          }}
+        ></div>
       </div>
-      <div className='progress-container'>
-        <div className="progress-bar">
-          <div className="progress-fill" style={{ width: `${progressoAtualizado}%` }}></div>
-        </div>
-      </div>
-    </>
-  )
-}
+      <p className="progress-text">Progresso: {progresso}%</p>
+    </div>
+  );
+};
 
-export default BarraProgresso
+export default BarraProgresso;

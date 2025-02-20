@@ -86,9 +86,9 @@
 }
 
 .btn-start {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading-animation {
@@ -109,17 +109,16 @@
   }
 }
 
-
 @media (max-width: 768px) {
   .container-pratica {
-      padding: 1rem;
-      gap: 1.5rem;
+    padding: 1rem;
+    gap: 1.5rem;
   }
 
   .container-pratica .input-pratica textarea {
-      width: 15rem;
-      height: 6rem;
-      font-size: 14px;
+    width: 15rem;
+    height: 6rem;
+    font-size: 14px;
   }
 
   .container-pratica .footer-pratica {
@@ -132,14 +131,13 @@
   .container-pratica .footer-pratica button {
     width: 60%;
   }
-
 }
 
 @media (max-width: 480px) {
   .container-pratica .input-pratica textarea {
-      height: 8rem;
-      font-size: 12px;
-      width: 16rem;
+    height: 8rem;
+    font-size: 12px;
+    width: 16rem;
   }
 
   .container-pratica .footer-pratica {

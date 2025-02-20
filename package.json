@@ -1,26 +1,35 @@
 {
-  "name": "codi_listening",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "english-app",
+  "version": "1.0.0",
+  "description": "Codi Listening é uma página da Codi Academy voltada para o curso de inglês para programadores, com o objetivo de aprimorar habilidades na língua inglesa e fornecer prática para questões técnicas e entrevistas. Nossa página oferece um ambiente onde desenvolvedores podem melhorar suas habilidades de comunicação enquanto se preparam para os desafios das entrevistas técnicas diariamente.",
+  "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "vite"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FernandoZuchi/English-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/FernandoZuchi/English-app/issues"
+  },
+  "homepage": "https://github.com/FernandoZuchi/English-app#readme",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.1.1"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
-    "elevenlabs": "^0.10.0",
-    "firebase": "^10.13.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.1"
-  },
-  "devDependencies": {
-    "@types/dotenv": "^8.2.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.3.4"
+    "firebase": "^11.3.1",
+    "react": "^18.2.0",
+    "react-circular-progressbar": "^2.1.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.2.0"
   }
 }

@@ -1,64 +1,59 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap");
 
 :root {
-    --roxo-codi: #A243D2;
-    --fonte-marrom: #211B15;
-    --fonte-preta: #1C1C1C;
-    --gray-900: #111827;
-    --gray-950: #030712;
-    --faded: linear-gradient(97.57deg, #29e0a9 -12.7%, #5f75f2 32.64%, #9956f6 78.49%, #e254ff 109.78%);
+  --verde-progresso: #28a745;
+  --cinza-fundo: #e0e0e0;
+  --cinza-borda: #9ca3af;
 }
 
 .progress-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 1rem;
+  width: 100%;
 }
 
+/* Fundo da barra de progresso */
 .progress-bar {
-    position: relative;
-    width: 100%;
-    max-width: 400px;
-    height: 20px;
-    background: #e0e0e0;
-    border-radius: 20px;
-    overflow: hidden;
-    font-family: "Montserrat", sans-serif;
+  width: 100%;
+  max-width: 400px;
+  height: 15px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #9ca3af;
+  padding: 2px; /* ✅ Padding adicionado para garantir a visibilidade */
 }
 
+/* Preenchimento da barra (verde) */
 .progress-fill {
-    height: 100%;
-    background: var(--faded);
-    border-radius: 20px 0 0 20px;
-    transition: width 0.3 ease;
+  height: 100%; /* ✅ Garante que a altura seja aplicada */
+  width: 0%; /* ✅ Começa zerada */
+  background: #28a745 !important; /* ✅ Força a cor verde */
+  transition: width 0.5s ease-in-out;
+  padding: 2px; /* ✅ Corrige visualmente */
 }
 
+/* Texto do progresso */
 .progress-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    width: 100%;
-    color: var(--gray-400);
-    font-weight: 600;
-    line-height: 40px; 
-    letter-spacing: 1px;
-    font-size: 20px;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 5px;
+  text-align: center;
 }
 
-/* Ajustes de responsividade */
+/* Responsividade */
 @media (max-width: 768px) {
-    .progress-container {
-        margin-top: 1rem;
-        gap: 10px;
-    }
+  .progress-bar {
+    max-width: 300px;
+  }
 
-    .progress-bar {
-        max-width: 300px;
-    }
-
-    .progress-text {
-        font-size: 16px;
-    }
+  .progress-text {
+    font-size: 14px;
+  }
 }
