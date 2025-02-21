@@ -58,3 +58,23 @@ router.post("/create-user", async (req, res) => {
 });
 
 module.exports = router; // 🔹 Exportando corretamente o Router
+
+router.post("/update-points", async (req, res) => {
+  const { userId, points } = req.body;
+
+  if (!userId || points === undefined) {
+    return res.status(400).json({ message: "Dados inválidos" });
+  }
+
+  try {
+    const userRef = db.collection("users").doc(userId);
+    await userRef.update({
+      points: points, // 🔹 Atualiza o total de pontos do usuário
+    });
+
+    res.json({ message: "Pontos atualizados com sucesso!" });
+  } catch (error) {
+    console.error("Erro ao atualizar pontos:", error);
+    res.status(500).json({ message: "Erro ao atualizar pontos" });
+  }
+});

@@ -52,23 +52,6 @@
   background-color: #0056b3;
 }
 
-/* Barra de progresso */
-.progress-container {
-  width: 80%;
-  background-color: #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-  margin-top: 20px;
-  height: 20px;
-}
-
-.progress-bar {
-  height: 100%;
-  background-color: #28a745 !important; /* Verde */
-  width: 0%;
-  transition: width 0.3s ease-in-out;
-}
-
 /* Área de prática */
 .practice-content {
   background-color: var(--gray-900);

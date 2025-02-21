@@ -1,103 +1,109 @@
-/* src/Components/Pratica/TelaFinal.css */
 .container-final {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1.5rem;
   text-align: center;
   font-weight: bold;
-}
-
-.container-final h1 {
-  color: var(--primary-color);
-  font-size: 2.5rem;
-}
-
-.container-final p {
-  font-size: 1.2rem;
-  color: var(--gray-400);
+  background: #1e1e2e;
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  margin: 50px auto;
 }
 
 .header-final {
   font-size: 2.5rem;
-  padding: 2rem;
-  background-image: var(--faded);
+  background-image: linear-gradient(90deg, #ff8c00, #ff0080);
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  letter-spacing: 2px;
 }
 
 .sub-final {
-  font-size: 2rem;
-  letter-spacing: 1px;
+  font-size: 1.2rem;
+  color: #d1d1d1;
+}
+
+.motivational-message {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffcc00;
 }
 
 .acertos-final {
-  font-size: 2rem;
-  letter-spacing: 1px;
+  font-size: 1.8rem;
+  color: #ffffff;
 }
 
 .acertos-final span {
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: var(--faded);
+  font-weight: bold;
+  color: #ffcc00;
 }
 
-.progress-final {
-  font-size: 2rem;
-  letter-spacing: 1px;
+/* Barra de Progresso */
+.progress-bar-container {
+  width: 100%;
+  max-width: 400px;
+  height: 20px;
+  background: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #555;
 }
 
-.progress-final span {
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: var(--faded);
+/* Botões */
+.button-group {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-voltar,
+.btn-ranking {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease-in-out;
 }
 
 .btn-voltar {
-  padding: 15px 30px;
-  background: transparent;
+  background: #ff0080;
   color: white;
-  border-radius: 10px;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  border: 1px solid white;
-  letter-spacing: 1px;
 }
 
-.btn-voltar:hover {
+.btn-ranking {
+  background: #ffcc00;
+  color: black;
+}
+
+.btn-voltar:hover,
+.btn-ranking:hover {
   transform: scale(1.1);
-  border: none;
-  transition: ease-in-out;
-  background-image: var(--faded);
-  cursor: pointer;
 }
 
+/* Responsividade */
 @media (max-width: 768px) {
-  .container-final h1 {
-    font-size: 2rem;
-  }
-
-  .container-final p {
-    font-size: 1rem;
-  }
-
   .header-final {
     font-size: 2rem;
   }
 
-  .acertos-final,
-  .progress-final {
+  .sub-final {
+    font-size: 1rem;
+  }
+
+  .acertos-final {
     font-size: 1.5rem;
   }
 
-  .btn-voltar {
-    padding: 10px 20px;
+  .btn-voltar,
+  .btn-ranking {
+    padding: 10px 15px;
     font-size: 0.9rem;
-    border: none;
-    transition: ease-in-out;
-    background-image: var(--faded);
   }
 }

@@ -4,7 +4,9 @@ import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import ListeningWriting from "./pages/ListeningWriting";
 import ListeningSpeaking from "./pages/ListeningSpeaking";
+import RankingComponent from "./Components/Ranking/RankingComponent";
 import "./global.css";
+import TelaFinal from "./Components/Pratica/TelaFinal";
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
             <Route path="/" element={<Header />} />
             <Route path="/listening-writing" element={<ListeningWriting />} />
             <Route path="/listening-speaking" element={<ListeningSpeaking />} />
+            <Route path="/ranking" element={<RankingComponent />} />{" "}
+            <Route path="/tela-final" element={<TelaFinal />} />
           </Routes>
         </main>
         <Footer />

@@ -82,6 +82,9 @@ const Navbar = ({ voltarParaInicio }) => {
         <Link to="/listening-speaking" className="nav-item">
           🎤 Escuta & Fala
         </Link>
+        <Link to="/ranking" className="nav-item">
+          🏆 Ranking
+        </Link>
       </div>
 
       {user ? (

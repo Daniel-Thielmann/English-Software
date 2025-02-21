@@ -1,0 +1,53 @@
+.ranking-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.ranking-container h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+}
+
+.ranking-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid #eee;
+  font-size: 18px;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.ranking-list li:hover {
+  background: #f8f8f8;
+}
+
+.ranking-medal {
+  font-size: 22px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.gold {
+  color: #ffd700;
+}
+
+.silver {
+  color: #c0c0c0;
+}
+
+.bronze {
+  color: #cd7f32;
+}
