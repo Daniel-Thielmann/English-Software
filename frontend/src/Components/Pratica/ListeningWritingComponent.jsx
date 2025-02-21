@@ -1,21 +1,87 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // 🔹 Correção: Importando navigate
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ConteudoPratica from "./ConteudoPratica";
 import TelaFinal from "./TelaFinal";
 import "../../global.css";
 import "./ListeningWritingComponent.css";
 import ProgressBar from "./ProgressBar";
-import { auth } from "../../firebaseConfig"; // 🔹 Correção: Importando corretamente
+import { auth, db } from "../../firebaseConfig"; // 🔹 Agora inclui Firestore
+import { doc, getDoc } from "firebase/firestore";
+import ModalAuth from "../ModalAuth/ModalAuth"; // 🔹 Modal de ativação
 
 const ListeningWritingComponent = () => {
   const [praticando, setPraticando] = useState(false);
   const [progresso, setProgresso] = useState(0);
   const [acertos, setAcertos] = useState(0);
   const [praticaConcluida, setPraticaConcluida] = useState(false);
-  const navigate = useNavigate(); // 🔹 Correção: Adicionando useNavigate
-  const user = auth.currentUser; // 🔹 Obtendo usuário autenticado
+  const [isActivated, setIsActivated] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
+  const user = auth.currentUser;
 
+  useEffect(() => {
+    if (user) {
+      verificarAtivacao(user.uid);
+    }
+  }, [user]);
+
+  // 🔹 Verifica se a conta já foi ativada no Firestore
+  const verificarAtivacao = async (userId) => {
+    try {
+      const userRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists() && userDoc.data().hasActivated) {
+        setIsActivated(true);
+      } else {
+        setModalOpen(true);
+      }
+    } catch (error) {
+      console.error("❌ Erro ao verificar ativação:", error);
+    }
+  };
+
+  // 🔹 Envia a chave de ativação para o backend
+  const validarChaveDeAtivacao = async (activationKey) => {
+    if (!user) {
+      alert("❌ Você precisa estar logado para ativar sua conta!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/validate-key", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.uid, activationKey }),
+      });
+
+      const data = await response.json();
+      console.log("🔍 Resposta da API:", data);
+
+      if (response.ok && data.success) {
+        alert(data.message);
+        setIsActivated(true);
+        setModalOpen(false);
+      } else {
+        alert(
+          `❌ Erro: ${data.message || "Erro desconhecido ao validar chave."}`
+        );
+      }
+    } catch (error) {
+      alert(
+        "❌ Erro ao validar chave. Verifique sua conexão e tente novamente."
+      );
+      console.error("❌ Erro no fetch:", error);
+    }
+  };
+
+  // 🔹 Só inicia a prática se a conta estiver ativada
   const comecarPratica = () => {
+    if (!isActivated) {
+      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
+      return;
+    }
+
     setPraticando(true);
     setPraticaConcluida(false);
     setProgresso(0);
@@ -25,7 +91,7 @@ const ListeningWritingComponent = () => {
   const atualizarProgresso = () => {
     setProgresso((prevProgresso) => {
       const novoValor = Math.min(prevProgresso + 10, 100);
-      console.log("Novo progresso:", novoValor); // Teste no Console
+      console.log("Novo progresso:", novoValor);
 
       if (novoValor === 100) {
         finalizarPratica();
@@ -53,7 +119,7 @@ const ListeningWritingComponent = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: user.uid,
-        pointsWriting: pontos, // 🔹 Garantindo que pointsWriting é enviado
+        pointsWriting: pontos,
       }),
     })
       .then((response) => response.json())
@@ -70,6 +136,13 @@ const ListeningWritingComponent = () => {
 
   return (
     <div className="listening-writing-container">
+      {/* 🔹 Modal de Ativação */}
+      <ModalAuth
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={validarChaveDeAtivacao}
+      />
+
       {praticaConcluida ? (
         <div className="final-screen">
           <TelaFinal
