@@ -3,6 +3,30 @@ const { db } = require("../firebase-config");
 
 const router = express.Router(); // 🔹 Definindo o Router corretamente
 
+// Rota para obter os 10 usuários com mais pontos
+router.get("/ranking", async (req, res) => {
+  try {
+    const snapshot = await db
+      .collection("users")
+      .orderBy("points", "desc") // Ordena os usuários por pontos (maior primeiro)
+      .limit(10) // Pega apenas os 10 melhores
+      .get();
+
+    const ranking = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      name: doc.data().name,
+      points: doc.data().points,
+    }));
+
+    res.json(ranking);
+  } catch (error) {
+    console.error("Erro ao buscar ranking:", error);
+    res.status(500).json({ message: "Erro ao buscar ranking", error });
+  }
+});
+
+module.exports = router;
+
 // Criar um novo usuário no Firestore
 router.post("/create-user", async (req, res) => {
   const { uid, name, email } = req.body;

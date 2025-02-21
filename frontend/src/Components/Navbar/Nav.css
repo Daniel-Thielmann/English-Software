@@ -73,6 +73,8 @@
   border-radius: 10px;
   transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
   cursor: pointer;
+  color: black;
+  font-family: "Montserrat", sans-serif;
 }
 
 .right-container:hover {
