@@ -1,66 +1,96 @@
-.listening-speaking-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  padding: 20px;
-  background-color: #111827;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Texto explicativo */
-.listening-speaking-container .body-text {
-  font-family: "Montserrat", sans-serif;
-  color: #9ca3af !important; /* Força a cor cinza */
-  font-weight: 400;
-  font-size: 22px !important; /* Força o tamanho */
-  line-height: 1.6;
-  max-width: 1000px;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-/* Botão de início */
-.start-button {
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  padding: 15px;
-  width: 300px;
-  border: none;
-  outline: none;
-  border-radius: 10px;
-  background: linear-gradient(97.57deg, #29e0a9, #5f75f2, #9956f6, #e254ff);
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out;
-}
-
-.start-button:hover {
-  transform: scale(1.05);
-}
-
-/* Tela final */
-.final-screen {
-  text-align: center;
-  padding: 20px;
-}
-
-.final-message {
-  font-size: 22px;
-  font-weight: bold;
-  color: #28a745;
-  margin-top: 10px;
-}
-
-/* Área de prática */
-.practice-content {
-  background-color: var(--gray-900);
-  padding: 20px;
-  width: 100%;
+/* Estilização do Container */
+.container-speaking {
   max-width: 600px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  margin: 50px auto;
+  padding: 20px;
+  background: #1e1e2e;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
   text-align: center;
+}
+
+/* Estilização do Título */
+.container-speaking h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: #ffcc00;
+}
+
+/* Frase a ser pronunciada */
+.frase {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffffff;
+  padding: 15px;
+  background: #333;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Botões */
+.btn-speak,
+.btn-finalizar {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.btn-speak {
+  background: #ff0080;
+  color: white;
+}
+
+.btn-finalizar {
+  background: #ffcc00;
+  color: black;
+}
+
+.btn-speak:hover,
+.btn-finalizar:hover {
+  transform: scale(1.1);
+}
+
+/* Transcrição do Usuário */
+.transcricao {
+  font-size: 1.2rem;
+  color: #ffcc00;
+  margin-top: 15px;
+  padding: 10px;
+  background: #222;
+  border-radius: 8px;
+}
+
+/* Pontuação */
+.pontuacao {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #00ff7f;
+  margin-top: 15px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container-speaking {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .frase {
+    font-size: 1.2rem;
+  }
+
+  .btn-speak,
+  .btn-finalizar {
+    font-size: 0.9rem;
+    padding: 10px 15px;
+  }
+
+  .pontuacao {
+    font-size: 1.2rem;
+  }
 }

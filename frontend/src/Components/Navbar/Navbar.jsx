@@ -24,7 +24,6 @@ const Navbar = ({ voltarParaInicio }) => {
         const loggedUser = result.user;
         setUser(loggedUser);
 
-        // Enviar os dados do usuário para o backend
         fetch("http://localhost:3000/api/create-user", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -50,7 +49,8 @@ const Navbar = ({ voltarParaInicio }) => {
           .finally(() => setLoading(false));
       })
       .catch((e) => {
-        console.error("Erro ao logar:", e);
+        console.error("Erro ao autenticar com o Google:", e);
+        alert("Falha na autenticação com Google. Verifique as configurações!");
         setError("Erro ao autenticar com o Google.");
         setLoading(false);
       });

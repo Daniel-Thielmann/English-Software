@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./RankingComponent.css"; // 🔹 Importa o CSS
+import "./RankingComponent.css";
 
 const RankingComponent = () => {
   const [ranking, setRanking] = useState([]);
@@ -18,29 +18,31 @@ const RankingComponent = () => {
       });
   }, []);
 
-  // Define as medalhas para os 3 primeiros colocados 🏅
-  const getMedal = (index) => {
-    if (index === 0) return <span className="ranking-medal gold">🥇</span>;
-    if (index === 1) return <span className="ranking-medal silver">🥈</span>;
-    if (index === 2) return <span className="ranking-medal bronze">🥉</span>;
-    return <span className="ranking-medal">{index + 1}.</span>;
-  };
-
   return (
     <div className="ranking-container">
       <h2>🏆 Ranking dos Melhores Usuários</h2>
       {loading ? (
         <p>Carregando ranking...</p>
       ) : (
-        <ul className="ranking-list">
+        <ol>
           {ranking.map((user, index) => (
             <li key={user.id}>
-              {getMedal(index)}
-              <span>{user.name}</span>
-              <span>{user.points} pontos</span>
+              <strong>
+                🥇 {index + 1}. {user.name}
+              </strong>
+              <br />
+              🎙️ Pontos de Fala:{" "}
+              {user.pointsSpeaking !== undefined
+                ? user.pointsSpeaking
+                : "Ainda não concluiu"}
+              <br />
+              ✍️ Pontos de Escrita:{" "}
+              {user.pointsWriting !== undefined
+                ? user.pointsWriting
+                : "Ainda não concluiu"}
             </li>
           ))}
-        </ul>
+        </ol>
       )}
     </div>
   );

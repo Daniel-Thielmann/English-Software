@@ -25,6 +25,17 @@ const ListeningWritingComponent = () => {
     });
   };
 
+  const salvarPontuacao = (userId, pointsWriting) => {
+    fetch("http://localhost:3000/api/update-points", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId, pointsWriting }), // 🔹 Enviando corretamente pointsWriting
+    })
+      .then((res) => res.json())
+      .then((data) => console.log("✅ Pontos de Escrita atualizados:", data))
+      .catch((err) => console.error("❌ Erro ao salvar pontuação:", err));
+  };
+
   return (
     <div className="listening-writing-container">
       {praticaConcluida ? (
