@@ -3,12 +3,13 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCrqy721fPRLour8vu6hqN4KlxOxy06VGY",
-  authDomain: "speakmaster-50956.firebaseapp.com",
-  projectId: "speakmaster-50956",
-  storageBucket: "speakmaster-50956.firebasestorage.app",
-  messagingSenderId: "299378003405",
-  appId: "1:299378003405:web:ecaebd01c597f28530c884",
+  apiKey: "AIzaSyDCUO2iFNtSq6hnqX0R1UHxvodXZK1gQiE",
+  authDomain: "codi-listening-ae9ad.firebaseapp.com",
+  projectId: "codi-listening-ae9ad",
+  storageBucket: "codi-listening-ae9ad.firebasestorage.app",
+  messagingSenderId: "556329953951",
+  appId: "1:556329953951:web:789fecc5bf5e6895c350aa",
+  measurementId: "G-WGBJ37RJFQ",
 };
 
 // 🔹 Evita inicializar o Firebase mais de uma vez

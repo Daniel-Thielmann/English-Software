@@ -1,27 +1,23 @@
-router.post("/validate-key", async (req, res) => {
-  const { userId, key } = req.body;
+const express = require("express");
+const router = express.Router();
+const { validateActivationKey } = require("../firebase-config");
 
-  if (!userId || !key) {
-    return res.status(400).json({ message: "Dados inválidos" });
+router.post("/validate-key", async (req, res) => {
+  const { userId, activationKey } = req.body;
+
+  if (!userId || !activationKey) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Dados incompletos!" });
   }
 
-  try {
-    const userRef = db.collection("users").doc(userId);
-    const userSnap = await userRef.get();
+  const response = await validateActivationKey(userId, activationKey);
 
-    if (!userSnap.exists) {
-      return res.status(404).json({ message: "Usuário não encontrado" });
-    }
-
-    const userData = userSnap.data();
-
-    if (userData.activationKey === key) {
-      return res.json({ valid: true, message: "Chave válida!" });
-    } else {
-      return res.json({ valid: false, message: "Chave inválida!" });
-    }
-  } catch (error) {
-    console.error("Erro ao validar chave:", error);
-    res.status(500).json({ message: "Erro no servidor" });
+  if (response.success) {
+    res.json(response);
+  } else {
+    res.status(400).json(response);
   }
 });
+
+module.exports = router;
