@@ -2,34 +2,66 @@ import React, { useState } from "react";
 import ConteudoPratica from "./ConteudoPratica";
 import TelaFinal from "./TelaFinal";
 import "../../global.css";
-import "./ListeningWritingComponent.css"; // Importando o CSS
+import "./ListeningWritingComponent.css";
 import ProgressBar from "./ProgressBar";
+import { auth } from "../../firebaseConfig";
 
 const ListeningWritingComponent = () => {
   const [praticando, setPraticando] = useState(false);
   const [progresso, setProgresso] = useState(0);
   const [acertos, setAcertos] = useState(0);
   const [praticaConcluida, setPraticaConcluida] = useState(false);
+  const user = auth.currentUser; // 🔹 Obtendo usuário autenticado
 
   const comecarPratica = () => {
     setPraticando(true);
     setPraticaConcluida(false);
     setProgresso(0);
+    setAcertos(0);
   };
 
   const atualizarProgresso = () => {
     setProgresso((prevProgresso) => {
       const novoValor = Math.min(prevProgresso + 10, 100);
       console.log("Novo progresso:", novoValor); // Teste no Console (F12 > Console)
+
+      if (novoValor === 100) {
+        finalizarPratica();
+      }
+
       return novoValor;
     });
+  };
+
+  const finalizarPratica = () => {
+    if (!user) {
+      console.error("Usuário não autenticado!");
+      return;
+    }
+
+    fetch("http://localhost:3000/api/update-points", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user.uid,
+        pointsWriting: acertos * 10, // 🔹 Cada acerto vale 10 pontos
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("✅ Pontos de Escrita atualizados:", data);
+        navigate("/tela-final", {
+          state: { pointsWriting: acertos * 10 },
+        });
+      })
+      .catch((error) => console.error("❌ Erro ao atualizar pontos:", error));
   };
 
   const salvarPontuacao = (userId, pointsWriting) => {
     fetch("http://localhost:3000/api/update-points", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, pointsWriting }), // 🔹 Enviando corretamente pointsWriting
+      body: JSON.stringify({ userId, pointsWriting }),
     })
       .then((res) => res.json())
       .then((data) => console.log("✅ Pontos de Escrita atualizados:", data))
@@ -41,7 +73,7 @@ const ListeningWritingComponent = () => {
       {praticaConcluida ? (
         <div className="final-screen">
           <TelaFinal
-            acertos={acertos}
+            pointsWriting={acertos * 10}
             progresso={progresso}
             voltarParaInicio={() => setPraticando(false)}
           />
@@ -50,7 +82,10 @@ const ListeningWritingComponent = () => {
       ) : praticando ? (
         <div className="practice-content">
           <ProgressBar progresso={progresso} />
-          <ConteudoPratica setProgresso={atualizarProgresso} />
+          <ConteudoPratica
+            setProgresso={atualizarProgresso}
+            setAcertos={setAcertos}
+          />
         </div>
       ) : (
         <div className="start-section">

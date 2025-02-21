@@ -16,7 +16,7 @@ const ListeningSpeakingComponent = () => {
   const [pontuacao, setPontuacao] = useState(0);
   const [gravando, setGravando] = useState(false);
   const [progresso, setProgresso] = useState(0);
-  const [totalPontosFala, setTotalPontosFala] = useState(0); // 🔹 Mantém os pontos acumulados
+  const [totalPontosFala, setTotalPontosFala] = useState(0);
   const navigate = useNavigate();
   const user = auth.currentUser;
 
@@ -109,7 +109,7 @@ const ListeningSpeakingComponent = () => {
     fetch("http://localhost:3000/api/update-points", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, pointsSpeaking }), // 🔹 Enviando corretamente pointsSpeaking
+      body: JSON.stringify({ userId, pointsSpeaking }),
     })
       .then((res) => res.json())
       .then((data) => console.log("✅ Pontos de Fala atualizados:", data))
@@ -117,18 +117,27 @@ const ListeningSpeakingComponent = () => {
   };
 
   const atualizarProgressoEProximaFrase = () => {
+    setProgresso((prevProgresso) => {
+      const novoProgresso = Math.min(prevProgresso + 100 / frases.length, 100);
+
+      if (novoProgresso === 100) {
+        finalizarPratica();
+      }
+
+      return novoProgresso;
+    });
+
     if (fraseAtualIndex < frases.length - 1) {
       setFraseAtualIndex(fraseAtualIndex + 1);
       setTranscricao("");
       setPontuacao(0);
-      setProgresso(progresso + 100 / frases.length);
-    } else {
-      setProgresso(100);
-      setTimeout(
-        () => navigate("/tela-final", { state: { totalPontosFala } }),
-        1500
-      );
     }
+  };
+
+  const finalizarPratica = () => {
+    setTimeout(() => {
+      navigate("/tela-final", { state: { pointsSpeaking: totalPontosFala } });
+    }, 1500);
   };
 
   return (
