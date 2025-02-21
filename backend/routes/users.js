@@ -28,9 +28,11 @@ router.get("/ranking", async (req, res) => {
 
 // 🔹 Criar um novo usuário no Firestore
 router.post("/create-user", async (req, res) => {
-  const { uid, name, email } = req.body;
+  const { uid, email, name } = req.body;
 
-  if (!uid || !name || !email) {
+  console.log("📥 Dados recebidos no backend:", req.body); // 🔍 Debug
+
+  if (!uid || !email) {
     return res
       .status(400)
       .json({ message: "Todos os campos são obrigatórios." });
@@ -42,17 +44,19 @@ router.post("/create-user", async (req, res) => {
 
     if (!userSnap.exists) {
       await userRef.set({
-        name,
         email,
-        pointsSpeaking: 0, // 🔹 Inicializando corretamente
+        name: name || "Usuário",
+        pointsSpeaking: 0,
         pointsWriting: 0,
       });
+      console.log("✅ Usuário salvo no Firestore:", { uid, email, name });
       res.json({ message: "Usuário criado com sucesso!" });
     } else {
+      console.log("⚠️ Usuário já existe no Firestore:", { uid, email });
       res.json({ message: "Usuário já existe." });
     }
   } catch (error) {
-    console.error("❌ Erro ao criar usuário:", error);
+    console.error("❌ Erro ao criar usuário no Firestore:", error);
     res.status(500).json({ message: "Erro no servidor ao criar usuário." });
   }
 });
@@ -60,6 +64,8 @@ router.post("/create-user", async (req, res) => {
 // 🔹 Atualizar pontos de fala e escrita
 router.post("/update-points", async (req, res) => {
   try {
+    console.log("Recebido no backend:", req.body); // 🔹 Verifica se os pontos chegam corretamente
+
     const { userId, pointsSpeaking, pointsWriting } = req.body;
 
     if (!userId) {

@@ -1,32 +1,23 @@
-import React from "react";
 import { useLocation } from "react-router-dom";
 import "./TelaFinal.css";
 
 const TelaFinal = () => {
   const location = useLocation();
-  const { pointsWriting = 0, pointsSpeaking = 0 } = location.state || {};
+  const pointsWriting = location.state?.pointsWriting ?? "Ainda não concluiu";
+  const pointsSpeaking = location.state?.pointsSpeaking ?? "Ainda não concluiu";
+
+  console.log("📌 Tela Final - pontosWriting:", pointsWriting);
+  console.log("📌 Tela Final - pontosSpeaking:", pointsSpeaking);
 
   return (
     <div className="container-final">
-      <h1 className="header-final">🎉 Prática Concluída!</h1>
-      <p className="sub-final">Volte amanhã para continuar evoluindo! 🚀</p>
+      <h1>🎉 Prática Concluída!</h1>
+      <p>Volte amanhã para continuar evoluindo! 🚀</p>
 
-      <p className="resultado-final">
-        🗣️ Pontos de Fala:{" "}
-        {pointsSpeaking > 0 ? pointsSpeaking : "Ainda não concluiu"}
-      </p>
+      <p>🗣️ Pontos de Fala: {pointsSpeaking}</p>
+      <p>✍️ Pontos de Escrita: {pointsWriting}</p>
 
-      <p className="resultado-final">
-        ✍️ Pontos de Escrita:{" "}
-        {pointsWriting > 0 ? pointsWriting : "Ainda não concluiu"}
-      </p>
-
-      <button
-        className="btn-voltar"
-        onClick={() => (window.location.href = "/")}
-      >
-        🔙 Voltar ao Início
-      </button>
+      <button onClick={() => navigate("/")}>Voltar ao Início</button>
     </div>
   );
 };

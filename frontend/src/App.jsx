@@ -7,6 +7,7 @@ import ListeningSpeaking from "./pages/ListeningSpeaking";
 import RankingComponent from "./Components/Ranking/RankingComponent";
 import "./global.css";
 import TelaFinal from "./Components/Pratica/TelaFinal";
+import AuthPage from "./Components/AuthPage/AuthPage";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
             <Route path="/listening-speaking" element={<ListeningSpeaking />} />
             <Route path="/ranking" element={<RankingComponent />} />{" "}
             <Route path="/tela-final" element={<TelaFinal />} />
+            <Route path="/auth" element={<AuthPage />} />
           </Routes>
         </main>
         <Footer />

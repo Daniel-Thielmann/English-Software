@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 🔹 Correção: Importando navigate
 import ConteudoPratica from "./ConteudoPratica";
 import TelaFinal from "./TelaFinal";
 import "../../global.css";
 import "./ListeningWritingComponent.css";
 import ProgressBar from "./ProgressBar";
-import { auth } from "../../firebaseConfig";
+import { auth } from "../../firebaseConfig"; // 🔹 Correção: Importando corretamente
 
 const ListeningWritingComponent = () => {
   const [praticando, setPraticando] = useState(false);
   const [progresso, setProgresso] = useState(0);
   const [acertos, setAcertos] = useState(0);
   const [praticaConcluida, setPraticaConcluida] = useState(false);
+  const navigate = useNavigate(); // 🔹 Correção: Adicionando useNavigate
   const user = auth.currentUser; // 🔹 Obtendo usuário autenticado
 
   const comecarPratica = () => {
@@ -23,7 +25,7 @@ const ListeningWritingComponent = () => {
   const atualizarProgresso = () => {
     setProgresso((prevProgresso) => {
       const novoValor = Math.min(prevProgresso + 10, 100);
-      console.log("Novo progresso:", novoValor); // Teste no Console (F12 > Console)
+      console.log("Novo progresso:", novoValor); // Teste no Console
 
       if (novoValor === 100) {
         finalizarPratica();
@@ -35,37 +37,35 @@ const ListeningWritingComponent = () => {
 
   const finalizarPratica = () => {
     if (!user) {
-      console.error("Usuário não autenticado!");
+      console.error("❌ Usuário não autenticado!");
       return;
     }
+
+    const pontos = acertos * 10;
+
+    console.log("🔹 Enviando para o backend:", {
+      userId: user.uid,
+      pointsWriting: pontos,
+    });
 
     fetch("http://localhost:3000/api/update-points", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         userId: user.uid,
-        pointsWriting: acertos * 10, // 🔹 Cada acerto vale 10 pontos
+        pointsWriting: pontos, // 🔹 Garantindo que pointsWriting é enviado
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log("✅ Pontos de Escrita atualizados:", data);
-        navigate("/tela-final", {
-          state: { pointsWriting: acertos * 10 },
-        });
+        setTimeout(() => {
+          navigate("/tela-final", {
+            state: { pointsWriting: pontos },
+          });
+        }, 500);
       })
       .catch((error) => console.error("❌ Erro ao atualizar pontos:", error));
-  };
-
-  const salvarPontuacao = (userId, pointsWriting) => {
-    fetch("http://localhost:3000/api/update-points", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId, pointsWriting }),
-    })
-      .then((res) => res.json())
-      .then((data) => console.log("✅ Pontos de Escrita atualizados:", data))
-      .catch((err) => console.error("❌ Erro ao salvar pontuação:", err));
   };
 
   return (
