@@ -124,7 +124,7 @@ const AuthPage = () => {
           {isRegistering && (
             <input
               type="text"
-              placeholder="Nome (opcional)"
+              placeholder="Nome"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />

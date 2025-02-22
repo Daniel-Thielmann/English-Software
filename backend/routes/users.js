@@ -48,6 +48,7 @@ router.post("/create-user", async (req, res) => {
         name: name || "Usuário",
         pointsSpeaking: 0,
         pointsWriting: 0,
+        hasActivated: false,
       });
       console.log("✅ Usuário salvo no Firestore:", { uid, email, name });
       res.json({ message: "Usuário criado com sucesso!" });
