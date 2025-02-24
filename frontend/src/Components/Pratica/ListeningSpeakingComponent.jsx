@@ -46,11 +46,12 @@ const ListeningSpeakingComponent = () => {
   };
 
   const iniciarPratica = () => {
-    setPraticaIniciada(true);
     if (!isActivated) {
       alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
       return;
     }
+
+    setPraticaIniciada(true); // Apenas se a conta estiver ativada
   };
 
   const iniciarReconhecimentoVoz = () => {
