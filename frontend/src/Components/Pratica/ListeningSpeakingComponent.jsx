@@ -72,23 +72,59 @@ const ListeningSpeakingComponent = () => {
 
     const recognition = new SpeechRecognition();
     recognition.lang = "en-US";
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
     recognition.start();
     setGravando(true);
 
+    let timeout;
+
     recognition.onresult = (event) => {
-      const textoFalado = event.results[0][0].transcript;
+      clearTimeout(timeout);
+
+      const textoFalado = event.results[event.results.length - 1][0].transcript;
       console.log("🗣️ Transcrição:", textoFalado);
       setTranscricao(textoFalado);
-      setGravando(false);
+
+      timeout = setTimeout(() => {
+        recognition.stop();
+        setGravando(false);
+
+        // 🔹 Normalização de texto para comparação
+        const limparTexto = (texto) =>
+          texto
+            .toLowerCase()
+            .trim()
+            .replace(/[.,!?]/g, "");
+
+        const respostaUsuario = limparTexto(textoFalado);
+        const respostaCorreta = limparTexto(frases[fraseAtualIndex]);
+
+        // 🔹 Comparação mais flexível
+        if (respostaUsuario === respostaCorreta) {
+          alert("✅ Correto! Próxima frase...");
+          setPointsSpeaking((prevPoints) => prevPoints + 10);
+          setProgresso(((fraseAtualIndex + 1) / frases.length) * 100);
+
+          if (fraseAtualIndex < frases.length - 1) {
+            setFraseAtualIndex((prevIndex) => prevIndex + 1);
+          } else {
+            alert("🎉 Parabéns! Você concluiu a prática.");
+            setPraticaIniciada(false);
+          }
+        } else {
+          alert("❌ Tente novamente! Sua resposta não está correta.");
+        }
+      }, 2000);
     };
 
     recognition.onspeechend = () => {
-      recognition.stop();
-      setGravando(false);
+      timeout = setTimeout(() => {
+        recognition.stop();
+        setGravando(false);
+      }, 2000);
     };
 
     recognition.onerror = (event) => {
