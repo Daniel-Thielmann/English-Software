@@ -54,7 +54,7 @@
   background: transparent;
   /* outline: none; */
   border-radius: 10px;
-  /* background-image: var(--faded); */
+  background-image: var(--faded);
 }
 
 .btn-finalize:hover {

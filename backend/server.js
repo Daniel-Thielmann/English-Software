@@ -2,18 +2,23 @@ const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
+const pointsRoutes = require("./routes/points"); // Importa a rota de pontos
+const rankingRoutes = require("./routes/ranking");
 
 const app = express();
+
+// 🔹 Middleware precisa vir antes das rotas!
 app.use(express.json());
 app.use(cors());
 
-// Adiciona a rota do ranking
 app.use("/api", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/points", pointsRoutes); // Garante que a rota está registrada corretamente
+app.use("/ranking", rankingRoutes); // Garante que a rota está registrada corretamente
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
 
 const { validateActivationKey } = require("./firebase-config");

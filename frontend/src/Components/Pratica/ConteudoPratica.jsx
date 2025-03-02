@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useConteudoPratica } from "../Hooks/UseConteudoPratica";
-import Modal from "../Modal/Modal";
+import Modal from "../Modal/ModalWriting";
 import "./ConteudoPratica.css";
-import waves from "../../assets/waves.png";
 import {
   getAuth,
   onAuthStateChanged,

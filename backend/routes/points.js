@@ -3,31 +3,70 @@ const { db } = require("../firebase-config");
 
 const router = express.Router();
 
-router.post("/update-points", async (req, res) => {
-  const { userId } = req.body;
+/**
+ * 🔹 Atualizar SOMENTE pontos de escrita
+ */
+router.post("/update-writing-points", async (req, res) => {
+  try {
+    const { userId, pointsWriting } = req.body;
 
-  if (!userId) return res.status(400).send("ID do usuário é obrigatório");
+    if (!userId || pointsWriting === undefined) {
+      return res.status(400).json({ error: "Dados insuficientes fornecidos." });
+    }
 
-  const userRef = db.collection("users").doc(userId);
-  const userDoc = await userRef.get();
+    const userRef = db.collection("users").doc(userId);
+    const userDoc = await userRef.get();
 
-  if (!userDoc.exists) {
-    return res.status(404).send("Usuário não encontrado");
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: "Usuário não encontrado." });
+    }
+
+    const userData = userDoc.data();
+    const newPointsWriting = (userData.pointsWriting || 0) + pointsWriting;
+
+    await userRef.update({ pointsWriting: newPointsWriting });
+
+    res.json({
+      message: "✅ Pontuação de escrita atualizada com sucesso!",
+      pointsWriting: newPointsWriting,
+    });
+  } catch (error) {
+    console.error("❌ Erro ao atualizar pontos de escrita:", error);
+    res.status(500).json({ error: "Erro ao atualizar pontos." });
   }
+});
 
-  const userData = userDoc.data();
-  const today = new Date().toISOString().split("T")[0];
+/**
+ * 🔹 Atualizar SOMENTE pontos de fala
+ */
+router.post("/update-speaking-points", async (req, res) => {
+  try {
+    const { userId, pointsSpeaking } = req.body;
 
-  if (userData.last_completed === today) {
-    return res.status(400).send("Usuário já concluiu hoje");
+    if (!userId || pointsSpeaking === undefined) {
+      return res.status(400).json({ error: "Dados insuficientes fornecidos." });
+    }
+
+    const userRef = db.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: "Usuário não encontrado." });
+    }
+
+    const userData = userDoc.data();
+    const newPointsSpeaking = (userData.pointsSpeaking || 0) + pointsSpeaking;
+
+    await userRef.update({ pointsSpeaking: newPointsSpeaking });
+
+    res.json({
+      message: "✅ Pontuação de fala atualizada com sucesso!",
+      pointsSpeaking: newPointsSpeaking,
+    });
+  } catch (error) {
+    console.error("❌ Erro ao atualizar pontos de fala:", error);
+    res.status(500).json({ error: "Erro ao atualizar pontos." });
   }
-
-  await userRef.update({
-    points: (userData.points || 0) + 10,
-    last_completed: today,
-  });
-
-  res.send("Pontos atualizados com sucesso!");
 });
 
 module.exports = router;
