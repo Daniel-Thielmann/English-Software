@@ -14,7 +14,7 @@ app.use(cors());
 app.use("/api", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/points", pointsRoutes); // Garante que a rota está registrada corretamente
-app.use("/ranking", rankingRoutes); // Garante que a rota está registrada corretamente
+app.use("/points", rankingRoutes); // Garante que a rota está registrada corretamente
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

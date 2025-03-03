@@ -6,16 +6,22 @@ const RankingComponent = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/ranking")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchRanking = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/points/ranking");
+        if (!response.ok) {
+          throw new Error("Erro ao buscar ranking");
+        }
+        const data = await response.json();
         setRanking(data);
+      } catch (error) {
+        console.error("❌ Erro ao buscar ranking:", error);
+      } finally {
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar ranking:", error);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchRanking();
   }, []);
 
   return (
@@ -23,23 +29,37 @@ const RankingComponent = () => {
       <h2>🏆 Ranking dos Melhores Usuários</h2>
       {loading ? (
         <p>Carregando ranking...</p>
+      ) : ranking.length === 0 ? (
+        <p>Nenhum usuário no ranking ainda.</p>
       ) : (
-        <ol>
+        <ol className="ranking-list">
           {ranking.map((user, index) => (
-            <li key={user.id}>
-              <strong>
-                🥇 {index + 1}. {user.name}
-              </strong>
-              <br />
-              🎙️ Pontos de Fala:{" "}
-              {user.pointsSpeaking !== undefined
-                ? user.pointsSpeaking
-                : "Ainda não concluiu"}
-              <br />
-              ✍️ Pontos de Escrita:{" "}
-              {user.pointsWriting !== undefined
-                ? user.pointsWriting
-                : "Ainda não concluiu"}
+            <li key={user.id} className={`rank-${index + 1}`}>
+              <span
+                className={`ranking-medal ${
+                  index === 0
+                    ? "gold"
+                    : index === 1
+                    ? "silver"
+                    : index === 2
+                    ? "bronze"
+                    : "default"
+                }`}
+              >
+                {index === 0
+                  ? "🥇"
+                  : index === 1
+                  ? "🥈"
+                  : index === 2
+                  ? "🥉"
+                  : "🏅"}{" "}
+                {index + 1}.
+              </span>
+              <span className="user-name">{user.name}</span>
+              <span className="points">
+                🎙️ {user.pointsSpeaking} | ✍️ {user.pointsWriting} | 🏆 Total:{" "}
+                {user.totalPoints}
+              </span>
             </li>
           ))}
         </ol>

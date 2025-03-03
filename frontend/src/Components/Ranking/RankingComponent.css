@@ -1,53 +1,84 @@
+/* Estilização do Container */
 .ranking-container {
   max-width: 600px;
   margin: 50px auto;
   padding: 20px;
   background: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
   text-align: center;
+  border: 2px solid #f1f1f1;
 }
 
+/* Título */
 .ranking-container h2 {
-  font-size: 24px;
+  font-size: 26px;
   margin-bottom: 20px;
-  color: #333;
+  color: #222;
+  font-weight: bold;
 }
 
+/* Lista do Ranking */
 .ranking-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
+/* Estilo dos Itens da Lista */
 .ranking-list li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 15px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 18px;
+  border-bottom: 2px solid #eee;
   font-size: 18px;
   font-weight: 500;
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.1s ease-in-out;
+  border-radius: 8px;
 }
 
+/* Efeito ao passar o mouse */
 .ranking-list li:hover {
-  background: #f8f8f8;
+  background: #f5f5f5;
+  transform: scale(1.02);
 }
 
+/* Estilo das Medalhas */
 .ranking-medal {
   font-size: 22px;
   font-weight: bold;
   margin-right: 10px;
 }
 
+/* Cores para as Medalhas do Top 3 */
 .gold {
-  color: #ffd700;
+  color: #ffd700; /* 🥇 Ouro */
 }
 
 .silver {
-  color: #c0c0c0;
+  color: #c0c0c0; /* 🥈 Prata */
 }
 
 .bronze {
-  color: #cd7f32;
+  color: #cd7f32; /* 🥉 Bronze */
+}
+
+/* Ajuste da Fonte para Usuários Além do Top 3 */
+.default {
+  color: #555;
+  font-weight: bold;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .ranking-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .ranking-list li {
+    font-size: 16px;
+    padding: 10px;
+  }
 }
