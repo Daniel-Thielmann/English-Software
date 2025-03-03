@@ -5,13 +5,8 @@ import { doc, getDoc } from "firebase/firestore";
 import ProgressBar from "./ProgressBar";
 import ModalAuth from "../ModalAuth/ModalAuth";
 import ModalSpeaking from "../Modal/ModalSpeaking"; // 🔹 Importação do ModalSpeaking
+import frases from "../../utils/frases.json"; // 🔹 Importação do frases.json
 import "./ListeningSpeakingComponent.css";
-
-const frases = [
-  "The quick brown fox jumps over the lazy dog.",
-  "I love programming in JavaScript.",
-  "Practice makes perfect.",
-];
 
 const ListeningSpeakingComponent = () => {
   const [fraseAtualIndex, setFraseAtualIndex] = useState(0);
@@ -23,9 +18,30 @@ const ListeningSpeakingComponent = () => {
   const [isActivated, setIsActivated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalSpeakingOpen, setModalSpeakingOpen] = useState(false); // 🔹 Estado do modal de speaking
+  const [erros, setErros] = useState(0); // 🔹 Contador de erros
+  const [frasesCompletadasHoje, setFrasesCompletadasHoje] = useState(0); // 🔹 Contador de frases completadas hoje
   const navigate = useNavigate();
   const user = auth.currentUser;
 
+  // 🔹 Verificar se o usuário já completou 10 frases hoje
+  useEffect(() => {
+    if (!user) return;
+
+    const frasesHoje = localStorage.getItem("frasesCompletadasHoje");
+    const usuarioFrases = localStorage.getItem("usuarioFrases");
+
+    // 🔹 Verificar se o usuário atual é o mesmo que completou as frases
+    if (frasesHoje && usuarioFrases === user.uid) {
+      setFrasesCompletadasHoje(parseInt(frasesHoje, 10));
+    } else {
+      // 🔹 Resetar o localStorage se o usuário for diferente
+      localStorage.removeItem("frasesCompletadasHoje");
+      localStorage.removeItem("usuarioFrases");
+      setFrasesCompletadasHoje(0);
+    }
+  }, [user]);
+
+  // 🔹 Verificar ativação do usuário
   useEffect(() => {
     const verificarAtivacao = async () => {
       if (!user) return;
@@ -45,17 +61,24 @@ const ListeningSpeakingComponent = () => {
     };
 
     verificarAtivacao();
-  }, []);
+  }, [user]);
 
+  // 🔹 Iniciar prática
   const iniciarPratica = () => {
     if (!isActivated) {
       alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
       return;
     }
 
+    if (frasesCompletadasHoje >= 10) {
+      alert("⚠️ Você já completou o limite diário de 10 frases.");
+      return;
+    }
+
     setPraticaIniciada(true);
   };
 
+  // 🔹 Iniciar reconhecimento de voz
   const iniciarReconhecimentoVoz = () => {
     if (!isActivated) {
       alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
@@ -103,14 +126,33 @@ const ListeningSpeakingComponent = () => {
         alert("✅ Correto! Próxima frase...");
         setPointsSpeaking((prevPoints) => prevPoints + 10);
         setProgresso(((fraseAtualIndex + 1) / frases.length) * 100);
+        setErros(0); // 🔹 Resetar contador de erros
 
+        // 🔹 Atualizar frases completadas hoje
+        const novasFrasesCompletadas = frasesCompletadasHoje + 1;
+        setFrasesCompletadasHoje(novasFrasesCompletadas);
+        localStorage.setItem("frasesCompletadasHoje", novasFrasesCompletadas);
+        localStorage.setItem("usuarioFrases", user.uid); // 🔹 Armazenar ID do usuário
+
+        // 🔹 Verificar se atingiu o limite diário
+        if (novasFrasesCompletadas >= 10) {
+          finalizarPratica(); // 🔹 Finalizar prática ao atingir o limite
+          return;
+        }
+
+        // 🔹 Avançar para a próxima frase
         if (fraseAtualIndex < frases.length - 1) {
           setFraseAtualIndex((prevIndex) => prevIndex + 1);
         } else {
           finalizarPratica();
         }
       } else {
-        alert("❌ Tente novamente! Sua resposta não está correta.");
+        setErros((prevErros) => prevErros + 1); // 🔹 Incrementar contador de erros
+        if (erros >= 2) {
+          alert("❌ Você errou 3 vezes. Pressione 'Pular' para avançar.");
+        } else {
+          alert("❌ Tente novamente! Sua resposta não está correta.");
+        }
       }
     };
 
@@ -120,6 +162,29 @@ const ListeningSpeakingComponent = () => {
         alert("Nenhum som detectado! Fale mais alto e tente novamente.");
       }
     };
+  };
+
+  // 🔹 Pular para a próxima frase
+  const pularFrase = () => {
+    // 🔹 Atualizar frases completadas hoje
+    const novasFrasesCompletadas = frasesCompletadasHoje + 1;
+    setFrasesCompletadasHoje(novasFrasesCompletadas);
+    localStorage.setItem("frasesCompletadasHoje", novasFrasesCompletadas);
+    localStorage.setItem("usuarioFrases", user.uid); // 🔹 Armazenar ID do usuário
+
+    // 🔹 Verificar se atingiu o limite diário
+    if (novasFrasesCompletadas >= 10) {
+      finalizarPratica(); // 🔹 Finalizar prática ao atingir o limite
+      return;
+    }
+
+    // 🔹 Avançar para a próxima frase
+    if (fraseAtualIndex < frases.length - 1) {
+      setFraseAtualIndex((prevIndex) => prevIndex + 1);
+      setErros(0); // 🔹 Resetar contador de erros
+    } else {
+      finalizarPratica();
+    }
   };
 
   // 🔹 Envia os pontos de fala para o backend
@@ -212,6 +277,11 @@ const ListeningSpeakingComponent = () => {
           >
             {gravando ? "🎙️ Ouvindo..." : "🎤 Falar"}
           </button>
+          {erros >= 3 && ( // 🔹 Mostrar botão de pular após 3 erros
+            <button className="btn-skip" onClick={pularFrase}>
+              ⏭️ Pular
+            </button>
+          )}
           {transcricao && (
             <p className="transcricao">🗣️ Você disse: {transcricao}</p>
           )}
