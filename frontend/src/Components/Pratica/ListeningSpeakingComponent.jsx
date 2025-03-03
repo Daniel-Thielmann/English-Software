@@ -78,6 +78,39 @@ const ListeningSpeakingComponent = () => {
     setPraticaIniciada(true);
   };
 
+  const validarChaveDeAtivacao = async (activationKey) => {
+    if (!user) {
+      alert("❌ Você precisa estar logado para ativar sua conta!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/validate-key", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.uid, activationKey }),
+      });
+
+      const data = await response.json();
+      console.log("🔍 Resposta da API:", data);
+
+      if (response.ok && data.success) {
+        alert(data.message);
+        setIsActivated(true);
+        setModalOpen(false);
+      } else {
+        alert(
+          `❌ Erro: ${data.message || "Erro desconhecido ao validar chave."}`
+        );
+      }
+    } catch (error) {
+      alert(
+        "❌ Erro ao validar chave. Verifique sua conexão e tente novamente."
+      );
+      console.error("❌ Erro no fetch:", error);
+    }
+  };
+
   // 🔹 Iniciar reconhecimento de voz
   const iniciarReconhecimentoVoz = () => {
     if (!isActivated) {
@@ -236,8 +269,11 @@ const ListeningSpeakingComponent = () => {
   return (
     <div className="listening-speaking-container">
       {/* 🔹 Modal de Ativação */}
-      <ModalAuth isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-
+      <ModalAuth
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={validarChaveDeAtivacao}
+      />
       {/* 🔹 ModalSpeaking aparece ao finalizar a prática */}
       {modalSpeakingOpen && (
         <ModalSpeaking
