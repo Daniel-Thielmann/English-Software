@@ -1,34 +1,7 @@
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore"; // Manipulação Firestore
+import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore"; // Manipulação firestore
 import { formatDate } from "../Components/Hooks/Date";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
-// 🔹 Função genérica para buscar dados do backend
-export const fetchDataFromBackend = async (
-  endpoint,
-  method = "GET",
-  body = null
-) => {
-  try {
-    const options = {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: body ? JSON.stringify(body) : null,
-    };
-
-    const response = await fetch(`${API_BASE_URL}/${endpoint}`, options);
-    if (!response.ok) {
-      throw new Error(`Erro ao buscar dados do backend: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Erro na requisição:", error);
-    return null;
-  }
-};
-
-// 🔹 Verifica o limite de áudio do usuário
 export const checkAudioLimit = async (userId) => {
   try {
     // 🔹 Tenta buscar o limite de áudio pelo backend primeiro
@@ -36,7 +9,7 @@ export const checkAudioLimit = async (userId) => {
       `check-audio-limit/${userId}`
     );
 
-    if (backendData && backendData.canGenerateAudio !== undefined) {
+    if (backendData) {
       console.log("🔹 Dados do Backend:", backendData);
       return backendData.canGenerateAudio;
     }
@@ -70,49 +43,62 @@ export const checkAudioLimit = async (userId) => {
   }
 };
 
-// 🔹 Incrementa a contagem de áudios
+export const fetchDataFromBackend = async (endpoint) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/${endpoint}`);
+    if (!response.ok) {
+      throw new Error("Erro ao buscar dados do backend");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erro na requisição:", error);
+    return null;
+  }
+};
+
 export const incrementAudioCount = async (userId) => {
   try {
     // 🔹 Atualiza também no backend
-    const backendResponse = await fetchDataFromBackend(
-      `increment-audio-count/${userId}`,
-      "POST"
-    );
-
-    if (!backendResponse) {
-      console.warn("⚠️ Falha ao atualizar contagem no backend.");
-    }
+    await fetch(`${API_BASE_URL}/increment-audio-count/${userId}`, {
+      method: "POST",
+    });
 
     // 🔹 Continua atualizando no Firebase
     const db = getFirestore();
     const userRef = doc(db, "audioLimits", userId);
     const userDoc = await getDoc(userRef);
-
-    if (userDoc.exists()) {
-      const { audioCount, lastAccessed } = userDoc.data();
-      await setDoc(
-        userRef,
-        { audioCount: audioCount + 1, lastAccessed },
-        { merge: true }
-      );
-    }
+    const { audioCount, lastAccessed } = userDoc.data();
+    await setDoc(
+      userRef,
+      { audioCount: audioCount + 1, lastAccessed },
+      { merge: true }
+    );
   } catch (error) {
     console.log("Erro ao incrementar contagem de áudios: ", error);
   }
 };
 
-// 🔹 Função para gerar áudio e atualizar contagem
 export const handlePlayAudio = async (userId, gerarAudio) => {
-  if (!userId) {
-    alert("⚠️ Você precisa estar logado para usar esta função.");
-    return;
-  }
-
-  const canGenerate = await checkAudioLimit(userId);
-  if (canGenerate) {
-    await gerarAudio();
-    await incrementAudioCount(userId);
+  if (userId) {
+    const canGenerate = await checkAudioLimit(userId);
+    if (canGenerate) {
+      await gerarAudio();
+      await incrementAudioCount(userId);
+    } else {
+      console.log("SE FUDEU VIADO");
+    }
   } else {
-    alert("🚫 Você atingiu o limite diário de áudios.");
+    handleLogin();
   }
 };
+
+// ## REGRAS DO FIREBASE:
+// Estas regras permitem que apenas o usuário autenticado leia e escreva no seu próprio documento de audioLimits.
+
+// service cloud.firestore {
+//     match /databases/{database}/documents {
+//       match /audioLimits/{userId} {
+//         allow read, write: if request.auth != null && request.auth.uid == userId;
+//       }
+//     }
+//   }
