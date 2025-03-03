@@ -19,7 +19,7 @@ app.use("/api/users", userRoutes);
 app.use("/text-to-speech", textToSpeechRoutes);
 app.use("/auth", authRoutes);
 app.use("/points", pointsRoutes);
-app.use("/ranking", rankingRoutes); // Corrigido para não sobrescrever pointsRoutes
+app.use("/points", rankingRoutes); // Corrigido para não sobrescrever pointsRoutes
 
 // 🔹 Configuração da porta do servidor
 const PORT = process.env.PORT || 3000;
