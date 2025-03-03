@@ -8,6 +8,15 @@ import ModalSpeaking from "../Modal/ModalSpeaking"; // 🔹 Importação do Moda
 import frases from "../../utils/frases.json"; // 🔹 Importação do frases.json
 import "./ListeningSpeakingComponent.css";
 
+// 🔹 Função para embaralhar o array (Fisher-Yates)
+const embaralharArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+};
+
 const ListeningSpeakingComponent = () => {
   const [fraseAtualIndex, setFraseAtualIndex] = useState(0);
   const [transcricao, setTranscricao] = useState("");
@@ -20,6 +29,7 @@ const ListeningSpeakingComponent = () => {
   const [modalSpeakingOpen, setModalSpeakingOpen] = useState(false); // 🔹 Estado do modal de speaking
   const [erros, setErros] = useState(0); // 🔹 Contador de erros
   const [frasesCompletadasHoje, setFrasesCompletadasHoje] = useState(0); // 🔹 Contador de frases completadas hoje
+  const [frasesEmbaralhadas, setFrasesEmbaralhadas] = useState([]); // 🔹 Array de frases embaralhadas
   const navigate = useNavigate();
   const user = auth.currentUser;
 
@@ -74,6 +84,10 @@ const ListeningSpeakingComponent = () => {
       alert("⚠️ Você já completou o limite diário de 10 frases.");
       return;
     }
+
+    // 🔹 Embaralhar as frases antes de iniciar a prática
+    const frasesAleatorias = embaralharArray([...frases]);
+    setFrasesEmbaralhadas(frasesAleatorias);
 
     setPraticaIniciada(true);
   };
@@ -152,13 +166,13 @@ const ListeningSpeakingComponent = () => {
           .replace(/[.,!?]/g, "");
 
       const respostaUsuario = limparTexto(textoFalado);
-      const respostaCorreta = limparTexto(frases[fraseAtualIndex]);
+      const respostaCorreta = limparTexto(frasesEmbaralhadas[fraseAtualIndex]);
 
       // 🔹 Comparação
       if (respostaUsuario === respostaCorreta) {
         alert("✅ Correto! Próxima frase...");
         setPointsSpeaking((prevPoints) => prevPoints + 10);
-        setProgresso(((fraseAtualIndex + 1) / frases.length) * 100);
+        setProgresso(((fraseAtualIndex + 1) / frasesEmbaralhadas.length) * 100);
         setErros(0); // 🔹 Resetar contador de erros
 
         // 🔹 Atualizar frases completadas hoje
@@ -174,7 +188,7 @@ const ListeningSpeakingComponent = () => {
         }
 
         // 🔹 Avançar para a próxima frase
-        if (fraseAtualIndex < frases.length - 1) {
+        if (fraseAtualIndex < frasesEmbaralhadas.length - 1) {
           setFraseAtualIndex((prevIndex) => prevIndex + 1);
         } else {
           finalizarPratica();
@@ -212,7 +226,7 @@ const ListeningSpeakingComponent = () => {
     }
 
     // 🔹 Avançar para a próxima frase
-    if (fraseAtualIndex < frases.length - 1) {
+    if (fraseAtualIndex < frasesEmbaralhadas.length - 1) {
       setFraseAtualIndex((prevIndex) => prevIndex + 1);
       setErros(0); // 🔹 Resetar contador de erros
     } else {
@@ -305,7 +319,7 @@ const ListeningSpeakingComponent = () => {
       ) : (
         <div className="practice-content">
           <ProgressBar progresso={progresso} />
-          <p className="frase">{frases[fraseAtualIndex]}</p>
+          <p className="frase">{frasesEmbaralhadas[fraseAtualIndex]}</p>
           <button
             className="btn-speak"
             onClick={iniciarReconhecimentoVoz}
