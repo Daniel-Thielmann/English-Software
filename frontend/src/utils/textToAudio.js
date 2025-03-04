@@ -1,7 +1,7 @@
 export const criarArquivoAudio = async (text) => {
   try {
     const response = await fetch(
-      "http://localhost:3000/text-to-speech/generate-audio",
+      `${import.meta.env.VITE_API_BASE_URL}/text-to-speech/generate-audio`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

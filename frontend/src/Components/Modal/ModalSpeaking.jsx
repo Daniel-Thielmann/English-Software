@@ -14,7 +14,9 @@ const ModalSpeaking = ({ message, onClose, acertos = 0, showDoneBtn }) => {
       return;
     }
 
-    const apiUrl = "http://localhost:3000/points/update-speaking-points";
+    const apiUrl = `${
+      import.meta.env.VITE_API_BASE_URL
+    }/points/update-speaking-points`;
 
     try {
       console.log(`🔹 Atualizando pontos de fala:`, {

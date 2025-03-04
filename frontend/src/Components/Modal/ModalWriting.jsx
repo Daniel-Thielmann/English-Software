@@ -14,7 +14,9 @@ const ModalWriting = ({ message, onClose, acertos = 0, showDoneBtn }) => {
       return;
     }
 
-    const apiUrl = "http://localhost:3000/points/update-writing-points";
+    const apiUrl = `${
+      import.meta.env.VITE_API_BASE_URL
+    }/points/update-writing-points`;
 
     try {
       console.log(`🔹 Atualizando pontos de escrita:`, {

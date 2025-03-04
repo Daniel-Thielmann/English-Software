@@ -99,11 +99,14 @@ const ListeningSpeakingComponent = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/auth/validate-key", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.uid, activationKey }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/auth/validate-key`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.uid, activationKey }),
+        }
+      );
 
       const data = await response.json();
       console.log("🔍 Resposta da API:", data);
@@ -248,7 +251,7 @@ const ListeningSpeakingComponent = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/points/update-speaking-points",
+        `${import.meta.env.VITE_API_BASE_URL}/points/update-speaking-points`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

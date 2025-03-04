@@ -27,17 +27,20 @@ const AuthPage = () => {
     });
 
     try {
-      const response = await fetch("http://localhost:3000/api/create-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: user.uid,
-          email: user.email,
-          name: displayName || "Usuário",
-        }),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/create-user`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uid: user.uid,
+            email: user.email,
+            name: displayName || "Usuário",
+          }),
+        }
+      );
 
       const data = await response.json();
       console.log("✅ Resposta do backend:", data);
