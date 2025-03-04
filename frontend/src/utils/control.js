@@ -49,12 +49,14 @@ export const incrementAudioCount = async (userId) => {
   try {
     const userRef = doc(db, "audioLimits", userId);
     const userDoc = await getDoc(userRef);
-    const { audioCount, lastAccessed } = userDoc.data();
-    await setDoc(
-      userRef,
-      { audioCount: audioCount + 1, lastAccessed },
-      { merge: true }
-    );
+    if (userDoc.exists()) {
+      const { audioCount, lastAccessed } = userDoc.data();
+      await setDoc(
+        userRef,
+        { audioCount: audioCount + 1, lastAccessed },
+        { merge: true }
+      );
+    }
   } catch (error) {
     console.error(
       "❌ Erro ao incrementar contagem no Firestore:",
@@ -63,6 +65,7 @@ export const incrementAudioCount = async (userId) => {
   }
 };
 
+// 🔹 Função para tocar áudio
 export const handlePlayAudio = async (userId, gerarAudio) => {
   if (!userId) {
     console.error("❌ Usuário não autenticado!");
@@ -77,5 +80,3 @@ export const handlePlayAudio = async (userId, gerarAudio) => {
     console.warn("⚠️ Limite de áudios atingido.");
   }
 };
-
-export { checkAudioLimit, handlePlayAudio, incrementAudioCount };
