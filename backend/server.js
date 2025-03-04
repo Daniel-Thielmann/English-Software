@@ -11,7 +11,13 @@ const textToSpeechRoutes = require("./routes/textToSpeech");
 const app = express();
 
 // 🔹 Middleware precisa vir antes das rotas!
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // 🔥 Libera o acesso de qualquer origem (pode ser restringido depois)
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 
 // 🔹 Registro correto das rotas
@@ -22,7 +28,7 @@ app.use("/points", pointsRoutes);
 app.use("/points", rankingRoutes); // Corrigido para não sobrescrever pointsRoutes
 
 // 🔹 Configuração da porta do servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 app.listen(PORT, () => {
   console.log(`🚀 Servidor rodando na porta ${PORT}`);
 });
