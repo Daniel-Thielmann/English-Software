@@ -24,13 +24,16 @@ router.post("/create-user", async (req, res) => {
         pointsSpeaking: 0,
         pointsWriting: 0,
         hasActivated: false,
+        createdAt: new Date().toISOString(),
       });
-      res.json({ message: "Usuário criado com sucesso!" });
+      res
+        .status(201)
+        .json({ success: true, message: "Usuário criado com sucesso!" });
     } else {
-      res.json({ message: "Usuário já existe." });
+      res.status(200).json({ success: true, message: "Usuário já existe." });
     }
   } catch (error) {
-    console.error("Erro ao criar usuário:", error);
+    console.error("❌ Erro ao criar usuário:", error);
     res.status(500).json({ message: "Erro no servidor ao criar usuário." });
   }
 });

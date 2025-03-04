@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { validateActivationKey } = require("../firebase-config");
 
+// 🔹 Rota para validar chave de ativação
 router.post("/validate-key", async (req, res) => {
   const { userId, activationKey } = req.body;
 
