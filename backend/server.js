@@ -65,3 +65,21 @@ const { validateActivationKey, db } = require("./firebase-config");
     console.error("❌ Erro ao conectar ao Firestore:", error);
   }
 })();
+
+(async () => {
+  try {
+    console.log("🔍 Testando conexão com Firestore...");
+    const testSnapshot = await db.collection("users").get();
+
+    if (testSnapshot.empty) {
+      console.log("⚠️ Nenhum usuário encontrado no Firestore.");
+    } else {
+      console.log("✅ Conexão com Firestore OK!");
+      testSnapshot.forEach((doc) => {
+        console.log(`🔑 Usuário: ${doc.id}, Dados:`, doc.data());
+      });
+    }
+  } catch (error) {
+    console.error("❌ Erro ao conectar ao Firestore:", error);
+  }
+})();
