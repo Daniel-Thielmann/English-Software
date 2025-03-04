@@ -2,15 +2,15 @@ const admin = require("firebase-admin");
 const fs = require("fs");
 const path = require("path");
 
-// 🔹 Caminho seguro para o arquivo de credenciais
-const serviceAccountPath = path.join(__dirname, "serviceAccountKey.json");
-
-if (!fs.existsSync(serviceAccountPath)) {
-  console.error("❌ ERRO: Arquivo serviceAccountKey.json não encontrado!");
-  process.exit(1); // Encerra o programa se a chave não for encontrada
+// 🔹 Verifica se a variável de ambiente está definida
+if (!process.env.FIREBASE_CREDENTIALS) {
+  console.error(
+    "❌ ERRO: Variável de ambiente FIREBASE_CREDENTIALS não encontrada!"
+  );
+  process.exit(1);
 }
 
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // 🔹 Inicializa o Firebase Admin SDK corretamente
 admin.initializeApp({
