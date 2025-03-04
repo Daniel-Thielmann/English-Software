@@ -11,7 +11,13 @@ const textToSpeechRoutes = require("./routes/textToSpeech");
 const app = express();
 
 // 🔹 Middleware para permitir CORS e evitar bloqueios
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://seu-frontend.vercel.app", // Substitua pelo domínio do seu frontend
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader(
