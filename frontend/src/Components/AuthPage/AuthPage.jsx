@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { auth, provider } from "../../utils/firebaseConfig";
 import "./AuthPage.css";
+import api from "../../utils/api";
 
 const AuthPage = () => {
   const [name, setName] = useState(""); // 🔹 Adicionando nome
@@ -20,32 +21,25 @@ const AuthPage = () => {
 
   // 🔹 Função para registrar usuário no Firestore
   const registerUserInDatabase = async (user, displayName) => {
-    console.log("📡 Tentando enviar usuário para o backend:", {
-      uid: user.uid,
-      email: user.email,
-      name: displayName || "Usuário",
-    });
-
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/users/create-user`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            name: displayName || "Usuário",
-          }),
-        }
-      );
+      console.log("📡 Enviando usuário para o backend:", {
+        uid: user.uid,
+        email: user.email,
+        name: displayName || "Usuário",
+      });
 
-      const data = await response.json();
-      console.log("✅ Resposta do backend:", data);
+      const response = await api.post("/users/create-user", {
+        uid: user.uid,
+        email: user.email,
+        name: displayName || "Usuário",
+      });
+
+      console.log("✅ Resposta do backend:", response.data);
     } catch (err) {
-      console.error("❌ Erro ao salvar usuário no banco de dados:", err);
+      console.error(
+        "❌ Erro ao salvar usuário no banco de dados:",
+        err.message
+      );
     }
   };
 

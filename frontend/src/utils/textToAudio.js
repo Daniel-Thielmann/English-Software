@@ -1,24 +1,20 @@
+import api from "./api"; // 🔹 Agora usa Axios
+
 export const criarArquivoAudio = async (text) => {
   try {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/text-to-speech/generate-audio`,
+    const response = await api.post(
+      "/text-to-speech/generate-audio",
+      { text },
       {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        responseType: "blob", // 🔹 Define para receber um Blob
       }
     );
 
-    if (!response.ok) {
-      throw new Error(`Erro HTTP: ${response.status}`);
-    }
-
-    const audioBlob = await response.blob();
+    const audioBlob = response.data;
     const audioUrl = URL.createObjectURL(audioBlob);
-
     return audioUrl;
   } catch (error) {
-    console.error("Erro ao gerar áudio:", error);
+    console.error("❌ Erro ao gerar áudio:", error.message);
     return null;
   }
 };

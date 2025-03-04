@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./RankingComponent.css";
+import api from "../../utils/api";
 
 const RankingComponent = () => {
   const [ranking, setRanking] = useState([]);
@@ -8,16 +9,10 @@ const RankingComponent = () => {
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/points/ranking`
-        );
-        if (!response.ok) {
-          throw new Error("Erro ao buscar ranking");
-        }
-        const data = await response.json();
-        setRanking(data);
+        const response = await api.get("/points/ranking");
+        setRanking(response.data);
       } catch (error) {
-        console.error("❌ Erro ao buscar ranking:", error);
+        console.error("❌ Erro ao buscar ranking:", error.message);
       } finally {
         setLoading(false);
       }
