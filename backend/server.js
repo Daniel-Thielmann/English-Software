@@ -1,13 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 
-// 🔹 Importação das rotas
-const userRoutes = require("./routes/users");
-const authRoutes = require("./routes/auth");
-const pointsRoutes = require("./routes/points");
-const rankingRoutes = require("./routes/ranking");
-const textToSpeechRoutes = require("./routes/textToSpeech");
-
 const app = express();
 
 // 🔹 Middleware para permitir CORS e evitar bloqueios
