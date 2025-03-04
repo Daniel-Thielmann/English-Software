@@ -1,4 +1,6 @@
 const admin = require("firebase-admin");
+const fs = require("fs");
+const path = require("path");
 
 // 🔹 Verifica se a variável de ambiente está definida
 if (!process.env.FIREBASE_CREDENTIALS) {
@@ -8,7 +10,6 @@ if (!process.env.FIREBASE_CREDENTIALS) {
   process.exit(1);
 }
 
-// 🔹 Converte a string da variável de ambiente para JSON
 const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
 
 // 🔹 Inicializa o Firebase Admin SDK corretamente
@@ -19,6 +20,7 @@ admin.initializeApp({
 const db = admin.firestore();
 
 // 🔹 Função para validar e ativar a chave no Firestore
+
 const validateActivationKey = async (userId, activationKey) => {
   try {
     console.log(
