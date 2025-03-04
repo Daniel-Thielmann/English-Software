@@ -3,7 +3,7 @@ import api from "./api"; // 🔹 Agora usa Axios
 export const criarArquivoAudio = async (text) => {
   try {
     const response = await api.post(
-      "/text-to-speech/generate-audio",
+      "/api/text-to-speech/generate-audio",
       { text },
       {
         responseType: "blob", // 🔹 Define para receber um Blob
