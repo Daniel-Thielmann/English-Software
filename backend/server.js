@@ -14,8 +14,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src * 'self' data: 'unsafe-inline' 'unsafe-eval'; font-src * data:; style-src * 'unsafe-inline' https://fonts.googleapis.com; font-src * https://fonts.gstatic.com;"
+  );
+  next();
+});
+
 // 🔹 Registro correto das rotas
-app.use("/api/users", userRoutes);
+app.use("/users", userRoutes);
 app.use("/text-to-speech", textToSpeechRoutes);
 app.use("/auth", authRoutes);
 app.use("/points", pointsRoutes);

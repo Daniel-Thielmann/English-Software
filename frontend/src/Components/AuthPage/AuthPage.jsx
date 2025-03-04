@@ -28,7 +28,7 @@ const AuthPage = () => {
         name: displayName || "Usuário",
       });
 
-      const response = await api.post("/users/create-user", {
+      const response = await api.post("/api/users/create-user", {
         uid: user.uid,
         email: user.email,
         name: displayName || "Usuário",

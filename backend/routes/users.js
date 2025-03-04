@@ -3,7 +3,6 @@ const { db } = require("../firebase-config");
 
 const router = express.Router();
 
-// 🔹 Criar um novo usuário no Firestore
 router.post("/create-user", async (req, res) => {
   const { uid, email, name } = req.body;
 

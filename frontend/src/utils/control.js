@@ -62,3 +62,20 @@ export const incrementAudioCount = async (userId) => {
     );
   }
 };
+
+export const handlePlayAudio = async (userId, gerarAudio) => {
+  if (!userId) {
+    console.error("❌ Usuário não autenticado!");
+    return;
+  }
+
+  const canGenerate = await checkAudioLimit(userId);
+  if (canGenerate) {
+    await gerarAudio();
+    await incrementAudioCount(userId);
+  } else {
+    console.warn("⚠️ Limite de áudios atingido.");
+  }
+};
+
+export { checkAudioLimit, handlePlayAudio, incrementAudioCount };
