@@ -251,7 +251,9 @@ const ListeningSpeakingComponent = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/points/update-speaking-points`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/api/points/update-speaking-points`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

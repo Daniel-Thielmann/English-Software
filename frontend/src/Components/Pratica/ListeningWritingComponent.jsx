@@ -118,7 +118,7 @@ const ListeningWritingComponent = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/update-writing-points`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/update-writing-points`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -27,7 +27,6 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [plays, setPlays] = useState(0);
 
-  // Monitorar o fluxo de login com useState, assim vou impedir que o usuário comece a práticar sem estar logado
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -45,8 +44,6 @@ const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
     }
   }, [audioUrl]);
 
-  // Isso tá muito feio mas eu reprovei em POO então ta tudo bem
-  // Kkkkkkk mano sem logar vc nn vai estudar nao parceiro
   const handleStartClick = async () => {
     if (user) {
       const canGenerate = await checkAudioLimit(user.uid);
