@@ -10,22 +10,23 @@ const textToSpeechRoutes = require("./routes/textToSpeech");
 
 const app = express();
 
-// 🔹 Middleware para permitir CORS
-app.use(
-  cors({
-    origin: "*", // 🔥 Libera o acesso de qualquer origem (pode ser restringido depois)
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+// 🔹 Middleware para permitir CORS e evitar bloqueios
+app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src * 'self' data: 'unsafe-inline' 'unsafe-eval'; font-src * data:; style-src * 'unsafe-inline';"
+  );
+  next();
+});
 
 // 🔹 Registro correto das rotas
 app.use("/api/users", userRoutes);
 app.use("/text-to-speech", textToSpeechRoutes);
 app.use("/auth", authRoutes);
 app.use("/points", pointsRoutes);
-app.use("/ranking", rankingRoutes); // 🔹 Agora "rankingRoutes" não sobrescreve "pointsRoutes"
+app.use("/points", rankingRoutes);
 
 // 🔹 Configuração da porta do servidor
 const PORT = process.env.PORT || 10000;

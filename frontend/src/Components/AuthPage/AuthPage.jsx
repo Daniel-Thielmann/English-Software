@@ -28,7 +28,7 @@ const AuthPage = () => {
 
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/create-user`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/users/create-user`,
         {
           method: "POST",
           headers: {
