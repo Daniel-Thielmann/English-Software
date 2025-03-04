@@ -23,11 +23,10 @@ app.use((req, res, next) => {
 });
 
 // 🔹 Registro correto das rotas
-app.use("/users", userRoutes);
-app.use("/text-to-speech", textToSpeechRoutes);
-app.use("/auth", authRoutes);
-app.use("/points", pointsRoutes);
-app.use("/points", rankingRoutes); // Corrigido para não sobrescrever pointsRoutes
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/points", pointsRoutes);
+app.use("/api/ranking", rankingRoutes); // 🔥 Corrigido para garantir que ranking funcione
 
 // 🔹 Configuração da porta do servidor
 const PORT = process.env.PORT || 10000;

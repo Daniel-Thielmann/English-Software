@@ -2,25 +2,41 @@ const admin = require("firebase-admin");
 const fs = require("fs");
 const path = require("path");
 
-// 🔹 Verifica se a variável de ambiente está definida
-if (!process.env.FIREBASE_CREDENTIALS) {
-  console.error(
-    "❌ ERRO: Variável de ambiente FIREBASE_CREDENTIALS não encontrada!"
-  );
-  process.exit(1);
+// 🔹 Inicializa Firebase apenas se ainda não estiver inicializado
+if (!admin.apps.length) {
+  let serviceAccount;
+
+  // 🔹 Tenta carregar as credenciais do ambiente, se existir
+  if (process.env.FIREBASE_CREDENTIALS) {
+    try {
+      serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+      console.log("✅ Credenciais carregadas da variável de ambiente.");
+    } catch (error) {
+      console.error("❌ ERRO ao carregar FIREBASE_CREDENTIALS:", error.message);
+      process.exit(1);
+    }
+  } else {
+    // 🔹 Fallback para um arquivo local
+    const serviceAccountPath = path.join(__dirname, "serviceAccountKey.json");
+
+    if (fs.existsSync(serviceAccountPath)) {
+      serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+      console.log("✅ Credenciais carregadas do arquivo local.");
+    } else {
+      console.error("❌ ERRO: Nenhuma credencial Firebase encontrada!");
+      process.exit(1);
+    }
+  }
+
+  // 🔹 Inicializa o Firebase Admin SDK corretamente
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
 }
-
-const serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
-
-// 🔹 Inicializa o Firebase Admin SDK corretamente
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
 
 const db = admin.firestore();
 
 // 🔹 Função para validar e ativar a chave no Firestore
-
 const validateActivationKey = async (userId, activationKey) => {
   try {
     console.log(
