@@ -1,21 +1,11 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
   "scripts": {
+    "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "vercel-build": "npm run build",
-    "preview": "vite preview",
-    "start": "vite preview"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "vite": "^6.2.1"
+    "preview": "vite preview"
   },
   "dependencies": {
     "axios": "^1.8.2",
@@ -23,5 +13,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0"
+  },
+  "devDependencies": {
+    "vite": "^6.2.1"
   }
 }
