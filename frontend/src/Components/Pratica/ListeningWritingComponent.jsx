@@ -4,7 +4,7 @@ import ConteudoPratica from "./ConteudoPratica";
 import "../../global.css";
 import "./ListeningWritingComponent.css";
 import ProgressBar from "./ProgressBar";
-import { auth, db } from "../../firebaseConfig";
+import { auth, db } from "../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
 import ModalAuth from "../ModalAuth/ModalAuth";
 
