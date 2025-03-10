@@ -6,7 +6,7 @@ import {
   signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { auth, provider } from "../firebaseConfig";
+import { auth, provider } from "../../firebaseConfig";
 import "./AuthPage.css";
 import api from "../../utils/api";
 

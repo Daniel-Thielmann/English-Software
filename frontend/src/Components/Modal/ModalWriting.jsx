@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebaseConfig";
+import { auth } from "../../firebaseConfig";
 import api from "../../utils/api"; // 🔹 Importando Axios
 import "./Modal.css";
 
