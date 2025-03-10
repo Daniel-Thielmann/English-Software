@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 
+require("dotenv").config({ path: "./.env" });
+
 // 🔹 Importação das rotas
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");

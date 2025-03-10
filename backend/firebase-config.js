@@ -3,6 +3,8 @@ const fs = require("fs");
 const path = require("path");
 
 // 🔹 Inicializa Firebase apenas se ainda não estiver inicializado
+require("dotenv").config({ path: "./.env" });
+
 if (!admin.apps.length) {
   let serviceAccount;
 
