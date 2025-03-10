@@ -3,9 +3,17 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  resolve: {
-    alias: {
-      react: require.resolve("react"),
+  base: "./",
+  build: {
+    outDir: "dist",
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
     },
+  },
+  server: {
+    port: 3000,
+    open: true,
   },
 });
