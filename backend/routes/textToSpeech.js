@@ -3,14 +3,14 @@ const gTTS = require("gtts");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
-const {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-} = require("firebase-admin/firestore");
+const admin = require("firebase-admin");
 
-const db = getFirestore();
+// 🔹 Garante que o Firebase foi inicializado corretamente
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
+
+const db = admin.firestore();
 
 // Criar pasta temporária para armazenar áudios gerados
 const tempDir = path.join(__dirname, "../temp");
@@ -53,18 +53,19 @@ router.post("/generate-audio", async (req, res) => {
 // 🔹 Rota para verificar o limite de áudios por usuário
 router.get("/check-audio-limit/:userId", async (req, res) => {
   const { userId } = req.params;
+
   try {
-    const userRef = doc(db, "audioLimits", userId);
-    const userDoc = await getDoc(userRef);
+    const userRef = db.collection("audioLimits").doc(userId); // 🔹 Corrigido
+    const userDoc = await userRef.get(); // 🔹 Corrigido
     const today = new Date().toISOString().split("T")[0];
 
-    if (userDoc.exists()) {
+    if (userDoc.exists) {
       const data = userDoc.data();
       return res.json({
         canGenerateAudio: data.lastAccessed !== today || data.audioCount < 10,
       });
     } else {
-      await setDoc(userRef, { audioCount: 0, lastAccessed: today });
+      await userRef.set({ audioCount: 0, lastAccessed: today });
       return res.json({ canGenerateAudio: true });
     }
   } catch (error) {

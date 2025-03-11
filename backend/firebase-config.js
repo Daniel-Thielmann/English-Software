@@ -1,36 +1,32 @@
 const admin = require("firebase-admin");
 const fs = require("fs");
 const path = require("path");
-
-// 🔹 Inicializa Firebase apenas se ainda não estiver inicializado
 require("dotenv").config({ path: "./.env" });
 
-if (!admin.apps.length) {
-  let serviceAccount;
+let serviceAccount;
 
-  // 🔹 Tenta carregar as credenciais do ambiente, se existir
-  if (process.env.FIREBASE_CREDENTIALS) {
-    try {
-      serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
-      console.log("✅ Credenciais carregadas da variável de ambiente.");
-    } catch (error) {
-      console.error("❌ ERRO ao carregar FIREBASE_CREDENTIALS:", error.message);
-      process.exit(1);
-    }
-  } else {
-    // 🔹 Fallback para um arquivo local
-    const serviceAccountPath = path.join(__dirname, "serviceAccountKey.json");
-
-    if (fs.existsSync(serviceAccountPath)) {
-      serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
-      console.log("✅ Credenciais carregadas do arquivo local.");
-    } else {
-      console.error("❌ ERRO: Nenhuma credencial Firebase encontrada!");
-      process.exit(1);
-    }
+if (process.env.FIREBASE_CREDENTIALS) {
+  try {
+    serviceAccount = JSON.parse(process.env.FIREBASE_CREDENTIALS);
+    console.log("✅ Credenciais carregadas da variável de ambiente.");
+  } catch (error) {
+    console.error("❌ ERRO ao carregar FIREBASE_CREDENTIALS:", error.message);
+    process.exit(1);
   }
+} else {
+  const serviceAccountPath = path.join(__dirname, "serviceAccountKey.json");
 
-  // 🔹 Inicializa o Firebase Admin SDK corretamente
+  if (fs.existsSync(serviceAccountPath)) {
+    serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
+    console.log("✅ Credenciais carregadas do arquivo local.");
+  } else {
+    console.error("❌ ERRO: Nenhuma credencial Firebase encontrada!");
+    process.exit(1);
+  }
+}
+
+// 🔹 Inicializa o Firebase apenas se ainda não estiver rodando
+if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
@@ -90,6 +86,29 @@ const validateActivationKey = async (userId, activationKey) => {
     return { success: false, message: error.message };
   }
 };
+
+// 🔹 Função para testar a conexão com o Firestore
+const testFirestoreConnection = async () => {
+  try {
+    console.log("🔍 Testando conexão com Firestore...");
+
+    const testSnapshot = await db.collection("users").limit(1).get();
+
+    if (testSnapshot.empty) {
+      console.log("⚠️ Nenhum usuário encontrado no Firestore.");
+    } else {
+      console.log("✅ Conexão com Firestore OK!");
+      testSnapshot.forEach((doc) => {
+        console.log(`🔑 Usuário: ${doc.id}, Dados:`, doc.data());
+      });
+    }
+  } catch (error) {
+    console.error("❌ Erro ao conectar ao Firestore:", error);
+  }
+};
+
+// 🔹 Executa o teste de conexão automaticamente na inicialização
+testFirestoreConnection();
 
 // 🔹 Exportação correta usando CommonJS
 module.exports = { db, admin, validateActivationKey };

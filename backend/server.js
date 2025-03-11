@@ -2,15 +2,15 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config({ path: "./.env" });
 
+// 🔹 Importação da configuração do Firebase antes das rotas
+const { db } = require("./firebase-config");
+
 // 🔹 Importação das rotas
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const pointsRoutes = require("./routes/points");
 const rankingRoutes = require("./routes/ranking");
 const textToSpeechRoutes = require("./routes/textToSpeech");
-
-// 🔹 Importação da configuração do Firebase
-const { db } = require("./firebase-config");
 
 const app = express();
 
@@ -31,7 +31,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/points", pointsRoutes);
 app.use("/api/ranking", rankingRoutes);
-app.use("/api/text-to-speech", textToSpeechRoutes); // 🔥 Corrigido para incluir rota de geração de áudio
+app.use("/api/text-to-speech", textToSpeechRoutes);
 
 // 🔹 Configuração da porta do servidor
 const PORT = process.env.PORT || 10000;
@@ -43,8 +43,7 @@ app.listen(PORT, () => {
 (async () => {
   try {
     console.log("🔍 Testando conexão com Firestore...");
-
-    const testSnapshot = await db.collection("users").get();
+    const testSnapshot = await db.collection("users").limit(1).get();
 
     if (testSnapshot.empty) {
       console.log("⚠️ Nenhum usuário encontrado no Firestore.");
