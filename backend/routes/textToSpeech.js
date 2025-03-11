@@ -3,7 +3,22 @@ const gTTS = require("gtts");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+} = require("firebase-admin/firestore");
 
+const db = getFirestore();
+
+// Criar pasta temporária para armazenar áudios gerados
+const tempDir = path.join(__dirname, "../temp");
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir);
+}
+
+// 🔹 Rota para gerar áudio a partir de texto
 router.post("/generate-audio", async (req, res) => {
   const { text } = req.body;
 
@@ -13,22 +28,75 @@ router.post("/generate-audio", async (req, res) => {
 
   try {
     const gtts = new gTTS(text, "en");
-    const filePath = path.join(__dirname, "audio.mp3");
+    const filePath = path.join(tempDir, `audio_${Date.now()}.mp3`);
 
     gtts.save(filePath, (err) => {
       if (err) {
+        console.error("❌ Erro ao salvar áudio:", err);
         return res.status(500).json({ error: "Erro ao gerar áudio!" });
       }
 
       res.sendFile(filePath, () => {
-        fs.unlinkSync(filePath); // Remove o arquivo após envio
+        fs.unlink(filePath, (unlinkErr) => {
+          if (unlinkErr) {
+            console.error("⚠️ Erro ao remover arquivo temporário:", unlinkErr);
+          }
+        });
       });
     });
   } catch (error) {
-    console.error("Erro ao gerar áudio:", error);
+    console.error("❌ Erro ao processar solicitação de áudio:", error);
     res.status(500).json({ error: "Erro interno no servidor!" });
   }
 });
 
-// Exportando a rota corretamente
+// 🔹 Rota para verificar o limite de áudios por usuário
+router.get("/check-audio-limit/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const userRef = doc(db, "audioLimits", userId);
+    const userDoc = await getDoc(userRef);
+    const today = new Date().toISOString().split("T")[0];
+
+    if (userDoc.exists()) {
+      const data = userDoc.data();
+      return res.json({
+        canGenerateAudio: data.lastAccessed !== today || data.audioCount < 10,
+      });
+    } else {
+      await setDoc(userRef, { audioCount: 0, lastAccessed: today });
+      return res.json({ canGenerateAudio: true });
+    }
+  } catch (error) {
+    console.error("❌ Erro ao buscar limite de áudio:", error);
+    return res.status(500).json({ error: "Erro interno no servidor" });
+  }
+});
+
+// 🔹 Rota para incrementar a contagem de áudios gerados
+router.post("/increment-audio-count/:userId", async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const userRef = doc(db, "audioLimits", userId);
+    const userDoc = await getDoc(userRef);
+    const today = new Date().toISOString().split("T")[0];
+
+    if (userDoc.exists()) {
+      const { audioCount, lastAccessed } = userDoc.data();
+      const newCount = lastAccessed === today ? audioCount + 1 : 1;
+
+      await setDoc(
+        userRef,
+        { audioCount: newCount, lastAccessed: today },
+        { merge: true }
+      );
+    }
+
+    return res.json({ success: true });
+  } catch (error) {
+    console.error("❌ Erro ao incrementar contagem:", error);
+    return res.status(500).json({ error: "Erro interno no servidor" });
+  }
+});
+
 module.exports = router;
