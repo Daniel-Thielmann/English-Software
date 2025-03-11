@@ -9,4 +9,5 @@ export default defineConfig({
   build: {
     outDir: "dist",
   },
+  base: "/", // Adicione essa linha para evitar problemas com refresh na Vercel
 });
