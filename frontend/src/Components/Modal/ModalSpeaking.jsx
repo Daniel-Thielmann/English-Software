@@ -21,7 +21,7 @@ const ModalSpeaking = ({ message, onClose, acertos = 0, showDoneBtn }) => {
         pointsSpeaking: acertos * 10,
       });
 
-      const response = await api.post("/points/update-speaking-points", {
+      const response = await api.post("/api/points/update-speaking-points", {
         userId: user.uid,
         pointsSpeaking: acertos * 10,
       });

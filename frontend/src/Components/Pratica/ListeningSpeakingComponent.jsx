@@ -175,14 +175,14 @@ const ListeningSpeakingComponent = () => {
       if (respostaUsuario === respostaCorreta) {
         alert("✅ Correto! Próxima frase...");
         setPointsSpeaking((prevPoints) => prevPoints + 10);
-        setProgresso(((fraseAtualIndex + 1) / frasesEmbaralhadas.length) * 100);
-        setErros(0); // 🔹 Resetar contador de erros
+
+        setProgresso((prevProgresso) => Math.min(prevProgresso + 10, 100));
 
         // 🔹 Atualizar frases completadas hoje
         const novasFrasesCompletadas = frasesCompletadasHoje + 1;
         setFrasesCompletadasHoje(novasFrasesCompletadas);
         localStorage.setItem("frasesCompletadasHoje", novasFrasesCompletadas);
-        localStorage.setItem("usuarioFrases", user.uid); // 🔹 Armazenar ID do usuário
+        localStorage.setItem("usuarioFrases", user.uid); // 🔹 Armazena o ID do usuário
 
         // 🔹 Verificar se atingiu o limite diário
         if (novasFrasesCompletadas >= 10) {
