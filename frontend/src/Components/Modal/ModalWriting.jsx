@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebaseConfig";
 import api from "../../utils/api"; // 🔹 Importando Axios
@@ -6,22 +6,27 @@ import "./Modal.css";
 
 const ModalWriting = ({ message, onClose, acertos = 0, showDoneBtn }) => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // 🔹 Estado para controlar o botão
 
   const handleFinalize = async () => {
     const user = auth.currentUser;
 
     if (!user) {
       console.error("❌ Usuário não autenticado!");
+      alert("Você precisa estar logado para salvar seus pontos.");
       return;
     }
 
     try {
+      setIsLoading(true); // 🔹 Desabilita o botão enquanto processa
+
       console.log(`🔹 Atualizando pontos de escrita:`, {
         userId: user.uid,
         pointsWriting: acertos * 10,
       });
 
-      const response = await api.post("/points/update-writing-points", {
+      const response = await api.post("/api/points/update-writing-points", {
+        // ✅ Corrigida a URL da API
         userId: user.uid,
         pointsWriting: acertos * 10,
       });
@@ -33,8 +38,17 @@ const ModalWriting = ({ message, onClose, acertos = 0, showDoneBtn }) => {
         state: { pointsWriting: acertos * 10 },
       });
     } catch (error) {
-      console.error("❌ Erro ao atualizar pontos de escrita:", error.message);
-      alert("Erro ao salvar os pontos. Tente novamente.");
+      console.error(
+        "❌ Erro ao atualizar pontos de escrita:",
+        error.response?.data || error.message
+      );
+      alert(
+        `Erro ao salvar os pontos: ${
+          error.response?.data?.error || "Tente novamente."
+        }`
+      );
+    } finally {
+      setIsLoading(false); // 🔹 Reabilita o botão após a requisição
     }
   };
 
@@ -46,8 +60,12 @@ const ModalWriting = ({ message, onClose, acertos = 0, showDoneBtn }) => {
         </button>
         <p className="modal-text">{message}</p>
         {showDoneBtn && (
-          <button className="btn-finalize" onClick={handleFinalize}>
-            Ir para Tela Final de Escrita
+          <button
+            className="btn-finalize"
+            onClick={handleFinalize}
+            disabled={isLoading}
+          >
+            {isLoading ? "Salvando..." : "Ir para Tela Final de Escrita"}
           </button>
         )}
       </div>

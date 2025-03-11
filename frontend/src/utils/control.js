@@ -7,7 +7,9 @@ const db = getFirestore();
 // 🔹 Verifica o limite de áudios do usuário
 export const checkAudioLimit = async (userId) => {
   try {
-    const response = await api.get(`/check-audio-limit/${userId}`);
+    const response = await api.get(
+      `/api/text-to-speech/check-audio-limit/${userId}`
+    ); // ✅ Caminho corrigido
     if (response.data) {
       console.log("🔹 Dados do Backend:", response.data);
       return response.data.canGenerateAudio;
@@ -41,7 +43,7 @@ export const checkAudioLimit = async (userId) => {
 // 🔹 Incrementa a contagem de áudios
 export const incrementAudioCount = async (userId) => {
   try {
-    await api.post(`/increment-audio-count/${userId}`);
+    await api.post(`/api/text-to-speech/increment-audio-count/${userId}`); // ✅ Caminho corrigido
   } catch (error) {
     console.error("❌ Erro ao incrementar contagem no backend:", error.message);
   }

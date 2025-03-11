@@ -21,7 +21,12 @@ app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
-    "default-src * 'self' data: 'unsafe-inline' 'unsafe-eval'; font-src * data:; style-src * 'unsafe-inline' https://fonts.googleapis.com; font-src * https://fonts.gstatic.com;"
+    "default-src 'self'; " +
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+      "font-src 'self' https://fonts.gstatic.com; " +
+      "img-src 'self' data:; " +
+      "connect-src 'self' http://localhost:10000 https://backend-codi.onrender.com; "
   );
   next();
 });

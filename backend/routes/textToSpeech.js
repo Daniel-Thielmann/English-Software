@@ -77,26 +77,32 @@ router.get("/check-audio-limit/:userId", async (req, res) => {
 // 🔹 Rota para incrementar a contagem de áudios gerados
 router.post("/increment-audio-count/:userId", async (req, res) => {
   const { userId } = req.params;
+
   try {
-    const userRef = doc(db, "audioLimits", userId);
-    const userDoc = await getDoc(userRef);
+    console.log(`🔹 Incrementando áudio para o usuário: ${userId}`); // Log para debug
+
+    const userRef = db.collection("audioLimits").doc(userId);
+    const userDoc = await userRef.get();
     const today = new Date().toISOString().split("T")[0];
 
-    if (userDoc.exists()) {
+    if (userDoc.exists) {
       const { audioCount, lastAccessed } = userDoc.data();
       const newCount = lastAccessed === today ? audioCount + 1 : 1;
 
-      await setDoc(
-        userRef,
+      await userRef.set(
         { audioCount: newCount, lastAccessed: today },
         { merge: true }
       );
+    } else {
+      await userRef.set({ audioCount: 1, lastAccessed: today });
     }
 
     return res.json({ success: true });
   } catch (error) {
     console.error("❌ Erro ao incrementar contagem:", error);
-    return res.status(500).json({ error: "Erro interno no servidor" });
+    return res
+      .status(500)
+      .json({ error: "Erro interno no servidor", details: error.message });
   }
 });
 
