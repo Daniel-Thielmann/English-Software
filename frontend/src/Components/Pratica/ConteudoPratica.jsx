@@ -13,6 +13,7 @@ import {
   handlePlayAudio,
   incrementAudioCount,
 } from "../../utils/control"; // Funções de controle com firebase
+import React from "react";
 
 const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {
   const { audioUrl, audioRef, text, gerarAudio } = useConteudoPratica();

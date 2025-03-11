@@ -9,6 +9,7 @@ import "./global.css";
 import TelaFinalWriting from "./Components/TelaFinal/TelaFinalWriting";
 import TelaFinalSpeaking from "./Components/TelaFinal/TelaFinalSpeaking";
 import AuthPage from "./Components/AuthPage/AuthPage";
+import React from "react";
 
 const App = () => {
   return (

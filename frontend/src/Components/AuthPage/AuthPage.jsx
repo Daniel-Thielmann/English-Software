@@ -9,6 +9,7 @@ import {
 import { auth, provider } from "../../firebaseConfig";
 import "./AuthPage.css";
 import api from "../../utils/api";
+import React from "react";
 
 const AuthPage = () => {
   const [name, setName] = useState(""); // 🔹 Adicionando nome

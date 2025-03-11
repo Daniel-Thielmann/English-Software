@@ -4,6 +4,7 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../../firebaseConfig.js";
 import navlogo from "../../assets/nav-logo.png";
 import "./Nav.css";
+import React from "react";
 
 const Navbar = ({ voltarParaInicio }) => {
   const [user, setUser] = useState(null);

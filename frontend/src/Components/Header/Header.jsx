@@ -1,5 +1,6 @@
 import codiicon from "../../assets/codi_icon.png";
 import "./Header.css";
+import React from "react";
 
 const Header = ({ comecarPratica }) => {
   return (

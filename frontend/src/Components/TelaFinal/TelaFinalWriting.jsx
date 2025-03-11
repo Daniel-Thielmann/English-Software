@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import "./TelaFinal.css";
+import React from "react";
 
 const TelaFinalWriting = () => {
   const navigate = useNavigate();
