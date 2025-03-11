@@ -1,12 +1,12 @@
 const express = require("express");
-const { db } = require("../firebase-config");
-
 const router = express.Router();
+const { db } = require("../firebase-config");
 
 // 🔹 Rota para obter os 10 usuários com mais pontos totais
 router.get("/ranking", async (req, res) => {
-  // 🔥 A rota precisa ser EXATAMENTE "/ranking"
   try {
+    console.log("🔍 Buscando ranking dos usuários..."); // Log para debug
+
     const snapshot = await db.collection("users").get();
 
     let ranking = snapshot.docs.map((doc) => {
@@ -24,10 +24,10 @@ router.get("/ranking", async (req, res) => {
     // 🔹 Ordenar os usuários pela maior pontuação total
     ranking.sort((a, b) => b.totalPoints - a.totalPoints);
 
-    res.json(ranking.slice(0, 10));
+    return res.json(ranking.slice(0, 10));
   } catch (error) {
     console.error("❌ Erro ao buscar ranking:", error);
-    res.status(500).json({ message: "Erro ao buscar ranking", error });
+    return res.status(500).json({ message: "Erro ao buscar ranking", error });
   }
 });
 

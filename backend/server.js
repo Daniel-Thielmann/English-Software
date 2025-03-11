@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/points", pointsRoutes);
-app.use("/api/ranking", rankingRoutes);
+app.use("/api/points", rankingRoutes);
 app.use("/api/text-to-speech", textToSpeechRoutes);
 
 // 🔹 Configuração da porta do servidor

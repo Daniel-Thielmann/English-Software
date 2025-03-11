@@ -5,14 +5,17 @@ import api from "../../utils/api";
 const RankingComponent = () => {
   const [ranking, setRanking] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null); // 🔹 Estado para capturar erros
 
   useEffect(() => {
     const fetchRanking = async () => {
       try {
-        const response = await api.get("/points/ranking");
+        console.log("🔍 Buscando ranking...");
+        const response = await api.get("/api/points/ranking"); // ✅ Caminho corrigido
         setRanking(response.data);
       } catch (error) {
-        console.error("❌ Erro ao buscar ranking:", error.message);
+        console.error("❌ Erro ao buscar ranking:", error);
+        setError("Erro ao carregar ranking. Tente novamente.");
       } finally {
         setLoading(false);
       }
@@ -26,6 +29,8 @@ const RankingComponent = () => {
       <h2>🏆 Ranking dos Melhores Usuários</h2>
       {loading ? (
         <p>Carregando ranking...</p>
+      ) : error ? (
+        <p className="error-message">{error}</p> // 🔹 Mostra erro caso aconteça
       ) : ranking.length === 0 ? (
         <p>Nenhum usuário no ranking ainda.</p>
       ) : (
@@ -52,10 +57,12 @@ const RankingComponent = () => {
                   : "🏅"}{" "}
                 {index + 1}.
               </span>
-              <span className="user-name">{user.name}</span>
+              <span className="user-name">
+                {user.name || "Usuário Anônimo"}
+              </span>
               <span className="points">
-                🎙️ {user.pointsSpeaking} | ✍️ {user.pointsWriting} | 🏆 Total:{" "}
-                {user.totalPoints}
+                🎙️ {user.pointsSpeaking || 0} | ✍️ {user.pointsWriting || 0} |
+                🏆 Total: {user.totalPoints || 0}
               </span>
             </li>
           ))}
