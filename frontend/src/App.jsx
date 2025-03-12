@@ -10,6 +10,8 @@ import TelaFinalWriting from "./Components/TelaFinal/TelaFinalWriting";
 import TelaFinalSpeaking from "./Components/TelaFinal/TelaFinalSpeaking";
 import AuthPage from "./Components/AuthPage/AuthPage";
 import React from "react";
+import TalkingComponent from "./Components/Talking/TalkingComponent";
+import TalkingPage from "./pages/Talking";
 
 const App = () => {
   return (
@@ -21,6 +23,7 @@ const App = () => {
             <Route path="/" element={<Header />} />
             <Route path="/listening-writing" element={<ListeningWriting />} />
             <Route path="/listening-speaking" element={<ListeningSpeaking />} />
+            <Route path="/talking" element={<TalkingComponent />} />
             <Route path="/ranking" element={<RankingComponent />} />
             <Route path="/tela-final-writing" element={<TelaFinalWriting />} />
             <Route

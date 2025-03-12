@@ -36,6 +36,9 @@ const Navbar = ({ voltarParaInicio }) => {
         <Link to="/listening-speaking" className="nav-item">
           🎤 Escuta & Fala
         </Link>
+        <Link to="/talking" className="nav-item">
+          🗣️ Conversação IA
+        </Link>
         <Link to="/ranking" className="nav-item">
           🏆 Ranking
         </Link>
