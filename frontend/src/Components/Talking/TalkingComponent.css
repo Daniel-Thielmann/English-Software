@@ -1,0 +1,50 @@
+.talking-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #1c1c1c;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.points-display {
+  font-size: 20px;
+  color: #00ff7f;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.talking-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.start-btn,
+.stop-btn {
+  background-color: #5f75f2;
+  color: white;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.stop-btn {
+  background-color: #e63946;
+}
+
+.start-btn:hover {
+  background-color: #4957c8;
+}
+
+.stop-btn:hover {
+  background-color: #b71c1c;
+}
