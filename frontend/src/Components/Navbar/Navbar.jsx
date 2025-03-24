@@ -9,6 +9,7 @@ import React from "react";
 const Navbar = ({ voltarParaInicio }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -29,29 +30,53 @@ const Navbar = ({ voltarParaInicio }) => {
         </Link>
       </div>
 
-      <div className="nav-links">
-        <Link to="/listening-writing" className="nav-item">
-          📖 Escuta & Escrita
-        </Link>
-        <Link to="/listening-speaking" className="nav-item">
-          🎤 Escuta & Fala
-        </Link>
-        <Link to="/ranking" className="nav-item">
-          🏆 Ranking
-        </Link>
+      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        ☰
       </div>
 
-      {user ? (
+      <div className={`nav-links ${menuOpen ? "show" : ""}`}>
+        <Link
+          to="/listening-writing"
+          className="nav-item"
+          onClick={() => setMenuOpen(false)}
+        >
+          📖 Escuta & Escrita
+        </Link>
+        <Link
+          to="/listening-speaking"
+          className="nav-item"
+          onClick={() => setMenuOpen(false)}
+        >
+          🎤 Escuta & Fala
+        </Link>
+        <Link
+          to="/ranking"
+          className="nav-item"
+          onClick={() => setMenuOpen(false)}
+        >
+          🏆 Ranking
+        </Link>
+
+        {!user && (
+          <button
+            className="mobile-login-btn"
+            onClick={() => {
+              navigate("/auth");
+              setMenuOpen(false);
+            }}
+          >
+            Entrar / Criar Conta
+          </button>
+        )}
+      </div>
+
+      {user && (
         <div className="right-container-logged">
           <span>{user.email}</span>
           <span className="material-symbols-outlined" onClick={handleLogout}>
             logout
           </span>
         </div>
-      ) : (
-        <button className="right-container" onClick={() => navigate("/auth")}>
-          Entrar / Criar Conta
-        </button>
       )}
     </div>
   );

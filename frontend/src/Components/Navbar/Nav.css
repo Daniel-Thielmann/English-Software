@@ -111,7 +111,7 @@
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .nav-container {
     font-size: 16px;
     padding: 15px;
@@ -138,5 +138,77 @@
   .right-container-logged img {
     width: 1.5em;
     height: 1.5em;
+  }
+}
+
+/* Ícone hamburguer */
+.hamburger {
+  display: none;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  position: absolute;
+  right: 50px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 3.5rem;
+    right: 0;
+    background-color: var(--gray-900);
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 0;
+    z-index: 1000;
+  }
+
+  .nav-links.show {
+    display: flex;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .right-container,
+  .right-container-logged {
+    top: 10px;
+    right: 20px;
+    position: absolute;
+  }
+}
+
+/* Botão mobile de login */
+.mobile-login-btn {
+  display: none;
+  border: 1px solid white;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.mobile-login-btn:hover {
+  background-color: var(--roxo-codi);
+  border: none;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .right-container {
+    display: none; /* esconde botão no topo em mobile */
+  }
+
+  .mobile-login-btn {
+    display: block;
   }
 }
