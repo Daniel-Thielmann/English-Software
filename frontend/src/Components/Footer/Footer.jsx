@@ -1,13 +1,11 @@
-import './Footer.css'
+import "./Footer.css";
 
 const Footer = () => {
   return (
-    <footer className='footer-container'>
-      <div className="text">
-        © 2024 Codi Listening. All rights reserved.
-      </div>
+    <footer className="footer-container">
+      <div className="text">© 2025 Codi Listening. All rights reserved.</div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
