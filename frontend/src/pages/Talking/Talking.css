@@ -3,11 +3,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #111827;
   box-sizing: border-box;
   height: 90%;
   color: #9ca3af !important;
-  padding: 2rem;
 }
 
 .start-section {
@@ -17,7 +15,7 @@
 }
 
 .body-text {
-  margin: 60px 0;
+  margin: 60px;
   font-size: 20px;
   line-height: 1.6;
 }
@@ -25,15 +23,13 @@
 .start-button {
   font-size: 18px;
   font-weight: 600;
+  padding: 20px;
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   background: linear-gradient(90deg, #a243d2, #ff0080);
   transition: transform 0.3s ease-in-out;
-  padding: 16px 28px;
-  max-width: 300px;
-  width: 100%;
 }
 
 .start-button:hover {
