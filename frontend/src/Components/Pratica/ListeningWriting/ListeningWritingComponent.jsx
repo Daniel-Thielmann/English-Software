@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ConteudoPratica from "./ConteudoPratica";
-import "../../global.css";
+import "../../../global.css";
 import "./ListeningWritingComponent.css";
-import ProgressBar from "./ProgressBar";
-import { auth, db } from "../../firebaseConfig";
+import ProgressBar from "../ProgressBar";
+import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import ModalAuth from "../ModalAuth/ModalAuth";
+import ModalAuth from "../../ModalAuth/ModalAuth";
+import TelaFinal from "../../TelaFinal/TelaFinalWriting";
 
 const ListeningWritingComponent = () => {
-  const [praticando, setPraticando] = useState(false);
   const [progresso, setProgresso] = useState(0);
   const [acertos, setAcertos] = useState(0);
   const [praticaConcluida, setPraticaConcluida] = useState(false);
@@ -24,7 +24,7 @@ const ListeningWritingComponent = () => {
     }
   }, [user]);
 
-  // 🔹 Verifica se a conta já foi ativada no Firestore
+  // Verifica se a conta está ativada
   const verificarAtivacao = async (userId) => {
     try {
       const userRef = doc(db, "users", userId);
@@ -40,7 +40,7 @@ const ListeningWritingComponent = () => {
     }
   };
 
-  // 🔹 Envia a chave de ativação para o backend
+  // Valida chave de ativação
   const validarChaveDeAtivacao = async (activationKey) => {
     if (!user) {
       alert("❌ Você precisa estar logado para ativar sua conta!");
@@ -58,8 +58,6 @@ const ListeningWritingComponent = () => {
       );
 
       const data = await response.json();
-      console.log("🔍 Resposta da API:", data);
-
       if (response.ok && data.success) {
         alert(data.message);
         setIsActivated(true);
@@ -77,44 +75,21 @@ const ListeningWritingComponent = () => {
     }
   };
 
-  // 🔹 Só inicia a prática se a conta estiver ativada
-  const comecarPratica = () => {
-    if (!isActivated) {
-      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
-      return;
-    }
-
-    setPraticando(true);
-    setPraticaConcluida(false);
-    setProgresso(0);
-    setAcertos(0);
-  };
-
-  // 🔹 Atualiza o progresso da atividade
+  // Atualiza progresso
   const atualizarProgresso = () => {
-    setProgresso((prevProgresso) => {
-      const novoValor = Math.min(prevProgresso + 10, 100);
-      console.log("Novo progresso:", novoValor);
-
-      if (novoValor === 100) {
-        finalizarPratica();
-      }
-
-      return novoValor;
+    setProgresso((prev) => {
+      const novo = Math.min(prev + 10, 100);
+      if (novo === 100) finalizarPratica();
+      return novo;
     });
   };
 
-  // 🔹 Função para enviar pontos de escrita para o backend
+  // Envia pontos de escrita para o backend
   const salvarPontosEscrita = async (pontos) => {
     if (!user) {
       console.error("❌ Usuário não autenticado!");
       return;
     }
-
-    console.log("🔹 Enviando pontos de escrita para o backend:", {
-      userId: user.uid,
-      pointsWriting: pontos,
-    });
 
     try {
       const response = await fetch(
@@ -122,25 +97,20 @@ const ListeningWritingComponent = () => {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.uid,
-            pointsWriting: pontos,
-          }),
+          body: JSON.stringify({ userId: user.uid, pointsWriting: pontos }),
         }
       );
 
       const data = await response.json();
       console.log("✅ Pontos de Escrita salvos no backend:", data);
-
-      return data;
     } catch (error) {
       console.error("❌ Erro ao salvar pontos:", error);
     }
   };
 
-  // 🔹 Finaliza a prática e salva os pontos
+  // Finaliza a prática
   const finalizarPratica = async () => {
-    const pontos = acertos * 10; // Calcula os pontos com base nos acertos
+    const pontos = acertos * 10;
     await salvarPontosEscrita(pontos);
 
     setTimeout(() => {
@@ -150,7 +120,6 @@ const ListeningWritingComponent = () => {
 
   return (
     <div className="listening-writing-container">
-      {/* 🔹 Modal de Ativação */}
       <ModalAuth
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -162,49 +131,18 @@ const ListeningWritingComponent = () => {
           <TelaFinal
             pointsWriting={acertos * 10}
             progresso={progresso}
-            voltarParaInicio={() => setPraticando(false)}
+            voltarParaInicio={() => {}}
           />
           <p className="final-message">Parabéns! Você concluiu a prática.</p>
         </div>
-      ) : praticando ? (
+      ) : (
         <div className="practice-content">
           <ProgressBar progresso={progresso} />
           <ConteudoPratica
             setProgresso={atualizarProgresso}
             setAcertos={setAcertos}
+            finalizarPratica={finalizarPratica}
           />
-        </div>
-      ) : (
-        <div className="start-section">
-          <p className="body-text">
-            🔹 Nesta atividade, você ouvirá frases em inglês e precisará
-            digitá-las corretamente para aprimorar sua compreensão auditiva e
-            ortografia.
-            <br />
-            <br />
-            📜 Regras da Atividade:
-            <br />
-            <br />
-            - Você pode reproduzir o áudio quantas vezes quiser antes de
-            responder.
-            <br />
-            <br />
-            - Sua resposta deve ser exatamente igual ao áudio, incluindo
-            pontuação e acentos.
-            <br />
-            <br />
-            - Letras maiúsculas e minúsculas são consideradas na correção.
-            <br />
-            <br />
-            - Se errar, você poderá tentar novamente antes de avançar.
-            <br />
-            <br />
-            🎯 Objetivo: Melhore sua escuta e escrita treinando diariamente.
-          </p>
-
-          <button className="start-button" onClick={comecarPratica}>
-            Iniciar Prática de Listening & Writing
-          </button>
         </div>
       )}
     </div>

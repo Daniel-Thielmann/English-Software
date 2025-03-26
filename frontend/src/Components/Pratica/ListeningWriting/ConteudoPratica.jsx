@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { useConteudoPratica } from "../Hooks/UseConteudoPratica";
-import Modal from "../Modal/ModalWriting";
+import { useConteudoPratica } from "../../Hooks/UseConteudoPratica";
+import Modal from "../../Modal/ModalWriting";
 import "./ConteudoPratica.css";
 import {
   getAuth,
@@ -12,7 +12,7 @@ import {
   checkAudioLimit,
   handlePlayAudio,
   incrementAudioCount,
-} from "../../utils/control"; // Funções de controle com firebase
+} from "../../../utils/control"; // Funções de controle com firebase
 import React from "react";
 
 const ConteudoPratica = ({ setProgresso, finalizarPratica }) => {

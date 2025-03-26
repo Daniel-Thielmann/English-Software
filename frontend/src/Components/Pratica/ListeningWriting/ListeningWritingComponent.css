@@ -105,3 +105,61 @@
   color: #28a745;
   margin-top: 10px;
 }
+
+@media (max-width: 1300px) {
+  .listening-writing-container .body-text {
+    font-size: 18px !important;
+    padding: 0 20px;
+    line-height: 1.5;
+  }
+
+  .start-button {
+    width: 90%;
+    max-width: 300px;
+    font-size: 16px;
+    padding: 12px 16px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .listening-writing-container .body-text {
+    font-size: 16px !important;
+    padding: 0 10px;
+    line-height: 1.4;
+  }
+
+  .start-button {
+    width: 90%;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1300px) {
+  .body-text {
+    font-size: 18px !important;
+    padding: 0 20px;
+    line-height: 1.5;
+  }
+
+  .start-button {
+    width: 90%;
+    max-width: 300px;
+    font-size: 16px;
+    padding: 12px 16px;
+    margin-top: 30px;
+    margin-bottom: 50px; /* 🔥 Isso impede de encostar no footer */
+  }
+}
+
+@media (max-width: 768px) {
+  .body-text {
+    font-size: 16px !important;
+    padding: 0 10px;
+    line-height: 1.4;
+  }
+
+  .start-button {
+    font-size: 15px;
+  }
+}

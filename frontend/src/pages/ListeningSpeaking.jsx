@@ -1,5 +1,5 @@
 import React from "react";
-import ListeningSpeakingComponent from "../Components/Pratica/ListeningSpeakingComponent";
+import ListeningSpeakingComponent from "../Components/Pratica/ListeningSpeaking/ListeningSpeakingComponent";
 
 const ListeningSpeaking = () => {
   return <ListeningSpeakingComponent />;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, db } from "../../firebaseConfig";
+import { auth, db } from "../../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
-import ProgressBar from "./ProgressBar";
-import ModalAuth from "../ModalAuth/ModalAuth";
-import ModalSpeaking from "../Modal/ModalSpeaking"; // 🔹 Importação do ModalSpeaking
-import frases from "../../utils/frases.json"; // 🔹 Importação do frases.json
+import ProgressBar from "../ProgressBar";
+import ModalAuth from "../../ModalAuth/ModalAuth";
+import ModalSpeaking from "../../Modal/ModalSpeaking"; // 🔹 Importação do ModalSpeaking
+import frases from "../../../utils/frases.json"; // 🔹 Importação do frases.json
 import "./ListeningSpeakingComponent.css";
 
 // 🔹 Função para embaralhar o array (Fisher-Yates)
