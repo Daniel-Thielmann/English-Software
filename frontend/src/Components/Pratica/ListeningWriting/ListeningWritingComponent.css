@@ -1,18 +1,14 @@
-/* Estilização do container principal */
 .listening-writing-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 80vh;
   padding: 20px;
   background-color: var(--gray-900);
   border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  height: 100vh;
+  height: 90%;
 }
 
-/* Área de prática */
 .practice-content {
   background-color: var(--gray-900);
   padding: 15px;
@@ -23,14 +19,12 @@
   text-align: center;
 }
 
-/* Texto de feedback */
 .feedback-text {
   font-size: 18px;
   color: #ffffff;
   margin-top: 10px;
 }
 
-/* Botões da prática */
 .practice-buttons {
   display: flex;
   gap: 10px;
@@ -52,7 +46,6 @@
   background-color: #138496;
 }
 
-/* Estilo para a tela final */
 .final-screen {
   text-align: center;
   padding: 20px;
