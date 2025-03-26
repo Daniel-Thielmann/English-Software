@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ListeningSpeakingComponent from "../Components/Pratica/ListeningSpeaking/ListeningSpeakingComponent";
+import ListeningSpeakingComponent from "../../Components/Pratica/ListeningSpeaking/ListeningSpeakingComponent";
 import "./ListeningSpeaking.css";
 
 const ListeningSpeaking = () => {
