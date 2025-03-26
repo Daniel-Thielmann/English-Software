@@ -203,12 +203,28 @@
 }
 
 /* Responsivo */
-@media (max-width: 850px) {
+@media (max-width: 1100px) {
   .right-container {
     display: none; /* esconde botão no topo em mobile */
   }
 
   .mobile-login-btn {
     display: block;
+  }
+}
+
+/* Versão desktop visível só fora do mobile */
+.desktop-login-btn {
+  display: block;
+}
+
+@media (max-width: 1100px) {
+  .desktop-login-btn {
+    display: none;
+  }
+
+  .right-container-logged {
+    position: static;
+    justify-content: center;
   }
 }

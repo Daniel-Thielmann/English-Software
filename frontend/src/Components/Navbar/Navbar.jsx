@@ -61,15 +61,24 @@ const Navbar = ({ voltarParaInicio }) => {
         </Link>
 
         {!user && (
-          <button
-            className="mobile-login-btn"
-            onClick={() => {
-              navigate("/auth");
-              setMenuOpen(false);
-            }}
-          >
-            Entrar / Criar Conta
-          </button>
+          <>
+            <button
+              className="right-container desktop-login-btn"
+              onClick={() => navigate("/auth")}
+            >
+              Entrar / Criar Conta
+            </button>
+
+            <button
+              className="mobile-login-btn"
+              onClick={() => {
+                navigate("/auth");
+                setMenuOpen(false);
+              }}
+            >
+              Entrar / Criar Conta
+            </button>
+          </>
         )}
       </div>
 
