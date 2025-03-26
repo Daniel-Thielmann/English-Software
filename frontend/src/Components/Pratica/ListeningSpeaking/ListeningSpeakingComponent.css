@@ -1,33 +1,21 @@
-/* Estilização do Container */
 .listening-speaking-container {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 🔹 Centraliza verticalmente */
-  align-items: center; /* 🔹 Centraliza horizontalmente */
-  height: 100vh; /* 🔹 Garante que ocupa toda a altura da tela */
-  width: 100%;
-  background: var(--gray-900);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--gray-900);
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  height: 90%;
 }
 
-/* Estilização do Título */
-.container-speaking h2 {
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #ffcc00;
-}
-
-.listening-speaking-container .body-text {
-  font-family: "Montserrat", sans-serif;
-  color: #9ca3af !important; /* Força a cor cinza */
-  font-weight: 400;
-  font-size: 22px !important; /* Força o tamanho */
-  line-height: 1.6;
-  max-width: 1000px;
+.start-section {
+  max-width: 900px;
   text-align: center;
-  margin-bottom: 10px;
+  font-family: "Montserrat", sans-serif;
 }
 
-/* Frase a ser pronunciada */
 .frase {
   font-size: 1.5rem;
   font-weight: bold;
@@ -35,19 +23,19 @@
   padding: 15px;
   background: #333;
   border-radius: 8px;
-  margin-bottom: 20px;
+  margin: 20px 0;
   text-align: center;
 }
 
-/* Botões */
 .btn-speak,
-.btn-finalizar {
+.btn-skip {
   padding: 12px 20px;
   font-size: 1rem;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
   border: none;
+  margin-top: 10px;
   transition: transform 0.2s ease-in-out;
 }
 
@@ -56,17 +44,16 @@
   color: white;
 }
 
-.btn-finalizar {
+.btn-skip {
   background: #ffcc00;
   color: black;
 }
 
 .btn-speak:hover,
-.btn-finalizar:hover {
+.btn-skip:hover {
   transform: scale(1.1);
 }
 
-/* Transcrição do Usuário */
 .transcricao {
   font-size: 1.2rem;
   color: #ffcc00;
@@ -76,28 +63,6 @@
   border-radius: 8px;
 }
 
-/* Botão Iniciar */
-.start-button {
-  font-size: 18px;
-  font-weight: 600;
-  color: white;
-  padding: 15px 20px;
-  width: 280px;
-  border: none;
-  outline: none;
-  border-radius: 10px;
-  background-image: linear-gradient(90deg, #ff0080, #ffcc00);
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out;
-  margin-top: 50px;
-}
-
-.start-button:hover {
-  transform: scale(1.05);
-  background-image: linear-gradient(90deg, #ffcc00, #ff0080);
-}
-
-/* Pontuação */
 .pointsSpeaking {
   font-size: 1.5rem;
   font-weight: bold;
@@ -105,31 +70,13 @@
   margin-top: 15px;
 }
 
-/* Centralizando conteúdo */
-.practice-content,
-.start-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; /* 🔹 Mantém tudo centralizado */
-  width: 100%;
-  max-width: 600px;
-  text-align: center;
-}
-
-/* Responsividade */
 @media (max-width: 768px) {
-  .container-speaking {
-    width: 90%;
-    padding: 15px;
-  }
-
   .frase {
     font-size: 1.2rem;
   }
 
   .btn-speak,
-  .btn-finalizar {
+  .btn-skip {
     font-size: 0.9rem;
     padding: 10px 15px;
   }
