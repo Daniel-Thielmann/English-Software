@@ -14,9 +14,14 @@ const Talking = () => {
             <br />
             <br />
             📜 Regras:
+            <br />
             <br />- A IA responderá como um ser humano.
+            <br />
             <br />- Você pode falar sobre qualquer assunto.
-            <br />- Use inglês para praticar vocabulário e fluência.
+            <br />
+            <br />- Use inglês para praticar vocabulário e fluência. <br />{" "}
+            <br />
+            🎯 Objetivo: Melhore sua escuta e fala treinando diariamente.
           </p>
 
           <button
