@@ -1,12 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { auth, db } from "../../firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
+import ModalAuth from "../../Components/ModalAuth/ModalAuth";
 import ListeningWritingComponent from "../../Components/Pratica/ListeningWriting/ListeningWritingComponent";
 import "./ListeningWriting.css";
 
 const ListeningWriting = () => {
   const [praticando, setPraticando] = useState(false);
+  const [isActivated, setIsActivated] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    if (user) {
+      verificarAtivacao(user.uid);
+    }
+  }, [user]);
+
+  const verificarAtivacao = async (userId) => {
+    try {
+      const userRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists() && userDoc.data().hasActivated) {
+        setIsActivated(true);
+      } else {
+        setModalOpen(true);
+      }
+    } catch (error) {
+      console.error("❌ Erro ao verificar ativação:", error);
+    }
+  };
+
+  const comecarPratica = () => {
+    if (!isActivated) {
+      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
+      return;
+    }
+    setPraticando(true);
+  };
 
   return (
     <div className="listening-writing-container">
+      <ModalAuth isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+
       {!praticando ? (
         <div className="start-section">
           <p className="body-text">
@@ -35,7 +72,7 @@ const ListeningWriting = () => {
             🎯 Objetivo: Melhore sua escuta e escrita treinando diariamente.
           </p>
 
-          <button className="start-button" onClick={() => setPraticando(true)}>
+          <button className="start-button" onClick={comecarPratica}>
             Iniciar Prática de Listening & Writing
           </button>
         </div>
