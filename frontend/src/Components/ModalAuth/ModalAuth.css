@@ -7,66 +7,117 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
   z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
 .modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  width: 350px;
+  background: #1e1e2e;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
   text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  animation: slideDown 0.4s ease;
 }
 
 .modal-content h2 {
-  margin-bottom: 10px;
-  color: #9ca3af;
+  margin-bottom: 12px;
+  color: #ffcc00;
+  font-size: 22px;
 }
 
 .modal-content p {
   font-size: 14px;
-  color: #9ca3af;
+  color: #d1d1d1;
+  margin-bottom: 20px;
 }
 
 .modal-content input {
-  width: 80%;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  width: 85%;
+  padding: 12px;
+  border: 1px solid #555;
+  background: #2c2c3a;
+  border-radius: 8px;
   text-align: center;
   font-size: 16px;
+  color: #ffffff;
+  outline: none;
+  margin-top: 10px;
 }
 
 .modal-buttons {
-  margin-top: 15px;
+  margin-top: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-activate,
+.btn-close {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
 .btn-activate {
-  background: #28a745;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background: #00c851;
+  color: #fff;
 }
 
 .btn-close {
-  background: #dc3545;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  background: #ff4444;
+  color: #fff;
 }
 
 .btn-activate:hover {
-  background: #218838;
+  background: #007e33;
+  transform: scale(1.05);
 }
 
 .btn-close:hover {
-  background: #c82333;
+  background: #cc0000;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ✅ Mensagem de sucesso e erro */
+.modal-message {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.modal-message.error {
+  color: #ff4444;
+}
+
+.modal-message.success {
+  color: #00c851;
 }

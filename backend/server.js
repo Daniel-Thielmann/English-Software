@@ -18,8 +18,8 @@ app.use(express.json());
 
 // 🔹 Registro das rotas
 app.use("/api/users", userRoutes);
-app.use("/text-to-speech", textToSpeechRoutes);
-app.use("/auth", authRoutes);
+app.use("/api/text-to-speech", textToSpeechRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/points", pointsRoutes);
 app.use("/api/points", rankingRoutes); // 🔹 Corrigido para evitar conflito com /points
 
