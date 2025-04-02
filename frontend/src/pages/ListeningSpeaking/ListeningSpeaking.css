@@ -4,8 +4,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: 90%;
-  padding: 20px;
+  min-height: 90vh;
   color: #9ca3af !important;
 }
 
@@ -13,6 +12,7 @@
   max-width: 900px;
   text-align: center;
   font-family: "Montserrat", sans-serif;
+  margin-top: 20px;
 }
 
 .body-text {
@@ -23,8 +23,8 @@
 
 .start-button {
   font-size: 18px;
-  padding: 20px;
   font-weight: 600;
+  padding: 20px;
   color: white;
   border: none;
   border-radius: 10px;
@@ -37,11 +37,11 @@
   transform: scale(1.05);
 }
 
-/* Responsivo */
 @media (max-width: 768px) {
   .body-text {
     font-size: 15px;
     line-height: 1.4;
+    padding: 0 1rem;
   }
 
   .start-button {

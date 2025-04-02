@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  height: 90%;
+  min-height: 90vh;
   color: #9ca3af !important;
 }
 
@@ -35,12 +35,6 @@
 
 .start-button:hover {
   transform: scale(1.05);
-}
-
-.em-breve {
-  text-align: center;
-  color: white;
-  font-family: "Montserrat", sans-serif;
 }
 
 @media (max-width: 768px) {
