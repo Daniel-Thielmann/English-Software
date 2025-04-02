@@ -59,11 +59,7 @@ const ListeningWriting = () => {
             responder.
             <br />
             <br />
-            - Sua resposta deve ser exatamente igual ao áudio, incluindo
-            pontuação e acentos.
-            <br />
-            <br />
-            - Letras maiúsculas e minúsculas são consideradas na correção.
+            - Sua resposta deve ser exatamente igual ao áudio.
             <br />
             <br />
             - Se errar, você poderá tentar novamente antes de avançar.

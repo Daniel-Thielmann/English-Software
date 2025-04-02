@@ -105,12 +105,8 @@ const Talking = () => {
             🎯 Objetivo: Desenvolver fluência através de prática real.
           </p>
 
-          <button
-            className="start-button"
-            onClick={comecarConversa}
-            disabled={!isActivated}
-          >
-            Iniciar Conversa com a IA 🤖
+          <button className="start-button" onClick={comecarConversa}>
+            Iniciar Conversa com a IA
           </button>
         </div>
       ) : (
