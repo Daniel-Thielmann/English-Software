@@ -1,76 +1,48 @@
-import React, { useState, useEffect } from "react";
-import { auth, db } from "../../firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
-import ModalAuth from "../../Components/ModalAuth/ModalAuth";
-import TalkingComponent from "../../Components/Pratica/Talking/TalkingComponent";
-import "./Talking.css";
+import React, { useState } from "react";
+import ListeningSpeakingComponent from "../Components/Pratica/ListeningSpeaking/ListeningSpeakingComponent";
+import "./ListeningSpeaking.css";
 
-const Talking = () => {
-  const [emConversacao, setEmConversacao] = useState(false);
-  const [isActivated, setIsActivated] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const user = auth.currentUser;
-
-  useEffect(() => {
-    if (user) {
-      verificarAtivacao(user.uid);
-    }
-  }, [user]);
-
-  const verificarAtivacao = async (userId) => {
-    try {
-      const userRef = doc(db, "users", userId);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists() && userDoc.data().hasActivated) {
-        setIsActivated(true);
-      } else {
-        setModalOpen(true);
-      }
-    } catch (error) {
-      console.error("❌ Erro ao verificar ativação:", error);
-    }
-  };
-
-  const comecarConversacao = () => {
-    if (!isActivated) {
-      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
-      return;
-    }
-    setEmConversacao(true);
-  };
+const ListeningSpeaking = () => {
+  const [praticando, setPraticando] = useState(false);
 
   return (
-    <div className="talking-page">
-      <ModalAuth isOpen={modalOpen} onClose={() => setModalOpen(false)} />
-
-      {!emConversacao ? (
+    <div className="listening-speaking-container">
+      {!praticando ? (
         <div className="start-section">
           <p className="body-text">
-            🔹 Nesta atividade, você terá uma conversa em inglês com a IA.
+            🔹 Nesta atividade, você ouvirá frases em inglês e precisará
+            repeti-las corretamente para aprimorar sua pronúncia e compreensão
+            auditiva.
             <br />
             <br />
-            📜 Regras:
+            📜 Regras da Atividade:
             <br />
-            <br />- A IA responderá como um ser humano.
             <br />
-            <br />- Você pode falar sobre qualquer assunto.
+            - Você pode reproduzir o áudio quantas vezes quiser antes de
+            repetir.
             <br />
-            <br />- Use inglês para praticar vocabulário e fluência.
+            <br />
+            - Sua resposta deve ser o mais próxima possível da frase original.
+            <br />
+            <br />
+            - Pronúncia e entonação são avaliadas pela IA.
+            <br />
+            <br />
+            - Se errar, você poderá tentar novamente antes de avançar.
             <br />
             <br />
             🎯 Objetivo: Melhore sua escuta e fala treinando diariamente.
           </p>
 
-          <button className="start-button" onClick={comecarConversacao}>
-            Iniciar Prática de Conversa com a IA
+          <button className="start-button" onClick={() => setPraticando(true)}>
+            Iniciar Prática de Listening & Speaking
           </button>
         </div>
       ) : (
-        <TalkingComponent />
+        <ListeningSpeakingComponent />
       )}
     </div>
   );
 };
 
-export default Talking;
+export default ListeningSpeaking;
