@@ -13,35 +13,13 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centraliza os itens da navbar */
+  justify-content: space-between;
   padding: 15px 30px;
   background-color: var(--gray-900);
   border-bottom: 1px solid var(--gray-950);
-  height: 3rem;
-  position: relative; /* Para manter alinhamentos corretos */
+  flex-wrap: wrap;
 }
 
-/* Ajustar logo e botão para não empurrar os links */
-.left-container {
-  position: absolute;
-  left: 30px;
-}
-
-.right-container,
-.right-container-logged {
-  position: absolute;
-  right: 30px;
-}
-
-/* Centralizando os links */
-.nav-links {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-}
-
-/* Logo */
 .left-container img {
   width: 8rem;
   cursor: pointer;
@@ -52,38 +30,54 @@
   transform: scale(1.05);
 }
 
-/* Navegação - Links */
+.center-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
 .nav-links .nav-item {
   text-decoration: none;
-  color: var(--white); /* Cor branca nos links */
+  color: var(--white);
   font-weight: 600;
   font-size: 18px;
   transition: color 0.3s ease-in-out;
 }
 
 .nav-links .nav-item:hover {
-  color: var(--roxo-codi); /* Hover roxo */
+  color: var(--roxo-codi);
 }
 
-/* Botões de Login */
 .right-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.desktop-login-btn {
   border: 1px solid white;
-  color: white;
+  color: black;
   padding: 10px;
   border-radius: 10px;
   transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
   cursor: pointer;
-  color: black;
+  background-color: white;
   font-family: "Montserrat", sans-serif;
 }
 
-.right-container:hover {
+.desktop-login-btn:hover {
   transform: scale(1.1);
   background-color: var(--roxo-codi);
   border: none;
+  color: white;
 }
 
-/* Container do usuário logado */
 .right-container-logged {
   display: flex;
   align-items: center;
@@ -91,67 +85,38 @@
   color: white;
   padding: 10px;
   border-radius: 10px;
+  white-space: nowrap;
 }
 
-.right-container-logged img {
-  border-radius: 50%;
-  width: 1.75em;
-  height: 1.75em;
-}
-
-/* Ícone de logout */
-#logout:hover {
+.hamburger {
+  display: none;
+  font-size: 24px;
+  color: white;
   cursor: pointer;
-  transform: scale(1.15);
-  color: red;
+}
+
+.mobile-login-btn {
+  display: none;
+  border: 1px solid white;
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  background: transparent;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.mobile-login-btn:hover {
+  background-color: var(--roxo-codi);
+  border: none;
 }
 
 .material-symbols-outlined {
   cursor: pointer;
 }
 
-/* Responsividade */
-@media (max-width: 850px) {
-  .nav-container {
-    font-size: 16px;
-    padding: 15px;
-  }
-
-  .left-container img {
-    width: 6rem;
-  }
-
-  .nav-links {
-    gap: 20px; /* Reduz espaçamento em telas menores */
-  }
-
-  .nav-item {
-    font-size: 16px;
-  }
-
-  .right-container,
-  .right-container-logged {
-    padding: 8px;
-    font-size: 14px;
-  }
-
-  .right-container-logged img {
-    width: 1.5em;
-    height: 1.5em;
-  }
-}
-
-/* Ícone hamburguer */
-.hamburger {
-  display: none;
-  font-size: 24px;
-  color: white;
-  cursor: pointer;
-  position: absolute;
-  right: 50px;
-}
-
-/* Mobile adjustments */
 @media (max-width: 1100px) {
   .nav-links {
     display: none;
@@ -175,56 +140,17 @@
     display: block;
   }
 
-  .right-container,
-  .right-container-logged {
-    top: 10px;
-    right: 20px;
-    position: absolute;
-  }
-}
-
-/* Botão mobile de login */
-.mobile-login-btn {
-  display: none;
-  border: 1px solid white;
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  background: transparent;
-  font-family: "Montserrat", sans-serif;
-  font-size: 16px;
-  transition: all 0.3s ease-in-out;
-  cursor: pointer;
-}
-
-.mobile-login-btn:hover {
-  background-color: var(--roxo-codi);
-  border: none;
-}
-
-/* Responsivo */
-@media (max-width: 1100px) {
-  .right-container {
-    display: none; /* esconde botão no topo em mobile */
+  .desktop-login-btn {
+    display: none;
   }
 
   .mobile-login-btn {
     display: block;
   }
-}
-
-/* Versão desktop visível só fora do mobile */
-.desktop-login-btn {
-  display: block;
-}
-
-@media (max-width: 1100px) {
-  .desktop-login-btn {
-    display: none;
-  }
 
   .right-container-logged {
     position: static;
+    margin-top: 10px;
     justify-content: center;
   }
 }

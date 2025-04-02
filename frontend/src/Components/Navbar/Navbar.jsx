@@ -30,45 +30,34 @@ const Navbar = ({ voltarParaInicio }) => {
         </Link>
       </div>
 
-      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-        ☰
-      </div>
+      <div className="center-container">
+        <div className={`nav-links ${menuOpen ? "show" : ""}`}>
+          <Link
+            to="/listening-writing"
+            className="nav-item"
+            onClick={() => setMenuOpen(false)}
+          >
+            📖 Escuta & Escrita
+          </Link>
+          <Link
+            to="/listening-speaking"
+            className="nav-item"
+            onClick={() => setMenuOpen(false)}
+          >
+            🎤 Escuta & Fala
+          </Link>
+          <Link to="/talking" className="nav-item">
+            🗣️ Conversação IA
+          </Link>
+          <Link
+            to="/ranking"
+            className="nav-item"
+            onClick={() => setMenuOpen(false)}
+          >
+            🏆 Ranking
+          </Link>
 
-      <div className={`nav-links ${menuOpen ? "show" : ""}`}>
-        <Link
-          to="/listening-writing"
-          className="nav-item"
-          onClick={() => setMenuOpen(false)}
-        >
-          📖 Escuta & Escrita
-        </Link>
-        <Link
-          to="/listening-speaking"
-          className="nav-item"
-          onClick={() => setMenuOpen(false)}
-        >
-          🎤 Escuta & Fala
-        </Link>
-        <Link to="/talking" className="nav-item">
-          🗣️ Conversação IA
-        </Link>
-        <Link
-          to="/ranking"
-          className="nav-item"
-          onClick={() => setMenuOpen(false)}
-        >
-          🏆 Ranking
-        </Link>
-
-        {!user && (
-          <>
-            <button
-              className="right-container desktop-login-btn"
-              onClick={() => navigate("/auth")}
-            >
-              Entrar / Criar Conta
-            </button>
-
+          {!user && (
             <button
               className="mobile-login-btn"
               onClick={() => {
@@ -78,18 +67,31 @@ const Navbar = ({ voltarParaInicio }) => {
             >
               Entrar / Criar Conta
             </button>
-          </>
-        )}
+          )}
+        </div>
       </div>
 
-      {user && (
-        <div className="right-container-logged">
-          <span>{user.email}</span>
-          <span className="material-symbols-outlined" onClick={handleLogout}>
-            logout
-          </span>
+      <div className="right-container">
+        {user ? (
+          <div className="right-container-logged">
+            <span>{user.email}</span>
+            <span className="material-symbols-outlined" onClick={handleLogout}>
+              logout
+            </span>
+          </div>
+        ) : (
+          <button
+            className="desktop-login-btn"
+            onClick={() => navigate("/auth")}
+          >
+            Entrar / Criar Conta
+          </button>
+        )}
+
+        <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
         </div>
-      )}
+      </div>
     </div>
   );
 };
