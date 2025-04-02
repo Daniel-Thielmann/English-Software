@@ -7,15 +7,27 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependency directories
+node_modules/
+dist/
+dist-ssr/
+
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+
+# Firebase Service Key
+serviceAccountKey.json
+
+# Local env
 *.local
 
 # Editor directories and files
-.vscode/*
+.vscode/
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,8 +35,9 @@ dist-ssr
 *.sln
 *.sw?
 
-.vercel
-*.env
-/frontend/.env
+# Vercel
+.vercel/
 
-serviceAccountKey.json
+# Frontend & Backend specific env
+/frontend/.env
+/backend/.env
