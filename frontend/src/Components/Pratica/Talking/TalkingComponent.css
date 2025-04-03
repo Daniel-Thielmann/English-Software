@@ -1,16 +1,24 @@
 .talking-component {
   background-color: #1e1e2e;
   padding: 2rem;
-  border-radius: 12px;
+  border-radius: 16px;
   max-width: 700px;
-  margin: auto;
-  color: white;
+  margin: 3rem auto;
+  color: #ffffff;
   font-family: "Montserrat", sans-serif;
   text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.talking-component h2 {
+  font-size: 26px;
+  color: #ffcc00;
+  margin-bottom: 1.5rem;
 }
 
 .talking-component button {
-  padding: 12px 20px;
+  padding: 14px 24px;
   font-size: 16px;
   font-weight: bold;
   background-color: #ff0080;
@@ -18,22 +26,52 @@
   border-radius: 10px;
   color: white;
   cursor: pointer;
-  transition: 0.2s;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
 .talking-component button:hover {
   background-color: #d90070;
+  transform: scale(1.05);
 }
 
 .resumo,
 .resposta {
   margin-top: 1rem;
   font-size: 18px;
+  padding: 0.8rem 1.2rem;
+  background-color: #2c2c3a;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.resumo strong,
+.resposta strong {
+  color: #00cfff;
 }
 
 .loading {
   margin-top: 1rem;
   font-style: italic;
-  color: #aaa;
+  color: #ffcc00;
+  font-size: 16px;
+}
+
+audio {
+  margin-top: 1rem;
+  width: 100%;
+  outline: none;
+  border-radius: 6px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -12,6 +12,7 @@ const Talking = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [pointsSpeaking, setPointsSpeaking] = useState(0);
   const navigate = useNavigate();
+
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -24,8 +25,6 @@ const Talking = () => {
 
         if (userDoc.exists() && userDoc.data().hasActivated) {
           setIsActivated(true);
-        } else {
-          setModalOpen(true);
         }
       } catch (error) {
         console.error("❌ Erro ao verificar ativação:", error);
@@ -35,11 +34,16 @@ const Talking = () => {
     verificarAtivacao();
   }, [user]);
 
-  const validarChaveDeAtivacao = async (activationKey) => {
-    if (!user) {
-      alert("❌ Você precisa estar logado para ativar sua conta!");
-      return;
+  const handleStartClick = () => {
+    if (isActivated) {
+      setEmConversacao(true);
+    } else {
+      setModalOpen(true);
     }
+  };
+
+  const validarChaveDeAtivacao = async (activationKey) => {
+    if (!user) return;
 
     try {
       const response = await fetch(
@@ -54,34 +58,16 @@ const Talking = () => {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        alert(data.message);
         setIsActivated(true);
         setModalOpen(false);
+        setEmConversacao(true); // ✅ já entra na prática
       } else {
-        alert(
-          `❌ Erro: ${data.message || "Erro desconhecido ao validar chave."}`
-        );
+        alert(data.message || "Erro ao validar a chave.");
       }
     } catch (error) {
-      alert(
-        "❌ Erro ao validar chave. Verifique sua conexão e tente novamente."
-      );
-      console.error("❌ Erro no fetch:", error);
+      console.error("❌ Erro ao validar chave:", error);
+      alert("❌ Erro ao validar chave. Verifique sua conexão.");
     }
-  };
-
-  const comecarConversa = () => {
-    if (!isActivated) {
-      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
-      return;
-    }
-
-    setEmConversacao(true);
-
-    // Finaliza automaticamente após 30 minutos
-    setTimeout(() => {
-      finalizarPratica();
-    }, 30 * 60 * 1000);
   };
 
   const finalizarPratica = () => {
@@ -129,7 +115,7 @@ const Talking = () => {
             <br />- A IA responde por voz.
             <br />- Você ganhará pontos ao longo da conversa.
           </p>
-          <button className="start-button" onClick={comecarConversa}>
+          <button className="start-button" onClick={handleStartClick}>
             Iniciar Conversa com a IA
           </button>
         </div>

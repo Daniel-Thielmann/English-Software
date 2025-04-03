@@ -13,13 +13,14 @@ const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
     e.preventDefault();
 
     if (activationKey.trim() === "") {
-      setMessage({ type: "error", text: "Insira uma chave válida!" });
+      setMessage({ type: "error", text: "❌ Insira uma chave válida!" });
       return;
     }
 
     const user = auth.currentUser;
+
     if (!user) {
-      setMessage({ type: "error", text: "Você precisa estar logado!" });
+      setMessage({ type: "error", text: "❌ Você precisa estar logado!" });
       return;
     }
 
@@ -27,38 +28,28 @@ const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
     setMessage(null);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/api/auth/validate-key`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: user.uid,
-            activationKey: activationKey,
-          }),
-        }
-      );
+      const result = await onSubmit(activationKey); // chama função do componente pai
 
-      const data = await response.json();
-
-      if (response.ok && data.success) {
+      if (result?.success) {
         setMessage({
           type: "success",
           text: "✅ Sua conta foi ativada com sucesso!",
         });
 
-        // ⬇️ Chama o callback sem `.then`
-        if (typeof onSubmit === "function") {
-          onSubmit(); // o fluxo continua no componente pai
-        }
+        // Aguarda alguns segundos para redirecionar ou fechar
+        setTimeout(() => {
+          setActivationKey("");
+          setMessage(null);
+          onClose(); // fecha modal
+        }, 2000);
       } else {
         setMessage({
           type: "error",
-          text: "❌ Chave inválida ou não autenticada ainda.",
+          text: result?.message || "❌ Erro ao validar chave.",
         });
       }
     } catch (error) {
-      console.error("❌ Erro ao validar chave:", error);
+      console.error("Erro ao validar chave:", error);
       setMessage({
         type: "error",
         text: "❌ Erro ao validar chave. Verifique sua conexão.",
@@ -73,6 +64,7 @@ const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
       <div className="modal-content">
         <h2>🔑 Ativação Necessária</h2>
         <p>Insira sua chave de ativação da Codi Academy para continuar.</p>
+
         <input
           type="text"
           placeholder="Digite a chave..."

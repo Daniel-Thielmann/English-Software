@@ -10,6 +10,7 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
   const [tempoRestante, setTempoRestante] = useState(30 * 60); // 30 minutos
   const [pontuacaoAtual, setPontuacaoAtual] = useState(0);
 
+  // ⏳ Temporizador de 30 minutos
   useEffect(() => {
     const intervalo = setInterval(() => {
       setTempoRestante((tempo) => {
@@ -25,10 +26,11 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
     return () => clearInterval(intervalo);
   }, [finalizarPratica]);
 
+  // 💾 Auto save da pontuação
   useEffect(() => {
     const intervaloAutoSave = setInterval(() => {
       salvarPontuacao();
-    }, 60 * 1000); // a cada 1 minuto
+    }, 60 * 1000);
 
     return () => clearInterval(intervaloAutoSave);
   }, [pontuacaoAtual]);
@@ -102,13 +104,14 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
       const data = await resposta.json();
       setRespostaIA(data.resposta);
 
-      // Soma pontos e envia ao pai
+      // Atualiza pontuação
       setPontuacaoAtual((prev) => {
         const novo = prev + 2;
         setPointsSpeaking(novo);
         return novo;
       });
 
+      // Toca áudio da resposta
       const audio = new Audio(`data:audio/mpeg;base64,${data.audioBase64}`);
       audio.play();
 

@@ -9,40 +9,40 @@ const ListeningSpeaking = () => {
   const [praticando, setPraticando] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const user = auth.currentUser;
 
   useEffect(() => {
-    if (user) {
-      verificarAtivacao(user.uid);
-    }
-  }, [user]);
-
-  const verificarAtivacao = async (userId) => {
-    try {
-      const userRef = doc(db, "users", userId);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists() && userDoc.data().hasActivated) {
-        setIsActivated(true);
-      } else {
-        setModalOpen(true);
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().hasActivated) {
+          setIsActivated(true);
+        }
       }
-    } catch (error) {
-      console.error("❌ Erro ao verificar ativação:", error);
-    }
-  };
+    });
 
-  const comecarPratica = () => {
-    if (!isActivated) {
-      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
-      return;
+    return () => unsubscribe();
+  }, []);
+
+  const handleStart = () => {
+    if (isActivated) {
+      setPraticando(true);
+    } else {
+      setModalOpen(true);
     }
-    setPraticando(true);
   };
 
   return (
     <div className="listening-speaking-page">
-      <ModalAuth isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ModalAuth
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={() => {
+          setIsActivated(true);
+          setModalOpen(false);
+          setPraticando(true);
+        }}
+      />
 
       {!praticando ? (
         <div className="start-section">
@@ -71,7 +71,7 @@ const ListeningSpeaking = () => {
             🎯 Objetivo: Melhore sua escuta e fala treinando diariamente.
           </p>
 
-          <button className="start-button" onClick={comecarPratica}>
+          <button className="start-button" onClick={handleStart}>
             Iniciar Prática de Listening & Speaking
           </button>
         </div>
