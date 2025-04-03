@@ -1,11 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./TalkingComponent.css";
+import { auth } from "../../../firebaseConfig";
 
-const TalkingComponent = () => {
+const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
   const [transcricao, setTranscricao] = useState("");
   const [respostaIA, setRespostaIA] = useState("");
   const [audioSrc, setAudioSrc] = useState("");
   const [loading, setLoading] = useState(false);
+  const [tempoRestante, setTempoRestante] = useState(30 * 60); // 30 minutos
+  const [pontuacaoAtual, setPontuacaoAtual] = useState(0);
+
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setTempoRestante((tempo) => {
+        if (tempo <= 1) {
+          clearInterval(intervalo);
+          finalizarPratica();
+          return 0;
+        }
+        return tempo - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalo);
+  }, [finalizarPratica]);
+
+  useEffect(() => {
+    const intervaloAutoSave = setInterval(() => {
+      salvarPontuacao();
+    }, 60 * 1000); // a cada 1 minuto
+
+    return () => clearInterval(intervaloAutoSave);
+  }, [pontuacaoAtual]);
+
+  const salvarPontuacao = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/update-points`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.uid,
+          pointsSpeaking: pontuacaoAtual,
+        }),
+      });
+
+      console.log("✅ Pontuação salva automaticamente:", pontuacaoAtual);
+    } catch (err) {
+      console.error("❌ Erro ao salvar pontos automaticamente:", err);
+    }
+  };
+
+  const formatarTempo = (segundos) => {
+    const m = String(Math.floor(segundos / 60)).padStart(2, "0");
+    const s = String(segundos % 60).padStart(2, "0");
+    return `${m}:${s}`;
+  };
 
   const iniciarReconhecimentoVoz = () => {
     const SpeechRecognition =
@@ -22,101 +74,74 @@ const TalkingComponent = () => {
     recognition.interimResults = false;
 
     recognition.start();
-    console.log("🎤 Reconhecimento de voz iniciado...");
+    setLoading(true);
 
     recognition.onresult = async (event) => {
       const textoFalado = event.results[0][0].transcript;
-      console.log("✅ Texto capturado:", textoFalado);
       setTranscricao(textoFalado);
-      await gerarRespostaComHuggingFace(textoFalado);
+      await conversarComIA(textoFalado);
     };
 
     recognition.onerror = (event) => {
-      console.error("❌ Erro no reconhecimento:", event.error);
+      setLoading(false);
+      console.error("Erro no reconhecimento:", event.error);
     };
   };
 
-  const gerarRespostaComHuggingFace = async (mensagem) => {
-    setLoading(true);
-    console.log("🧠 Enviando para DialoGPT:", mensagem);
-
+  const conversarComIA = async (mensagem) => {
     try {
       const resposta = await fetch(
-        "https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium",
+        `${import.meta.env.VITE_API_BASE_URL}/api/conversar`,
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_HUGGINGFACE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            inputs: `The user said: "${mensagem}". Reply like an English conversation tutor.`,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: mensagem }),
         }
       );
 
       const data = await resposta.json();
+      setRespostaIA(data.resposta);
 
-      if (data.error) {
-        console.error("❌ Erro HuggingFace:", data.error);
-        setRespostaIA("Desculpe, ocorreu um erro na resposta da IA.");
-        return;
-      }
+      // Soma pontos e envia ao pai
+      setPontuacaoAtual((prev) => {
+        const novo = prev + 2;
+        setPointsSpeaking(novo);
+        return novo;
+      });
 
-      const respostaGerada =
-        data.generated_text || "Sorry, I didn't understand that.";
-      console.log("✅ Resposta da IA:", respostaGerada);
-      setRespostaIA(respostaGerada);
-      await converterTextoEmAudio(respostaGerada);
-    } catch (error) {
-      console.error("❌ Erro ao consultar HuggingFace:", error);
-      setRespostaIA("Erro ao gerar resposta.");
+      const audio = new Audio(`data:audio/mpeg;base64,${data.audioBase64}`);
+      audio.play();
+
+      setAudioSrc(`data:audio/mpeg;base64,${data.audioBase64}`);
+    } catch (err) {
+      console.error("Erro na conversa com IA:", err);
+      setRespostaIA("Erro ao responder.");
     } finally {
       setLoading(false);
     }
   };
 
-  const converterTextoEmAudio = async (texto) => {
-    console.log("🔊 Gerando áudio com ElevenLabs:", texto);
-
-    try {
-      const resposta = await fetch(
-        `https://api.elevenlabs.io/v1/text-to-speech/${
-          import.meta.env.VITE_ELEVENLABS_VOICE_ID
-        }`,
-        {
-          method: "POST",
-          headers: {
-            "xi-api-key": import.meta.env.VITE_ELEVENLABS_API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            text: texto,
-            voice_settings: {
-              stability: 0.4,
-              similarity_boost: 0.7,
-            },
-          }),
-        }
-      );
-
-      if (!resposta.ok) {
-        console.error("❌ ElevenLabs falhou:", await resposta.text());
-        return;
-      }
-
-      const blob = await resposta.blob();
-      const urlAudio = URL.createObjectURL(blob);
-      setAudioSrc(urlAudio);
-      console.log("✅ Áudio gerado com sucesso!");
-    } catch (error) {
-      console.error("❌ Erro no ElevenLabs:", error);
-    }
-  };
-
   return (
     <div className="talking-component">
-      <h2>🗣️ Converse com a IA</h2>
+      <h2>🗣️ Conversando com a IA</h2>
+
+      <div
+        style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "0.5rem" }}
+      >
+        ⏳ Tempo restante: {formatarTempo(tempoRestante)}
+      </div>
+
+      <div
+        style={{
+          fontSize: "18px",
+          fontWeight: "bold",
+          color: "#00ff99",
+          marginBottom: "1rem",
+        }}
+      >
+        ⭐ Pontuação atual: {pontuacaoAtual}
+      </div>
+
       <button onClick={iniciarReconhecimentoVoz} disabled={loading}>
         🎤 Falar
       </button>
@@ -141,6 +166,8 @@ const TalkingComponent = () => {
       )}
 
       {loading && <p className="loading">⏳ A IA está respondendo...</p>}
+
+      <button onClick={finalizarPratica}>Encerrar Prática</button>
     </div>
   );
 };

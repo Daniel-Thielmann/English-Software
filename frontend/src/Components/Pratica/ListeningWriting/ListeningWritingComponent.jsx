@@ -123,7 +123,7 @@ const ListeningWritingComponent = () => {
       <ModalAuth
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onSubmit={validarChaveDeAtivacao}
+        onSubmit={() => setIsActivated(true)}
       />
 
       {praticaConcluida ? (

@@ -4,11 +4,14 @@ import TalkingComponent from "../../Components/Pratica/Talking/TalkingComponent"
 import "./Talking.css";
 import { auth, db } from "../../firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const Talking = () => {
   const [emConversacao, setEmConversacao] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [pointsSpeaking, setPointsSpeaking] = useState(0);
+  const navigate = useNavigate();
   const user = auth.currentUser;
 
   useEffect(() => {
@@ -72,7 +75,38 @@ const Talking = () => {
       alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
       return;
     }
+
     setEmConversacao(true);
+
+    // Finaliza automaticamente após 30 minutos
+    setTimeout(() => {
+      finalizarPratica();
+    }, 30 * 60 * 1000);
+  };
+
+  const finalizarPratica = () => {
+    if (!user) return;
+
+    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/update-points`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userId: user.uid,
+        pointsSpeaking,
+      }),
+    })
+      .then((res) => res.json())
+      .then(() => {
+        navigate("/tela-final", {
+          state: {
+            pointsSpeaking,
+          },
+        });
+      })
+      .catch((err) => {
+        console.error("Erro ao salvar pontos:", err);
+        alert("❌ Erro ao salvar sua pontuação.");
+      });
   };
 
   return (
@@ -86,31 +120,24 @@ const Talking = () => {
       {!emConversacao ? (
         <div className="start-section">
           <p className="body-text">
-            🔹 Nesta atividade, você terá uma conversa em inglês com a IA para
-            treinar fluência, vocabulário e compreensão.
+            🔹 Nesta atividade, você terá uma conversa em inglês com a IA por
+            até 30 minutos.
             <br />
             <br />
-            📜 Regras da Atividade:
-            <br />
-            <br />
-            - A IA responderá como um ser humano.
-            <br />
-            <br />
-            - Você pode falar sobre qualquer assunto em inglês.
-            <br />
-            <br />
-            - Utilize o máximo de vocabulário possível durante a conversa.
-            <br />
-            <br />
-            🎯 Objetivo: Desenvolver fluência através de prática real.
+            📜 Regras:
+            <br />- Fale sobre qualquer assunto.
+            <br />- A IA responde por voz.
+            <br />- Você ganhará pontos ao longo da conversa.
           </p>
-
           <button className="start-button" onClick={comecarConversa}>
             Iniciar Conversa com a IA
           </button>
         </div>
       ) : (
-        <TalkingComponent />
+        <TalkingComponent
+          setPointsSpeaking={setPointsSpeaking}
+          finalizarPratica={finalizarPratica}
+        />
       )}
     </div>
   );

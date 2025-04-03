@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import "./ModalAuth.css";
 import { auth } from "../../firebaseConfig";
-import { useNavigate, useLocation } from "react-router-dom";
 
-const ModalAuth = ({ isOpen, onClose }) => {
+const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
   const [activationKey, setActivationKey] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [message, setMessage] = useState(null);
 
   if (!isOpen) return null;
 
@@ -16,18 +13,18 @@ const ModalAuth = ({ isOpen, onClose }) => {
     e.preventDefault();
 
     if (activationKey.trim() === "") {
-      setMessage("❌ Insira uma chave de ativação válida!");
+      setMessage({ type: "error", text: "Insira uma chave válida!" });
       return;
     }
 
     const user = auth.currentUser;
     if (!user) {
-      setMessage("❌ Você precisa estar logado para ativar sua conta!");
+      setMessage({ type: "error", text: "Você precisa estar logado!" });
       return;
     }
 
     setLoading(true);
-    setMessage("");
+    setMessage(null);
 
     try {
       const response = await fetch(
@@ -42,29 +39,30 @@ const ModalAuth = ({ isOpen, onClose }) => {
         }
       );
 
-      let data = null;
-      try {
-        data = await response.json();
-      } catch (err) {
-        console.warn("⚠️ Resposta sem JSON válido.");
-      }
+      const data = await response.json();
 
-      if (response.ok && data && data.success) {
-        setMessage("✅ Sua conta foi ativada com sucesso!");
-        setTimeout(() => {
-          onClose();
-          navigate(location.pathname).then(() => {
-            window.location.reload();
-          });
-        }, 1500);
-      } else if (data && data.message) {
-        setMessage(`❌ ${data.message}`);
+      if (response.ok && data.success) {
+        setMessage({
+          type: "success",
+          text: "✅ Sua conta foi ativada com sucesso!",
+        });
+
+        // ⬇️ Chama o callback sem `.then`
+        if (typeof onSubmit === "function") {
+          onSubmit(); // o fluxo continua no componente pai
+        }
       } else {
-        setMessage("❌ Chave inválida ou erro ao validar.");
+        setMessage({
+          type: "error",
+          text: "❌ Chave inválida ou não autenticada ainda.",
+        });
       }
     } catch (error) {
       console.error("❌ Erro ao validar chave:", error);
-      setMessage("❌ Erro ao validar chave. Verifique sua conexão.");
+      setMessage({
+        type: "error",
+        text: "❌ Erro ao validar chave. Verifique sua conexão.",
+      });
     } finally {
       setLoading(false);
     }
@@ -81,15 +79,11 @@ const ModalAuth = ({ isOpen, onClose }) => {
           value={activationKey}
           onChange={(e) => setActivationKey(e.target.value)}
         />
+
         {message && (
-          <p
-            className={`modal-message ${
-              message.startsWith("✅") ? "success" : "error"
-            }`}
-          >
-            {message}
-          </p>
+          <div className={`modal-message ${message.type}`}>{message.text}</div>
         )}
+
         <div className="modal-buttons">
           <button
             onClick={handleSubmit}

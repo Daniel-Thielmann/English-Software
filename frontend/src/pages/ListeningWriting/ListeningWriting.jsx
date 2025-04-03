@@ -9,40 +9,54 @@ const ListeningWriting = () => {
   const [praticando, setPraticando] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const user = auth.currentUser;
+  const [carregandoUsuario, setCarregandoUsuario] = useState(true);
+
+  const verificarAtivacao = async () => {
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          setIsActivated(data.hasActivated || false);
+        }
+      } catch (err) {
+        console.error("Erro ao verificar ativação:", err);
+      }
+    }
+    setCarregandoUsuario(false);
+  };
 
   useEffect(() => {
-    if (user) {
-      verificarAtivacao(user.uid);
-    }
-  }, [user]);
+    verificarAtivacao();
+  }, []);
 
-  const verificarAtivacao = async (userId) => {
-    try {
-      const userRef = doc(db, "users", userId);
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists() && userDoc.data().hasActivated) {
-        setIsActivated(true);
-      } else {
-        setModalOpen(true);
-      }
-    } catch (error) {
-      console.error("❌ Erro ao verificar ativação:", error);
+  const iniciarPratica = () => {
+    if (isActivated) {
+      setPraticando(true);
+    } else {
+      setModalOpen(true);
     }
   };
 
-  const comecarPratica = () => {
-    if (!isActivated) {
-      alert("⚠️ Você precisa ativar sua conta antes de iniciar as atividades.");
-      return;
-    }
+  const handleAtivacaoConcluida = async () => {
+    setModalOpen(false);
+    await verificarAtivacao();
     setPraticando(true);
   };
 
+  if (carregandoUsuario) {
+    return <div className="loading">Carregando dados do usuário...</div>;
+  }
+
   return (
     <div className="listening-writing-container">
-      <ModalAuth isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ModalAuth
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onSubmit={handleAtivacaoConcluida}
+      />
 
       {!praticando ? (
         <div className="start-section">
@@ -68,7 +82,7 @@ const ListeningWriting = () => {
             🎯 Objetivo: Melhore sua escuta e escrita treinando diariamente.
           </p>
 
-          <button className="start-button" onClick={comecarPratica}>
+          <button className="start-button" onClick={iniciarPratica}>
             Iniciar Prática de Listening & Writing
           </button>
         </div>
