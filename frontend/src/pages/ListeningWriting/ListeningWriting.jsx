@@ -46,10 +46,6 @@ const ListeningWriting = () => {
     setPraticando(true);
   };
 
-  if (carregandoUsuario) {
-    return <div className="loading">Carregando dados do usuário...</div>;
-  }
-
   return (
     <div className="listening-writing-container">
       <ModalAuth

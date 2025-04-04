@@ -111,9 +111,15 @@ const Talking = () => {
             <br />
             <br />
             📜 Regras:
+            <br />
             <br />- Fale sobre qualquer assunto.
+            <br />
             <br />- A IA responde por voz.
+            <br />
             <br />- Você ganhará pontos ao longo da conversa.
+            <br />
+            <br />- 🎯 Objetivo: Melhore sua escuta e fala treinando
+            diariamente.
           </p>
           <button className="start-button" onClick={handleStartClick}>
             Iniciar Conversa com a IA
