@@ -10,7 +10,6 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
   const [tempoRestante, setTempoRestante] = useState(30 * 60); // 30 minutos
   const [pontuacaoAtual, setPontuacaoAtual] = useState(0);
 
-  // ⏳ Temporizador de 30 minutos
   useEffect(() => {
     const intervalo = setInterval(() => {
       setTempoRestante((tempo) => {
@@ -26,11 +25,10 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
     return () => clearInterval(intervalo);
   }, [finalizarPratica]);
 
-  // 💾 Auto save da pontuação
   useEffect(() => {
     const intervaloAutoSave = setInterval(() => {
       salvarPontuacao();
-    }, 60 * 1000);
+    }, 60 * 1000); // a cada 1 minuto
 
     return () => clearInterval(intervaloAutoSave);
   }, [pontuacaoAtual]);
@@ -104,14 +102,12 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
       const data = await resposta.json();
       setRespostaIA(data.resposta);
 
-      // Atualiza pontuação
       setPontuacaoAtual((prev) => {
         const novo = prev + 2;
         setPointsSpeaking(novo);
         return novo;
       });
 
-      // Toca áudio da resposta
       const audio = new Audio(`data:audio/mpeg;base64,${data.audioBase64}`);
       audio.play();
 
@@ -128,22 +124,11 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
     <div className="talking-component">
       <h2>🗣️ Conversando com a IA</h2>
 
-      <div
-        style={{ fontSize: "20px", fontWeight: "bold", marginBottom: "0.5rem" }}
-      >
+      <div className="tempo-restante">
         ⏳ Tempo restante: {formatarTempo(tempoRestante)}
       </div>
 
-      <div
-        style={{
-          fontSize: "18px",
-          fontWeight: "bold",
-          color: "#00ff99",
-          marginBottom: "1rem",
-        }}
-      >
-        ⭐ Pontuação atual: {pontuacaoAtual}
-      </div>
+      <div className="pontuacao">⭐ Pontuação atual: {pontuacaoAtual}</div>
 
       <button onClick={iniciarReconhecimentoVoz} disabled={loading}>
         🎤 Falar

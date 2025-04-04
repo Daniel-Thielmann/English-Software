@@ -9,27 +9,21 @@ const ListeningWriting = () => {
   const [praticando, setPraticando] = useState(false);
   const [isActivated, setIsActivated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [carregandoUsuario, setCarregandoUsuario] = useState(true);
-
-  const verificarAtivacao = async () => {
-    const user = auth.currentUser;
-    if (user) {
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const data = userSnap.data();
-          setIsActivated(data.hasActivated || false);
-        }
-      } catch (err) {
-        console.error("Erro ao verificar ativação:", err);
-      }
-    }
-    setCarregandoUsuario(false);
-  };
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    verificarAtivacao();
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+        const userRef = doc(db, "users", firebaseUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().hasActivated) {
+          setIsActivated(true);
+        }
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const iniciarPratica = () => {
@@ -40,10 +34,32 @@ const ListeningWriting = () => {
     }
   };
 
-  const handleAtivacaoConcluida = async () => {
-    setModalOpen(false);
-    await verificarAtivacao();
-    setPraticando(true);
+  const validarChaveDeAtivacao = async (activationKey) => {
+    if (!user) return { success: false, message: "Usuário não autenticado" };
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/validate-key`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: user.uid, activationKey }),
+        }
+      );
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setIsActivated(true);
+        setModalOpen(false);
+        setPraticando(true);
+        return { success: true };
+      } else {
+        return { success: false, message: data.message };
+      }
+    } catch (err) {
+      console.error("Erro ao validar chave:", err);
+      return { success: false, message: "Erro ao validar chave." };
+    }
   };
 
   return (
@@ -51,7 +67,7 @@ const ListeningWriting = () => {
       <ModalAuth
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        onSubmit={handleAtivacaoConcluida}
+        onSubmit={validarChaveDeAtivacao}
       />
 
       {!praticando ? (

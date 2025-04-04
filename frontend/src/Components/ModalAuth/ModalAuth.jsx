@@ -18,7 +18,6 @@ const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
     }
 
     const user = auth.currentUser;
-
     if (!user) {
       setMessage({ type: "error", text: "❌ Você precisa estar logado!" });
       return;
@@ -28,24 +27,36 @@ const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
     setMessage(null);
 
     try {
-      const result = await onSubmit(activationKey); // chama função do componente pai
+      const response = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/validate-key`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.uid,
+            activationKey: activationKey,
+          }),
+        }
+      );
 
-      if (result?.success) {
+      const data = await response.json();
+
+      if (response.ok && data.success) {
         setMessage({
           type: "success",
           text: "✅ Sua conta foi ativada com sucesso!",
         });
 
-        // Aguarda alguns segundos para redirecionar ou fechar
         setTimeout(() => {
           setActivationKey("");
           setMessage(null);
-          onClose(); // fecha modal
-        }, 2000);
+          onSubmit(true); // ✅ Informa ao pai que a ativação foi concluída
+          onClose();
+        }, 1500);
       } else {
         setMessage({
           type: "error",
-          text: result?.message || "❌ Erro ao validar chave.",
+          text: data.message || "❌ Chave incorreta ou inválida.",
         });
       }
     } catch (error) {

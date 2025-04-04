@@ -11,28 +11,23 @@ const Talking = () => {
   const [isActivated, setIsActivated] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [pointsSpeaking, setPointsSpeaking] = useState(0);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  const user = auth.currentUser;
-
   useEffect(() => {
-    const verificarAtivacao = async () => {
-      if (!user) return;
-
-      try {
-        const userRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userRef);
-
-        if (userDoc.exists() && userDoc.data().hasActivated) {
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
+      if (firebaseUser) {
+        setUser(firebaseUser);
+        const userRef = doc(db, "users", firebaseUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists() && userSnap.data().hasActivated) {
           setIsActivated(true);
         }
-      } catch (error) {
-        console.error("❌ Erro ao verificar ativação:", error);
       }
-    };
+    });
 
-    verificarAtivacao();
-  }, [user]);
+    return () => unsubscribe();
+  }, []);
 
   const handleStartClick = () => {
     if (isActivated) {
@@ -43,7 +38,9 @@ const Talking = () => {
   };
 
   const validarChaveDeAtivacao = async (activationKey) => {
-    if (!user) return;
+    if (!user) {
+      return { success: false, message: "Usuário não autenticado." };
+    }
 
     try {
       const response = await fetch(
@@ -60,13 +57,17 @@ const Talking = () => {
       if (response.ok && data.success) {
         setIsActivated(true);
         setModalOpen(false);
-        setEmConversacao(true); // ✅ já entra na prática
+        setEmConversacao(true); // ✅ já inicia conversa
+        return { success: true };
       } else {
-        alert(data.message || "Erro ao validar a chave.");
+        return {
+          success: false,
+          message: data.message || "Erro na validação.",
+        };
       }
     } catch (error) {
       console.error("❌ Erro ao validar chave:", error);
-      alert("❌ Erro ao validar chave. Verifique sua conexão.");
+      return { success: false, message: "Erro de conexão com o servidor." };
     }
   };
 
