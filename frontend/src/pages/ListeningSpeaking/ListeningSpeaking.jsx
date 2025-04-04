@@ -68,6 +68,10 @@ const ListeningSpeaking = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={validarChaveDeAtivacao}
+        onSuccess={() => {
+          setIsActivated(true);
+          setPraticando(true); // ✅ inicia prática automaticamente
+        }}
       />
 
       {!praticando ? (

@@ -251,7 +251,12 @@ const ListeningSpeakingComponent = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={validarChaveDeAtivacao}
+        onSuccess={() => {
+          setIsActivated(true);
+          window.location.reload(); // ✅ recarrega página para iniciar prática corretamente
+        }}
       />
+
       {modalSpeakingOpen && (
         <ModalSpeaking
           message="Parabéns! Você concluiu sua prática diária."

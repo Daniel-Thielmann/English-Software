@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./ModalAuth.css";
 import { auth } from "../../firebaseConfig";
 
-const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
+const ModalAuth = ({ isOpen, onClose, onSubmit, onSuccess }) => {
   const [activationKey, setActivationKey] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -50,7 +50,8 @@ const ModalAuth = ({ isOpen, onClose, onSubmit }) => {
         setTimeout(() => {
           setActivationKey("");
           setMessage(null);
-          onSubmit(true); // ✅ Informa ao pai que a ativação foi concluída
+          onSubmit(true); // ✅ Comportamento já existente
+          if (onSuccess) onSuccess(); // ✅ Novo: permite iniciar prática automaticamente
           onClose();
         }, 1500);
       } else {

@@ -7,7 +7,7 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
   const [respostaIA, setRespostaIA] = useState("");
   const [audioSrc, setAudioSrc] = useState("");
   const [loading, setLoading] = useState(false);
-  const [tempoRestante, setTempoRestante] = useState(30 * 60); // 30 minutos
+  const [tempoRestante, setTempoRestante] = useState(30 * 60);
   const [pontuacaoAtual, setPontuacaoAtual] = useState(0);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
   useEffect(() => {
     const intervaloAutoSave = setInterval(() => {
       salvarPontuacao();
-    }, 60 * 1000); // a cada 1 minuto
+    }, 60 * 1000);
 
     return () => clearInterval(intervaloAutoSave);
   }, [pontuacaoAtual]);

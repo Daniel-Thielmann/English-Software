@@ -102,6 +102,10 @@ const Talking = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={validarChaveDeAtivacao}
+        onSuccess={() => {
+          setIsActivated(true);
+          setEmConversacao(true);
+        }}
       />
 
       {!emConversacao ? (
