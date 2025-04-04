@@ -102,16 +102,17 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
       const data = await resposta.json();
       setRespostaIA(data.resposta);
 
-      setPontuacaoAtual((prev) => {
-        const novo = prev + 2;
-        setPointsSpeaking(novo);
-        return novo;
-      });
+      const novaPontuacao = pontuacaoAtual + 2;
+      setPontuacaoAtual(novaPontuacao);
+      setPointsSpeaking(novaPontuacao);
 
-      const audio = new Audio(`data:audio/mpeg;base64,${data.audioBase64}`);
-      audio.play();
-
-      setAudioSrc(`data:audio/mpeg;base64,${data.audioBase64}`);
+      if (data.audioBase64) {
+        const audio = new Audio(`data:audio/mpeg;base64,${data.audioBase64}`);
+        audio.play();
+        setAudioSrc(`data:audio/mpeg;base64,${data.audioBase64}`);
+      } else {
+        console.warn("⚠️ audioBase64 não recebido:", data);
+      }
     } catch (err) {
       console.error("Erro na conversa com IA:", err);
       setRespostaIA("Erro ao responder.");

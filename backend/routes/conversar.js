@@ -6,7 +6,7 @@ const elevenLabsApiKey = process.env.VITE_ELEVENLABS_API_KEY;
 const elevenLabsVoiceId = process.env.VITE_ELEVENLABS_VOICE_ID;
 const openaiApiKey = process.env.OPENAI_API_KEY;
 
-router.post("/conversar", async (req, res) => {
+router.post("/", async (req, res) => {
   const { prompt } = req.body;
 
   if (!prompt) return res.status(400).json({ error: "Prompt ausente." });
@@ -68,7 +68,8 @@ router.post("/conversar", async (req, res) => {
       audioBase64,
     });
   } catch (error) {
-    console.error("Erro:", error.response?.data || error.message);
+    console.error("🔥 Erro completo:", error); // <-- log completo
+    console.error("🔥 Erro da API:", error.response?.data); // <-- erro da OpenAI ou ElevenLabs
     res.status(500).json({ error: "Erro ao gerar resposta com voz." });
   }
 });
