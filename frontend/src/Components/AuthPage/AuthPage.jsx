@@ -12,7 +12,7 @@ import api from "../../utils/api";
 import React from "react";
 
 const AuthPage = () => {
-  const [name, setName] = useState(""); // 🔹 Adicionando nome
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
@@ -20,26 +20,23 @@ const AuthPage = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // 🔹 Função para registrar usuário no Firestore
   const registerUserInDatabase = async (user, displayName) => {
     try {
-      console.log("📡 Enviando usuário para o backend:", {
+      const payload = {
         uid: user.uid,
         email: user.email,
         name: displayName || "Usuário",
-      });
+      };
 
-      const response = await api.post("/api/users/create-user", {
-        uid: user.uid,
-        email: user.email,
-        name: displayName || "Usuário",
-      });
+      console.log("📡 Enviando usuário para o backend:", payload);
+
+      const response = await api.post("/api/users/create-user", payload);
 
       console.log("✅ Resposta do backend:", response.data);
     } catch (err) {
       console.error(
         "❌ Erro ao salvar usuário no banco de dados:",
-        err.message
+        err.response?.data || err.message
       );
     }
   };
@@ -50,11 +47,6 @@ const AuthPage = () => {
     setError("");
 
     try {
-      console.log("📡 Tentando criar usuário no Firebase com:", {
-        email,
-        password,
-      });
-
       let userCredential;
       if (isRegistering) {
         userCredential = await createUserWithEmailAndPassword(
@@ -62,24 +54,15 @@ const AuthPage = () => {
           email,
           password
         );
-        console.log("✅ Usuário criado com sucesso:", userCredential.user);
+        const user = userCredential.user;
 
-        // Atualiza o nome, se fornecido
-        if (name.trim() !== "") {
-          await updateProfile(userCredential.user, { displayName: name });
+        if (name.trim()) {
+          await updateProfile(user, { displayName: name });
           console.log("✅ Nome atualizado no Firebase:", name);
         }
 
-        // Envia para o Firestore
-        console.log("📡 Enviando dados para o backend:", {
-          uid: userCredential.user.uid,
-          email: userCredential.user.email,
-          name,
-        });
-
-        await registerUserInDatabase(userCredential.user, name);
+        await registerUserInDatabase(user, name);
       } else {
-        console.log("📡 Tentando logar com:", { email, password });
         userCredential = await signInWithEmailAndPassword(
           auth,
           email,
@@ -93,6 +76,7 @@ const AuthPage = () => {
       console.error("🔥 Erro ao autenticar:", err.code, err.message);
       setError(`Erro Firebase: ${err.message}`);
     }
+
     setLoading(false);
   };
 
@@ -103,9 +87,7 @@ const AuthPage = () => {
       const user = result.user;
       console.log("✅ Usuário autenticado com Google:", user);
 
-      // 🔹 Registra usuário no Firestore com nome (se existir no Google)
       await registerUserInDatabase(user, user.displayName);
-
       navigate("/");
     } catch (err) {
       setError("Erro ao autenticar com Google.");
