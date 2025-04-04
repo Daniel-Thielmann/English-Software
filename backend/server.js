@@ -22,7 +22,7 @@ app.use("/api/conversar", conversarRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/points", pointsRoutes);
-app.use("/api/ranking", rankingRoutes); // ✅ Corrigido: separa rota /ranking
+app.use("/api/points", rankingRoutes); // ✅ Corrigido: separa rota /ranking
 app.use("/api/text-to-speech", textToSpeechRoutes);
 app.use("/api/chat", chatRoute); // ✅ Rota para ChatGPT
 
