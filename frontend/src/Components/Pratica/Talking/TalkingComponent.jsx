@@ -32,22 +32,31 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
 
     return () => clearInterval(intervaloAutoSave);
   }, [pontuacaoAtual]);
-
   const salvarPontuacao = async () => {
     const user = auth.currentUser;
     if (!user) return;
 
     try {
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/update-points`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: user.uid,
-          pointsSpeaking: pontuacaoAtual,
-        }),
-      });
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/api/points/update-speaking-points`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.uid,
+            pointsSpeaking: pontuacaoAtual,
+          }),
+        }
+      );
 
-      console.log("✅ Pontuação salva automaticamente:", pontuacaoAtual);
+      if (!response.ok) {
+        throw new Error(`Erro na resposta: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("✅ Pontuação salva automaticamente:", data.pointsSpeaking);
     } catch (err) {
       console.error("❌ Erro ao salvar pontos automaticamente:", err);
     }
@@ -87,7 +96,6 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
       console.error("Erro no reconhecimento:", event.error);
     };
   };
-
   const conversarComIA = async (mensagem) => {
     try {
       const resposta = await fetch(
@@ -98,6 +106,10 @@ const TalkingComponent = ({ setPointsSpeaking, finalizarPratica }) => {
           body: JSON.stringify({ prompt: mensagem }),
         }
       );
+
+      if (!resposta.ok) {
+        throw new Error(`Erro do servidor: ${resposta.status}`);
+      }
 
       const data = await resposta.json();
       setRespostaIA(data.resposta);

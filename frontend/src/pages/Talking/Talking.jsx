@@ -70,23 +70,30 @@ const Talking = () => {
       return { success: false, message: "Erro de conexão com o servidor." };
     }
   };
-
   const finalizarPratica = () => {
     if (!user) return;
-
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/update-points`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: user.uid,
-        pointsSpeaking,
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => {
-        navigate("/tela-final", {
+    fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/api/points/update-speaking-points`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.uid,
+          pointsSpeaking,
+        }),
+      }
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Erro na resposta: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        // Enviando para tela final com a pontuação total atualizada retornada pela API
+        navigate("/tela-final-speaking", {
           state: {
-            pointsSpeaking,
+            pointsSpeaking: data.pointsSpeaking,
           },
         });
       })

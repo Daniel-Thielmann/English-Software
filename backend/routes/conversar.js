@@ -2,14 +2,36 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 
-const elevenLabsApiKey = process.env.VITE_ELEVENLABS_API_KEY;
-const elevenLabsVoiceId = process.env.VITE_ELEVENLABS_VOICE_ID;
+// Changed from VITE_ prefix to regular environment variables
+const elevenLabsApiKey = process.env.ELEVENLABS_API_KEY;
+const elevenLabsVoiceId = process.env.ELEVENLABS_VOICE_ID;
 const openaiApiKey = process.env.OPENAI_API_KEY;
+
+// Added debug logs to help troubleshoot environment variables
+console.log("Environment variables check in conversar.js:");
+console.log("- OpenAI API Key:", openaiApiKey ? "defined" : "undefined");
+console.log(
+  "- ElevenLabs API Key:",
+  elevenLabsApiKey ? "defined" : "undefined"
+);
+console.log(
+  "- ElevenLabs Voice ID:",
+  elevenLabsVoiceId ? "defined" : "undefined"
+);
 
 router.post("/", async (req, res) => {
   const { prompt } = req.body;
 
   if (!prompt) return res.status(400).json({ error: "Prompt ausente." });
+
+  // Check if all required API keys are available
+  if (!openaiApiKey || !elevenLabsApiKey || !elevenLabsVoiceId) {
+    console.error("Missing required API keys. Check environment variables.");
+    return res.status(500).json({
+      error: "Erro de configuração do servidor. Contate o administrador.",
+      details: "Missing API keys",
+    });
+  }
 
   try {
     // 🔹 Passo 1: ChatGPT gera a resposta
