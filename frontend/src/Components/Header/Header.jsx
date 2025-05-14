@@ -1,6 +1,7 @@
 import codiicon from "../../assets/codi_icon.png";
 import "./Header.css";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = ({ comecarPratica }) => {
   return (
@@ -12,6 +13,17 @@ const Header = ({ comecarPratica }) => {
         <h1>
           A <span>nova maneira</span> de aprender inglês
         </h1>
+        <div className="mobile-buttons">
+          <Link to="/listening-writing" className="mobile-practice-btn">
+            Listening & Writing
+          </Link>
+          <Link to="/listening-speaking" className="mobile-practice-btn">
+            Listening & Speaking
+          </Link>
+          <Link to="/talking" className="mobile-practice-btn">
+            Conversação IA
+          </Link>
+        </div>
         <p>
           Aprimore seu entendimento em apenas alguns minutos! Com auxilio
           completo da melhor tecnologia de Inteligência Artificial

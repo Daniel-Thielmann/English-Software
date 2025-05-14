@@ -47,7 +47,7 @@
 .header-text h1 {
   font-size: 42px;
   font-weight: 700;
-  margin-bottom: 80px;
+  margin-bottom: 20px;
 }
 
 .header-text span {
@@ -65,6 +65,34 @@
   margin: 0 auto;
 }
 
+/* Mobile Practice Buttons */
+.mobile-buttons {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto 30px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.mobile-practice-btn {
+  background-image: var(--faded);
+  color: white;
+  font-weight: 600;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-practice-btn:hover,
+.mobile-practice-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .header-text {
@@ -73,10 +101,15 @@
 
   .header-text h1 {
     font-size: 24px;
+    margin-bottom: 20px;
   }
 
   .header-text p {
     font-size: 16px;
+  }
+
+  .mobile-buttons {
+    display: flex;
   }
 
   .btn-start {
