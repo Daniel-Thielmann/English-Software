@@ -70,25 +70,21 @@ const ModalAuth = ({ isOpen, onClose, onSubmit, onSuccess }) => {
       setLoading(false);
     }
   };
-
   return (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>🔑 Ativação Necessária</h2>
         <p>Insira sua chave de ativação da Codi Academy para continuar.</p>
-
         <input
           type="text"
           placeholder="Digite a chave..."
           value={activationKey}
           onChange={(e) => setActivationKey(e.target.value)}
         />
-
         {message && (
           <div className={`modal-message ${message.type}`}>{message.text}</div>
-        )}
-
-        <div className="modal-buttons">
+        )}{" "}
+        <div className="modal-button-wrapper">
           <button
             onClick={handleSubmit}
             className="btn-activate"
@@ -96,7 +92,9 @@ const ModalAuth = ({ isOpen, onClose, onSubmit, onSuccess }) => {
           >
             {loading ? "Validando..." : "Ativar"}
           </button>
-          <button onClick={onClose} className="btn-close" disabled={loading}>
+        </div>
+        <div className="modal-button-wrapper cancel-button-wrapper">
+          <button onClick={onClose} className="btn-cancel" disabled={loading}>
             Cancelar
           </button>
         </div>
